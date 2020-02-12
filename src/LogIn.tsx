@@ -16,6 +16,8 @@ type Props = {};
 const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
   const [logIn, { data: logInData }] = useMutation(LOG_IN);
 
+  console.log(logInData);
+
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -60,13 +62,13 @@ const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
           valuePropName: "checked",
           initialValue: true
         })(<Checkbox>Remember me</Checkbox>)}
-        <a className="login-form-forgot" href="/forgot-password">
+        <a className="login-form-forgot" href="">
           Forgot password
         </a>
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
         </Button>
-        Or <a href="/register">register now!</a>
+        Or <a href="">register now!</a>
       </Form.Item>
     </Form>
   );
