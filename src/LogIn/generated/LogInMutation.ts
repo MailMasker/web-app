@@ -1,0 +1,63 @@
+import * as Types from "../../generated/types";
+
+import gql from "graphql-tag";
+import * as ApolloReactCommon from "@apollo/react-common";
+import * as ApolloReactHooks from "@apollo/react-hooks";
+
+export type LogInMutationVariables = {
+  username: Types.Scalars["String"];
+  password: Types.Scalars["String"];
+};
+
+export type LogInMutation = { readonly __typename?: "Mutation" } & Pick<
+  Types.Mutation,
+  "authenticate"
+>;
+
+export const LogInDocument = gql`
+  mutation LogIn($username: String!, $password: String!) {
+    authenticate(username: $username, password: $password)
+  }
+`;
+export type LogInMutationFn = ApolloReactCommon.MutationFunction<
+  LogInMutation,
+  LogInMutationVariables
+>;
+
+/**
+ * __useLogInMutation__
+ *
+ * To run a mutation, you first call `useLogInMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogInMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logInMutation, { data, loading, error }] = useLogInMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLogInMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    LogInMutation,
+    LogInMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<LogInMutation, LogInMutationVariables>(
+    LogInDocument,
+    baseOptions
+  );
+}
+export type LogInMutationHookResult = ReturnType<typeof useLogInMutation>;
+export type LogInMutationResult = ApolloReactCommon.MutationResult<
+  LogInMutation
+>;
+export type LogInMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  LogInMutation,
+  LogInMutationVariables
+>;

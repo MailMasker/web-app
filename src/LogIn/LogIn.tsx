@@ -3,22 +3,15 @@ import React, { FormEvent, useCallback, useState } from "react";
 
 import { ApolloError } from "apollo-boost";
 import { FormComponentProps } from "antd/lib/form/Form";
-import gql from "graphql-tag";
 import { useHistory } from "react-router-dom";
-import { useMutation } from "@apollo/react-hooks";
+import { useLogInMutation } from "./generated/LogInMutation";
 
 const { Text } = Typography;
-
-const LogInQuery = gql`
-  mutation LogIn($username: String!, $password: String!) {
-    authenticate(username: $username, password: $password)
-  }
-`;
 
 type Props = {};
 
 const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
-  const [logIn] = useMutation(LogInQuery);
+  const [logIn] = useLogInMutation();
   const [logInServerError, setLogInServerError] = useState<ApolloError | null>(
     null
   );
@@ -68,16 +61,19 @@ const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
           valuePropName: "checked",
           initialValue: true
         })(<Checkbox>Remember me</Checkbox>)}
-        <a className="login-form-forgot" href="#">
+        <Button type="link" onClick={() => history.push("/reset-password")}>
           Forgot password
-        </a>
+        </Button>
         {logInServerError && (
           <Text type="danger">{logInServerError.message}</Text>
         )}
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
         </Button>
-        Or <a href="#">register now!</a>
+        Or
+        <Button type="link" onClick={() => history.push("/register")}>
+          register now!
+        </Button>
       </Form.Item>
     </Form>
   );
