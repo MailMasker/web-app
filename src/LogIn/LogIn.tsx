@@ -18,13 +18,11 @@ const LogInQuery = gql`
 type Props = {};
 
 const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
-  const [logIn, { data: logInData }] = useMutation(LogInQuery);
+  const [logIn] = useMutation(LogInQuery);
   const [logInServerError, setLogInServerError] = useState<ApolloError | null>(
     null
   );
   const history = useHistory();
-
-  console.log(logInData);
 
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {

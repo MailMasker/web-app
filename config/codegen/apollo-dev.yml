@@ -1,0 +1,35 @@
+overwrite: true
+schema: "https://n0tccaeafe.execute-api.us-east-1.amazonaws.com/dev/graphql"
+documents: "src/**/*.graphql"
+generates:
+  src/generated/fragment-matcher.ts:
+    plugins:
+      - "fragment-matcher"
+  src/generated/schema.json:
+    plugins:
+      - "introspection"
+    config:
+      minify: true
+  src/generated/types.ts:
+    plugins:
+      - "typescript"
+  src/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .ts
+      baseTypesPath: generated/types.ts
+      folder: generated
+    config:
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      immutableTypes: true
+      dedupeOperationSuffix: true
+    plugins:
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    hooks:
+      afterOneFileWrite:
+        - sed -i'' -e 's/FragmentFragment/Fragment/g'
+        - sed -i'' -e 's/_Fragment/_/g'
+        - prettier --write

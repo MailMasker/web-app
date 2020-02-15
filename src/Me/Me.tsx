@@ -1,11 +1,11 @@
 import React from "react";
 import { Spin } from "antd";
-import { useMeQuery } from "../Me/generated/MeQuery";
+import { useMeQuery } from "./generated/MeQuery";
 import { useRouteMatch } from "react-router-dom";
 
-interface AuthenticatedProps {}
+interface MeProps {}
 
-const Authenticated: React.FC<AuthenticatedProps> = ({ children }) => {
+const Me: React.FC<MeProps> = ({ children }) => {
   const { data, loading } = useMeQuery();
   const match = useRouteMatch("/login");
 
@@ -24,4 +24,4 @@ const Authenticated: React.FC<AuthenticatedProps> = ({ children }) => {
   }
 };
 
-export default Authenticated;
+export default Me;
