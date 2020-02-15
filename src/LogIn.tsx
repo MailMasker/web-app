@@ -1,35 +1,43 @@
-import { Button, Checkbox, Form, Icon, Input } from "antd";
-import React, { FormEvent, useCallback } from "react";
+import { Button, Checkbox, Form, Icon, Input, Typography } from "antd";
+import React, { FormEvent, useCallback, useState } from "react";
 
+import { ApolloError } from "apollo-boost";
 import { FormComponentProps } from "antd/lib/form/Form";
 import gql from "graphql-tag";
+import { useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 
-const LOG_IN = gql`
-  mutation LogIn($email: String!, $password: String!) {
-    authenticate(email: $email, password: $password)
+const { Text } = Typography;
+
+const LogInQuery = gql`
+  mutation LogIn($username: String!, $password: String!) {
+    authenticate(username: $username, password: $password)
   }
 `;
 
 type Props = {};
 
 const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
-  const [logIn, { data: logInData }] = useMutation(LOG_IN);
+  const [logIn, { data: logInData }] = useMutation(LogInQuery);
+  const [logInServerError, setLogInServerError] = useState<ApolloError | null>(
+    null
+  );
+  const history = useHistory();
 
   console.log(logInData);
 
   const handleSubmit = useCallback(
-    (event: FormEvent<HTMLFormElement>) => {
+    async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       form.validateFields((err, { username, password }) => {
         if (!err) {
-          logIn({ variables: { username, password } });
-        } else {
-          console.log("Validation error");
+          logIn({ variables: { username, password } })
+            .then(() => history.push("/"))
+            .catch(err => setLogInServerError(err));
         }
       });
     },
-    [form, logIn]
+    [form, history, logIn]
   );
 
   const { getFieldDecorator } = form;
@@ -62,13 +70,16 @@ const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
           valuePropName: "checked",
           initialValue: true
         })(<Checkbox>Remember me</Checkbox>)}
-        <a className="login-form-forgot" href="">
+        <a className="login-form-forgot" href="#">
           Forgot password
         </a>
+        {logInServerError && (
+          <Text type="danger">{logInServerError.message}</Text>
+        )}
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
         </Button>
-        Or <a href="">register now!</a>
+        Or <a href="#">register now!</a>
       </Form.Item>
     </Form>
   );
