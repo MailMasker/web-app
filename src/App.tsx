@@ -3,13 +3,15 @@ import "antd/dist/antd.css";
 import { Link, Route, Router, Switch } from "react-router-dom";
 
 import { ApolloProvider } from "@apollo/react-hooks";
-import Authenticated from "./Authenticated/Authenticated";
-import { LogIn } from "./LogIn/LogIn";
+import Authenticated from "./Authenticated";
+import ForgotPassword from "./Unauthenticated/ForgotPassword";
+import Home from "./Me/Home";
+import LogOut from "./LogOut/LogOut";
 import React from "react";
 import { client } from "./apollo-client";
 import { history } from "./history";
 
-function App() {
+const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <div
@@ -29,31 +31,16 @@ function App() {
                     <Link to="/">Home</Link>
                   </li>
                   <li>
-                    <Link to="/login">Log In</Link>
-                  </li>
-                  <li>
-                    <Link to="/logout">Log Out</Link>
-                  </li>
-                  <li>
-                    <Link to="/register">Register</Link>
+                    <Link to="/log-o'sout">Log Out</Link>
                   </li>
                 </ul>
               </nav>
-
-              {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
               <Switch>
-                <Route path="/logout">
+                <Route path="/log-out">
                   <LogOut />
-                </Route>
-                <Route path="/login">
-                  <LogIn />
                 </Route>
                 <Route path="/forgot-password">
                   <ForgotPassword />
-                </Route>
-                <Route path="/register">
-                  <Register />
                 </Route>
                 <Route path="/">
                   <Home />
@@ -65,22 +52,5 @@ function App() {
       </div>
     </ApolloProvider>
   );
-}
-
-function Home() {
-  return <h2>Me</h2>;
-}
-
-function LogOut() {
-  return <h2>Log out</h2>;
-}
-
-function ForgotPassword() {
-  return <h2>ForgotPassword</h2>;
-}
-
-function Register() {
-  return <h2>Register</h2>;
-}
-
+};
 export default App;

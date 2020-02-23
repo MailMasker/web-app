@@ -8,9 +8,14 @@ import { useLogInMutation } from "./generated/LogInMutation";
 
 const { Text } = Typography;
 
-type Props = {};
+interface NormalLoginFormProps extends FormComponentProps {
+  onLoginSuccess: () => void;
+}
 
-const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
+const NormalLoginForm: React.FC<NormalLoginFormProps> = ({
+  form,
+  onLoginSuccess
+}) => {
   const [logIn] = useLogInMutation();
   const [logInServerError, setLogInServerError] = useState<ApolloError | null>(
     null
@@ -23,12 +28,12 @@ const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
       form.validateFields((err, { username, password }) => {
         if (!err) {
           logIn({ variables: { username, password } })
-            .then(() => history.push("/"))
+            .then(onLoginSuccess)
             .catch(err => setLogInServerError(err));
         }
       });
     },
-    [form, history, logIn]
+    [form, logIn, onLoginSuccess]
   );
 
   const { getFieldDecorator } = form;
@@ -79,4 +84,6 @@ const NormalLoginForm: React.FC<Props & FormComponentProps> = ({ form }) => {
   );
 };
 
-export const LogIn = Form.create({ name: "normal_login" })(NormalLoginForm);
+export const LogIn = Form.create<NormalLoginFormProps>({
+  name: "normal_login"
+})(NormalLoginForm);
