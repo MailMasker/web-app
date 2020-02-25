@@ -4,7 +4,7 @@ import { useMeQuery } from "./generated/MeQuery";
 
 interface HomeProps {}
 
-const Home: React.FC<HomeProps> = ({}) => {
+const Home: React.FC<HomeProps> = () => {
   const { data, loading } = useMeQuery();
 
   if (loading) {
