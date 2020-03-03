@@ -7,10 +7,12 @@ import { useMeQuery } from "../Me/generated/MeQuery";
 interface AuthenticatedProps {}
 
 const Authenticated: React.FC<AuthenticatedProps> = ({ children }) => {
-  const { data, loading } = useMeQuery();
+  const { data, loading, error } = useMeQuery();
   const match = useRouteMatch("/login");
 
-  if (match) {
+  if (error) {
+    throw error;
+  } else if (match) {
     if (!!data) {
       return <Redirect to="/" />;
     }

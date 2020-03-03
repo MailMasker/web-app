@@ -8,6 +8,7 @@ import ForgotPassword from "./Unauthenticated/ForgotPassword";
 import Home from "./Me/Home";
 import LogOut from "./LogOut/LogOut";
 import React from "react";
+import Unauthenticated from "./Unauthenticated";
 import { client } from "./apollo-client";
 import { history } from "./history";
 
@@ -23,31 +24,38 @@ const App: React.FC = () => {
         }}
       >
         <Router history={history}>
-          <Authenticated>
-            <div style={{ width: "800px" }}>
-              <nav>
-                <ul>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/log-o'sout">Log Out</Link>
-                  </li>
-                </ul>
-              </nav>
-              <Switch>
-                <Route path="/log-out">
-                  <LogOut />
-                </Route>
-                <Route path="/forgot-password">
-                  <ForgotPassword />
-                </Route>
-                <Route path="/">
-                  <Home />
-                </Route>
-              </Switch>
-            </div>
-          </Authenticated>
+          <Switch>
+            <Route path="/login">
+              <Unauthenticated onLoginSuccess={() => history.push("/")} />
+            </Route>
+            <Route path="*">
+              <Authenticated>
+                <div style={{ width: "800px" }}>
+                  <nav>
+                    <ul>
+                      <li>
+                        <Link to="/">Home</Link>
+                      </li>
+                      <li>
+                        <Link to="/logout">Log Out</Link>
+                      </li>
+                    </ul>
+                  </nav>
+                  <Switch>
+                    <Route path="/logout">
+                      <LogOut />
+                    </Route>
+                    <Route path="/forgot-password">
+                      <ForgotPassword />
+                    </Route>
+                    <Route path="/">
+                      <Home />
+                    </Route>
+                  </Switch>
+                </div>
+              </Authenticated>
+            </Route>
+          </Switch>
         </Router>
       </div>
     </ApolloProvider>

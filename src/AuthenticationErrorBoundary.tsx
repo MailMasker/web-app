@@ -38,16 +38,13 @@ export class AuthenticationErrorBoundary extends React.PureComponent<
   };
 
   static getDerivedStateFromError(error: Error | ApolloError) {
-    if (!isAuthError(error)) {
+    if (isAuthError(error)) {
+      // We handle auth errors with apollo-link-error, so no need to handle them here.
       return;
     }
 
     return { error };
   }
-
-  handleLoginSuccess = () => {
-    this.setState({ error: null });
-  };
 
   render() {
     if (this.state.error) {
@@ -60,7 +57,7 @@ export class AuthenticationErrorBoundary extends React.PureComponent<
             padding: "60px 0px"
           }}
         >
-          <Unauthenticated onLoginSuccess={this.handleLoginSuccess} />
+          Oops! Something went wrong. Please refresh the page and try again.
         </div>
       );
     }
