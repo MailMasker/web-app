@@ -1,7 +1,7 @@
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
-import AccountCreation from "./AccountCreation";
-import { LogIn } from "./LogIn/LogIn";
+import { AccountCreation } from "./AccountCreation";
+import { LogIn } from "./LogIn";
 import React from "react";
 
 interface UnauthenticatedProps {
@@ -20,7 +20,10 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = ({
         <Route
           path="/sign-up"
           render={routeProps => (
-            <AccountCreation {...routeProps} onLoginSuccess={onLoginSuccess} />
+            <AccountCreation
+              {...routeProps}
+              onAccountCreationSuccess={onLoginSuccess}
+            />
           )}
         ></Route>
         <Route path="*">

@@ -1,8 +1,8 @@
-import * as ApolloReactCommon from "@apollo/react-common";
-import * as ApolloReactHooks from "@apollo/react-hooks";
 import * as Types from "../../../generated/types";
 
 import gql from "graphql-tag";
+import * as ApolloReactCommon from "@apollo/react-common";
+import * as ApolloReactHooks from "@apollo/react-hooks";
 
 export type LogInMutationVariables = {
   username: Types.Scalars["String"];
