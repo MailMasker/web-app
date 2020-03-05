@@ -1,8 +1,7 @@
 import { Button, Checkbox, Form, Input, Typography } from "antd";
 
 import React from "react";
-import { useCreateUserMutation } from "./generated/CreateUserMutation";
-import { uuidv4 } from "../../lib/uuid";
+import { useLogInMutation } from "./generated/LogInMutation";
 
 const { Text } = Typography;
 
@@ -14,26 +13,24 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 }
 };
 
-interface AccountCreationProps {
-  onAccountCreationSuccess: () => void;
+interface LogInProps {
+  onLogInSuccess: () => void;
 }
 
-const AccountCreation = ({
-  onAccountCreationSuccess
-}: AccountCreationProps) => {
+const LogIn = ({ onLogInSuccess }: LogInProps) => {
   const [form] = Form.useForm();
-  const [createAccount, { error, loading }] = useCreateUserMutation();
+
+  const [logIn, { error, loading }] = useLogInMutation();
 
   const onFinish = (values: any) => {
     console.info("Submitted form: ", values);
-    createAccount({
+    logIn({
       variables: {
         username: values.username,
-        password: values.password,
-        uuid: uuidv4()
+        password: values.password
       }
     })
-      .then(onAccountCreationSuccess)
+      .then(onLogInSuccess)
       .catch(err => console.error(err));
   };
 
@@ -74,6 +71,7 @@ const AccountCreation = ({
       history.push("/reset-password") */}
 
       {error && <Text type="danger">{error.message}</Text>}
+
       <Form.Item {...tailLayout}>
         <Button
           type="primary"
@@ -88,4 +86,4 @@ const AccountCreation = ({
   );
 };
 
-export default AccountCreation;
+export default LogIn;
