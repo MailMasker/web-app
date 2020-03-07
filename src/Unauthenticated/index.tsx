@@ -14,7 +14,7 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = ({
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/login">
+        <Route path="/log-in">
           <LogIn onLogInSuccess={onLoginSuccess} />
         </Route>
         <Route
@@ -27,7 +27,7 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = ({
           )}
         ></Route>
         <Route path="*">
-          <Redirect to="/login" />
+          <Redirect to="/log-in" />
         </Route>
       </Switch>
     </BrowserRouter>

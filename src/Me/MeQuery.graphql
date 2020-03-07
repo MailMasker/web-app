@@ -1,7 +1,37 @@
-query me {
+query Me {
   me {
     user {
       id
+      username
+      routes {
+        id
+        redirectToVerifiedEmail {
+          ...VerifiedEmailFragment
+        }
+        emailMask {
+          ...EmailMaskFragment
+        }
+        expires
+        disabled
+      }
+      verifiedEmails {
+        ...VerifiedEmailFragment
+      }
+      emailMasks {
+        ...EmailMaskFragment
+      }
     }
   }
+}
+
+fragment EmailMaskFragment on EmailMask {
+  id
+  base
+  domain
+}
+
+fragment VerifiedEmailFragment on VerifiedEmail {
+  id
+  email
+  verified
 }

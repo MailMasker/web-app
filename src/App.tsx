@@ -11,6 +11,7 @@ import React from "react";
 import Unauthenticated from "./Unauthenticated";
 import { client } from "./apollo-client";
 import { history } from "./history";
+import localStorage from "./lib/localStorage";
 
 const App: React.FC = () => {
   return (
@@ -25,8 +26,17 @@ const App: React.FC = () => {
       >
         <Router history={history}>
           <Switch>
-            <Route path="/login">
-              <Unauthenticated onLoginSuccess={() => history.push("/")} />
+            <Route path={["/log-in", "/sign-up"]}>
+              <Unauthenticated
+                onLoginSuccess={() => {
+                  localStorage.setItem(
+                    "global",
+                    "hasAuthenticatedOnce",
+                    "true"
+                  );
+                  history.push("/");
+                }}
+              />
             </Route>
             <Route path="*">
               <Authenticated>

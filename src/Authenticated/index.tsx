@@ -8,7 +8,7 @@ interface AuthenticatedProps {}
 
 const Authenticated: React.FC<AuthenticatedProps> = ({ children }) => {
   const { data, loading, error } = useMeQuery();
-  const match = useRouteMatch("/login");
+  const match = useRouteMatch("/log-in");
 
   if (error) {
     throw error;

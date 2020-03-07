@@ -79,7 +79,7 @@ const LogIn = ({ onLogInSuccess }: LogInProps) => {
           loading={loading}
           disabled={loading}
         >
-          Submit
+          Log In
         </Button>
       </Form.Item>
     </Form>

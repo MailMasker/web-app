@@ -5,7 +5,7 @@ interface LogOutProps {}
 
 const LogOut: React.FC<LogOutProps> = () => {
   document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  return <Redirect to="/login" />;
+  return <Redirect to="/log-in" />;
 };
 
 export default LogOut;

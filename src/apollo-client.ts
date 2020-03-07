@@ -1,9 +1,15 @@
 import ApolloClient from "apollo-boost";
 import { history } from "./history";
+import localStorage from "./lib/localStorage";
+
+const apiBaseURL =
+  process.env.REACT_APP_ENVIRONMENT === "local"
+    ? "http://localhost:3000/graphql"
+    : "https://n0tccaeafe.execute-api.us-east-1.amazonaws.com/dev/graphql";
 
 export const client = new ApolloClient({
   credentials: "include",
-  uri: "https://n0tccaeafe.execute-api.us-east-1.amazonaws.com/dev/graphql",
+  uri: apiBaseURL,
   fetch: (uri: RequestInfo, options: RequestInit | undefined) =>
     window.fetch(
       options && options.body
@@ -15,8 +21,16 @@ export const client = new ApolloClient({
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
         if (extensions && extensions.code === `UNAUTHENTICATED`) {
-          debugger;
-          history.push(`/login`);
+          if (
+            history.location.pathname !== "/sign-up" &&
+            history.location.pathname !== "/log-in"
+          ) {
+            if (!!localStorage.getItem("global", "hasAuthenticatedOnce")) {
+              history.push(`/log-in`);
+            } else {
+              history.push(`/sign-up`);
+            }
+          }
         }
       });
     } else if (networkError) {

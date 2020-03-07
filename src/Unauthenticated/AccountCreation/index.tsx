@@ -81,7 +81,7 @@ const AccountCreation = ({
           loading={loading}
           disabled={loading}
         >
-          Submit
+          Sign Up
         </Button>
       </Form.Item>
     </Form>

@@ -13,21 +13,80 @@ export type MeQuery = (
     { readonly __typename?: 'Me' }
     & { readonly user: (
       { readonly __typename?: 'User' }
-      & Pick<Types.User, 'id'>
+      & Pick<Types.User, 'id' | 'username'>
+      & { readonly routes: ReadonlyArray<(
+        { readonly __typename?: 'Route' }
+        & Pick<Types.Route, 'id' | 'expires' | 'disabled'>
+        & { readonly redirectToVerifiedEmail: (
+          { readonly __typename?: 'VerifiedEmail' }
+          & VerifiedEmailFragment
+        ), readonly emailMask: (
+          { readonly __typename?: 'EmailMask' }
+          & EmailMaskFragment
+        ) }
+      )>, readonly verifiedEmails: ReadonlyArray<(
+        { readonly __typename?: 'VerifiedEmail' }
+        & VerifiedEmailFragment
+      )>, readonly emailMasks: ReadonlyArray<(
+        { readonly __typename?: 'EmailMask' }
+        & EmailMaskFragment
+      )> }
     ) }
   ) }
 );
 
+export type EmailMaskFragment = (
+  { readonly __typename?: 'EmailMask' }
+  & Pick<Types.EmailMask, 'id' | 'base' | 'domain'>
+);
 
+export type VerifiedEmailFragment = (
+  { readonly __typename?: 'VerifiedEmail' }
+  & Pick<Types.VerifiedEmail, 'id' | 'email' | 'verified'>
+);
+
+export const EmailMaskFragmentDoc = gql`
+    fragment EmailMaskFragment on EmailMask {
+  id
+  base
+  domain
+}
+    `;
+export const VerifiedEmailFragmentDoc = gql`
+    fragment VerifiedEmailFragment on VerifiedEmail {
+  id
+  email
+  verified
+}
+    `;
 export const MeDocument = gql`
-    query me {
+    query Me {
   me {
     user {
       id
+      username
+      routes {
+        id
+        redirectToVerifiedEmail {
+          ...VerifiedEmailFragment
+        }
+        emailMask {
+          ...EmailMaskFragment
+        }
+        expires
+        disabled
+      }
+      verifiedEmails {
+        ...VerifiedEmailFragment
+      }
+      emailMasks {
+        ...EmailMaskFragment
+      }
     }
   }
 }
-    `;
+    ${VerifiedEmailFragmentDoc}
+${EmailMaskFragmentDoc}`;
 
 /**
  * __useMeQuery__
