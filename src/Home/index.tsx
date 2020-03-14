@@ -1,5 +1,6 @@
 import { List, Spin, Typography } from "antd";
 
+import ErrorMessage from "../lib/ErrorMessage";
 import { Link } from "react-router-dom";
 import React from "react";
 import { useMeQuery } from "./generated/MeQuery";
@@ -9,7 +10,9 @@ const { Title } = Typography;
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
-  const { data, loading, error } = useMeQuery();
+  const { data, loading, error } = useMeQuery({
+    fetchPolicy: "cache-and-network"
+  });
 
   if (loading) {
     return (
@@ -18,7 +21,7 @@ const Home: React.FC<HomeProps> = () => {
       </div>
     );
   } else if (error) {
-    return <div style={{ color: "red" }}>{error.message}</div>;
+    return <ErrorMessage error={error} />;
   } else if (data) {
     const routes = [...data.me.user.routes];
     return (
@@ -56,7 +59,7 @@ const Home: React.FC<HomeProps> = () => {
             emptyText: (
               <div>
                 You have no verified emails addresses.{" "}
-                <Link to="/verified-emails/create">
+                <Link to="/verified-emails/new">
                   Verify your email address now?
                 </Link>
               </div>

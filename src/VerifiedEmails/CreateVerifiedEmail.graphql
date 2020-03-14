@@ -1,0 +1,5 @@
+mutation CreateVerifiedEmail($email: String!) {
+  createVerifiedEmail(email: $email) {
+    ...VerifiedEmailFragment
+  }
+}

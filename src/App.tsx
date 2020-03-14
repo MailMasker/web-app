@@ -1,17 +1,22 @@
 import "antd/dist/antd.css";
 
+import { Button, Layout, Result } from "antd";
 import { Link, Route, Router, Switch } from "react-router-dom";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
+import CreateVerifiedEmail from "./VerifiedEmails/CreateVerifiedEmail";
 import ForgotPassword from "./Unauthenticated/ForgotPassword";
 import Home from "./Home";
+import LayoutContainer from "./LayoutContainer";
 import LogOut from "./LogOut/LogOut";
 import React from "react";
 import Unauthenticated from "./Unauthenticated";
 import { client } from "./apollo-client";
 import { history } from "./history";
 import localStorage from "./lib/localStorage";
+
+const { Header, Content, Footer } = Layout;
 
 const App: React.FC = () => {
   return (
@@ -40,29 +45,34 @@ const App: React.FC = () => {
             </Route>
             <Route path="*">
               <Authenticated>
-                <div style={{ width: "800px" }}>
-                  <nav>
-                    <ul>
-                      <li>
-                        <Link to="/">Home</Link>
-                      </li>
-                      <li>
-                        <Link to="/logout">Log Out</Link>
-                      </li>
-                    </ul>
-                  </nav>
+                <LayoutContainer authenticated>
                   <Switch>
-                    <Route path="/logout">
+                    <Route path="/log-out">
                       <LogOut />
                     </Route>
                     <Route path="/forgot-password">
                       <ForgotPassword />
                     </Route>
-                    <Route path="/">
+                    <Route path="/verified-emails/new">
+                      <CreateVerifiedEmail />
+                    </Route>
+                    <Route path="/" exact>
                       <Home />
                     </Route>
+                    <Route path="*">
+                      <Result
+                        status="404"
+                        title="404"
+                        subTitle="Sorry, the page you visited does not exist."
+                        extra={
+                          <Link to="/">
+                            <Button type="primary">Back Home</Button>
+                          </Link>
+                        }
+                      />
+                    </Route>
                   </Switch>
-                </div>
+                </LayoutContainer>
               </Authenticated>
             </Route>
           </Switch>

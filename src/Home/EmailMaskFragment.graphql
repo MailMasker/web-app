@@ -1,0 +1,5 @@
+fragment EmailMaskFragment on EmailMask {
+  id
+  base
+  domain
+}

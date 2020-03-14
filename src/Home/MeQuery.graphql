@@ -23,15 +23,3 @@ query Me {
     }
   }
 }
-
-fragment EmailMaskFragment on EmailMask {
-  id
-  base
-  domain
-}
-
-fragment VerifiedEmailFragment on VerifiedEmail {
-  id
-  email
-  verified
-}

@@ -1,0 +1,5 @@
+fragment VerifiedEmailFragment on VerifiedEmail {
+  id
+  email
+  verified
+}

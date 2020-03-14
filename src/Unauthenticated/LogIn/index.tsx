@@ -1,9 +1,11 @@
 import { Button, Checkbox, Form, Input, Typography } from "antd";
 
+import ErrorMessage from "../../lib/ErrorMessage";
+import { Link } from "react-router-dom";
 import React from "react";
 import { useLogInMutation } from "./generated/LogInMutation";
 
-const { Text } = Typography;
+const { Title } = Typography;
 
 const layout = {
   labelCol: { span: 8 },
@@ -39,50 +41,60 @@ const LogIn = ({ onLogInSuccess }: LogInProps) => {
   };
 
   return (
-    <Form
-      {...layout}
-      name="basic"
-      form={form}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
-      <Form.Item
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: "Please input your username!" }]}
+    <React.Fragment>
+      <Title>Log In</Title>
+
+      <Form
+        {...layout}
+        name="basic"
+        form={form}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
       >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      {/* history.push("/register")
-      history.push("/reset-password") */}
-
-      {error && <Text type="danger">{error.message}</Text>}
-
-      <Form.Item {...tailLayout}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={loading}
-          disabled={loading}
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: "Please input your username!" }]}
         >
-          Log In
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>
+        {/* history.push("/register")
+      history.push("/reset-password") */}
+        <Form.Item {...tailLayout}>
+          <ErrorMessage error={error} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}
+          >
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              disabled={loading}
+            >
+              Log In
+            </Button>
+            <Link to="/forgot-password" style={{ marginLeft: "12px" }}>
+              Forgot password?
+            </Link>
+          </div>
+        </Form.Item>
+      </Form>
+    </React.Fragment>
   );
 };
 

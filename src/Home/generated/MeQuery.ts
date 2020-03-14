@@ -1,5 +1,10 @@
 import * as Types from "../../generated/types";
 
+import {
+  VerifiedEmailFragmentDoc,
+  VerifiedEmailFragment
+} from "../../VerifiedEmails/generated/VerifiedEmailFragment";
+import { EmailMaskFragmentDoc, EmailMaskFragment } from "./EmailMaskFragment";
 import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/react-common";
 import * as ApolloReactHooks from "@apollo/react-hooks";
@@ -35,29 +40,6 @@ export type MeQuery = { readonly __typename?: "Query" } & {
   };
 };
 
-export type EmailMaskFragment = { readonly __typename?: "EmailMask" } & Pick<
-  Types.EmailMask,
-  "id" | "base" | "domain"
->;
-
-export type VerifiedEmailFragment = {
-  readonly __typename?: "VerifiedEmail";
-} & Pick<Types.VerifiedEmail, "id" | "email" | "verified">;
-
-export const EmailMaskFragmentDoc = gql`
-  fragment EmailMaskFragment on EmailMask {
-    id
-    base
-    domain
-  }
-`;
-export const VerifiedEmailFragmentDoc = gql`
-  fragment VerifiedEmailFragment on VerifiedEmail {
-    id
-    email
-    verified
-  }
-`;
 export const MeDocument = gql`
   query Me {
     me {

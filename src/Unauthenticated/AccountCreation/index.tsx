@@ -1,10 +1,11 @@
 import { Button, Checkbox, Form, Input, Typography } from "antd";
 
+import ErrorMessage from "../../lib/ErrorMessage";
 import React from "react";
 import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import { uuidv4 } from "../../lib/uuid";
 
-const { Text } = Typography;
+const { Title } = Typography;
 
 const layout = {
   labelCol: { span: 8 },
@@ -42,49 +43,52 @@ const AccountCreation = ({
   };
 
   return (
-    <Form
-      {...layout}
-      name="basic"
-      form={form}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
-      <Form.Item
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: "Please input your username!" }]}
+    <React.Fragment>
+      <Title>Sign Up</Title>
+
+      <Form
+        {...layout}
+        name="basic"
+        form={form}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
       >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      {/* history.push("/register")
-      history.push("/reset-password") */}
-
-      {error && <Text type="danger">{error.message}</Text>}
-      <Form.Item {...tailLayout}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={loading}
-          disabled={loading}
+        <Form.Item
+          label="Create Username"
+          name="username"
+          rules={[{ required: true, message: "Please choose a username!" }]}
         >
-          Sign Up
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Choose Password"
+          name="password"
+          rules={[{ required: true, message: "Please choose a password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>
+
+        <Form.Item {...tailLayout}>
+          <ErrorMessage error={error} />
+          <div>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              disabled={loading}
+            >
+              Sign Up
+            </Button>
+          </div>
+        </Form.Item>
+      </Form>
+    </React.Fragment>
   );
 };
 
