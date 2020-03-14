@@ -1,7 +1,7 @@
 import { Button, Form, Input, Result, message } from "antd";
-import { Link, useHistory } from "react-router-dom";
 
 import ErrorMessage from "../lib/ErrorMessage";
+import { Link } from "react-router-dom";
 import React from "react";
 import { useCreateVerifiedEmailMutation } from "./generated/CreateVerifiedEmail";
 
@@ -20,8 +20,6 @@ const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = ({}) => {
     createVerifiedEmail,
     { data, error, loading }
   ] = useCreateVerifiedEmailMutation();
-
-  const history = useHistory();
 
   if (data) {
     return (

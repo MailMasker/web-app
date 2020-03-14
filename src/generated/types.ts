@@ -14,10 +14,6 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
-export type CreateEmailMaskInput = {
-  raw: Scalars['String'];
-};
-
 export type CreateRouteInput = {
   redirectToVerifiedEmailID: Scalars['ID'];
   emailMaskID: Scalars['ID'];
@@ -85,7 +81,7 @@ export type MutationCreateVerifiedEmailArgs = {
 
 
 export type MutationCreateEmailMaskArgs = {
-  input: CreateEmailMaskInput;
+  raw: Scalars['String'];
 };
 
 

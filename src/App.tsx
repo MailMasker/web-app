@@ -5,6 +5,7 @@ import { Link, Route, Router, Switch } from "react-router-dom";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
+import CreateEmailMask from "./EmailMasks/CreateEmailMask";
 import CreateVerifiedEmail from "./VerifiedEmails/CreateVerifiedEmail";
 import ForgotPassword from "./Unauthenticated/ForgotPassword";
 import Home from "./Home";
@@ -55,6 +56,9 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="/verified-emails/new">
                       <CreateVerifiedEmail />
+                    </Route>
+                    <Route path="/email-masks/new">
+                      <CreateEmailMask />
                     </Route>
                     <Route path="/" exact>
                       <Home />
