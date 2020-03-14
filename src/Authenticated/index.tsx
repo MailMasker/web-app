@@ -2,7 +2,7 @@ import { Redirect, useRouteMatch } from "react-router-dom";
 
 import React from "react";
 import { Spin } from "antd";
-import { useMeQuery } from "../Me/generated/MeQuery";
+import { useMeQuery } from "../Home/generated/MeQuery";
 
 interface AuthenticatedProps {}
 

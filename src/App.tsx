@@ -5,7 +5,7 @@ import { Link, Route, Router, Switch } from "react-router-dom";
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
 import ForgotPassword from "./Unauthenticated/ForgotPassword";
-import Home from "./Me/Home";
+import Home from "./Home";
 import LogOut from "./LogOut/LogOut";
 import React from "react";
 import Unauthenticated from "./Unauthenticated";
