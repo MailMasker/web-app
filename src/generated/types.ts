@@ -14,16 +14,6 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
-export type CreateRouteInput = {
-  redirectToVerifiedEmailID: Scalars['ID'];
-  emailMaskID: Scalars['ID'];
-};
-
-export type CreateRoutePayload = {
-   __typename?: 'CreateRoutePayload';
-  routeID: Scalars['ID'];
-};
-
 export type CreateUserPayload = {
    __typename?: 'CreateUserPayload';
   userID: Scalars['ID'];
@@ -53,7 +43,7 @@ export type Mutation = {
   createUser: CreateUserPayload;
   createVerifiedEmail: VerifiedEmail;
   createEmailMask: EmailMask;
-  createRoute: CreateRoutePayload;
+  createRoute: Route;
 };
 
 
@@ -86,7 +76,8 @@ export type MutationCreateEmailMaskArgs = {
 
 
 export type MutationCreateRouteArgs = {
-  input: CreateRouteInput;
+  redirectToVerifiedEmailID: Scalars['ID'];
+  emailMaskID: Scalars['ID'];
 };
 
 export type Query = {

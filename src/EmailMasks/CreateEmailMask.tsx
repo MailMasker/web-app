@@ -1,6 +1,6 @@
-import { Button, Form, Input, Result, Select, message } from "antd";
+import { Button, Form, Input, Result, Select } from "antd";
 import { Link, useHistory } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import ErrorMessage from "../lib/ErrorMessage";
 import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
@@ -89,7 +89,11 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
               }
             ]}
           >
-            <Input style={{ width: "50%" }} placeholder="Choose an alias" />
+            <Input
+              style={{ width: "50%" }}
+              placeholder="Choose an alias"
+              autoFocus
+            />
           </Form.Item>
           <Form.Item
             name="domain"

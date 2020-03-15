@@ -1,4 +1,4 @@
-import { Button, Form, Input, Result, message } from "antd";
+import { Button, Form, Input, Result } from "antd";
 
 import ErrorMessage from "../lib/ErrorMessage";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ const tailLayout = {
 
 interface CreateVerifiedEmailProps {}
 
-const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = ({}) => {
+const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = () => {
   const [
     createVerifiedEmail,
     { data, error, loading }
@@ -28,7 +28,7 @@ const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = ({}) => {
         title="You're half-way there!"
         subTitle={`Before we can redirect emails to ${data.createVerifiedEmail.email}, you will have to find an email we just sent you and click the 'Verify Email' button. This confirms for us that you own this email account.`}
         extra={[
-          <Link to="">
+          <Link to="" key="go-home">
             <Button type="primary" key="console">
               Go Home
             </Button>
@@ -67,7 +67,7 @@ const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = ({}) => {
         name="email"
         rules={[{ required: true, message: "Please input an email address" }]}
       >
-        <Input type="email" />
+        <Input type="email" autoFocus />
       </Form.Item>
 
       <Form.Item {...tailLayout}>

@@ -26,7 +26,7 @@ export default function useRandomWords(count: number) {
         console.error(new Error(`Failed to fetch random words: ${err}`));
         setLoading(false);
       });
-  }, []);
+  }, [count]);
 
   return { loading, allRandomWords };
 }

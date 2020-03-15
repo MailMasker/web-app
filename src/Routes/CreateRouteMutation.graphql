@@ -1,0 +1,16 @@
+mutation CreateRoute($redirectToVerifiedEmailID: ID!, $emailMaskID: ID!) {
+  createRoute(
+    redirectToVerifiedEmailID: $redirectToVerifiedEmailID
+    emailMaskID: $emailMaskID
+  ) {
+    id
+    redirectToVerifiedEmail {
+      ...VerifiedEmailFragment
+    }
+    emailMask {
+      ...EmailMaskFragment
+    }
+    expires
+    disabled
+  }
+}

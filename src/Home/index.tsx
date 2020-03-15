@@ -23,7 +23,6 @@ const Home: React.FC<HomeProps> = () => {
   } else if (error) {
     return <ErrorMessage error={error} />;
   } else if (data) {
-    const routes = [...data.me.user.routes];
     return (
       <React.Fragment>
         <div>{JSON.stringify(data)}</div>
@@ -98,17 +97,14 @@ const Home: React.FC<HomeProps> = () => {
           renderItem={route => (
             <List.Item>
               <List.Item.Meta
-                title={<Link to={`/masks/${route.id}`}>{route.id}</Link>}
-                description={
-                  route.expires ? (
-                    "Expires" + new Date(route.expires).toLocaleTimeString()
-                  ) : (
-                    <div>
-                      Awaiting verification...{" "}
-                      <Link to="">Resend verification email?</Link>
-                    </div>
-                  )
+                title={
+                  <Link to={`/masks/${route.id}`}>
+                    Redirect emails received at {route.emailMask.base}@
+                    {route.emailMask.domain} to{" "}
+                    {route.redirectToVerifiedEmail.email}
+                  </Link>
                 }
+                description={"Never expires"}
               />
             </List.Item>
           )}

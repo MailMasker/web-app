@@ -1,11 +1,12 @@
 import "antd/dist/antd.css";
 
-import { Button, Layout, Result } from "antd";
+import { Button, Result } from "antd";
 import { Link, Route, Router, Switch } from "react-router-dom";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
 import CreateEmailMask from "./EmailMasks/CreateEmailMask";
+import CreateRoute from "./Routes/CreateRoute";
 import CreateVerifiedEmail from "./VerifiedEmails/CreateVerifiedEmail";
 import ForgotPassword from "./Unauthenticated/ForgotPassword";
 import Home from "./Home";
@@ -16,8 +17,6 @@ import Unauthenticated from "./Unauthenticated";
 import { client } from "./apollo-client";
 import { history } from "./history";
 import localStorage from "./lib/localStorage";
-
-const { Header, Content, Footer } = Layout;
 
 const App: React.FC = () => {
   return (
@@ -59,6 +58,9 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="/email-masks/new">
                       <CreateEmailMask />
+                    </Route>
+                    <Route path="/routes/new">
+                      <CreateRoute />
                     </Route>
                     <Route path="/" exact>
                       <Home />
