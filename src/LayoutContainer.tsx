@@ -15,7 +15,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
 }) => {
   const history = useHistory();
   return (
-    <Layout className="layout">
+    <Layout className="layout" style={{ minHeight: "100vh" }}>
       <Header style={{ display: "flex", justifyContent: "space-between" }}>
         <div>
           <div

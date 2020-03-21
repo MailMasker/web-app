@@ -1,4 +1,6 @@
-import ApolloClient from "apollo-boost";
+import ApolloClient, { ApolloError } from "apollo-boost";
+
+import hasGraphQLAuthenticationError from "./lib/hasGraphQLAuthenticationError";
 import { history } from "./history";
 import localStorage from "./lib/localStorage";
 
@@ -18,21 +20,18 @@ export const client = new ApolloClient({
       options
     ),
   onError: ({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ extensions }) => {
-        if (extensions && extensions.code === `UNAUTHENTICATED`) {
-          if (
-            history.location.pathname !== "/sign-up" &&
-            history.location.pathname !== "/log-in"
-          ) {
-            if (!!localStorage.getItem("global", "hasAuthenticatedOnce")) {
-              history.push(`/log-in`);
-            } else {
-              history.push(`/sign-up`);
-            }
-          }
+    if (hasGraphQLAuthenticationError(graphQLErrors)) {
+      if (
+        history.location.pathname !== "/sign-up" &&
+        history.location.pathname !== "/log-in" &&
+        !history.location.pathname.startsWith("/verify-email")
+      ) {
+        if (!!localStorage.getItem("global", "hasAuthenticatedOnce")) {
+          history.push(`/log-in`);
+        } else {
+          history.push(`/sign-up`);
         }
-      });
+      }
     } else if (networkError) {
       console.log(`network error:${networkError}`);
     }

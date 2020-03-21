@@ -1,0 +1,44 @@
+import * as Types from '../../generated/types';
+
+import gql from 'graphql-tag';
+import * as ApolloReactCommon from '@apollo/react-common';
+import * as ApolloReactHooks from '@apollo/react-hooks';
+
+export type UnauthenticateMutationVariables = {};
+
+
+export type UnauthenticateMutation = (
+  { readonly __typename?: 'Mutation' }
+  & Pick<Types.Mutation, 'unauthenticate'>
+);
+
+
+export const UnauthenticateDocument = gql`
+    mutation Unauthenticate {
+  unauthenticate
+}
+    `;
+export type UnauthenticateMutationFn = ApolloReactCommon.MutationFunction<UnauthenticateMutation, UnauthenticateMutationVariables>;
+
+/**
+ * __useUnauthenticateMutation__
+ *
+ * To run a mutation, you first call `useUnauthenticateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnauthenticateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unauthenticateMutation, { data, loading, error }] = useUnauthenticateMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUnauthenticateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnauthenticateMutation, UnauthenticateMutationVariables>) {
+        return ApolloReactHooks.useMutation<UnauthenticateMutation, UnauthenticateMutationVariables>(UnauthenticateDocument, baseOptions);
+      }
+export type UnauthenticateMutationHookResult = ReturnType<typeof useUnauthenticateMutation>;
+export type UnauthenticateMutationResult = ApolloReactCommon.MutationResult<UnauthenticateMutation>;
+export type UnauthenticateMutationOptions = ApolloReactCommon.BaseMutationOptions<UnauthenticateMutation, UnauthenticateMutationVariables>;

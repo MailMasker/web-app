@@ -6,6 +6,7 @@ import React, { useCallback } from "react";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
+import AuthenticatedOrUnauthenticated from "./AuthenticatedOrUnauthenticated";
 import CreateEmailMask from "./EmailMasks/CreateEmailMask";
 import CreateRoute from "./Routes/CreateRoute";
 import CreateVerifiedEmail from "./VerifiedEmails/CreateVerifiedEmail";
@@ -14,6 +15,7 @@ import Home from "./Home";
 import LayoutContainer from "./LayoutContainer";
 import LogOut from "./LogOut/LogOut";
 import Unauthenticated from "./Unauthenticated";
+import VerifyEmail from "./Unauthenticated/VerifyEmail";
 import { client } from "./apollo-client";
 import { history } from "./history";
 import localStorage from "./lib/localStorage";
@@ -29,12 +31,27 @@ const App: React.FC = () => {
         className="App"
         style={{
           display: "flex",
-          justifyContent: "center",
-          margin: "32px 0px"
+          justifyContent: "center"
         }}
       >
         <Router history={history}>
           <Switch>
+            <Route
+              path="/verify-email/:email/code/:verificationCode"
+              render={({ match }) => (
+                <AuthenticatedOrUnauthenticated>
+                  {({ authenticated }) => (
+                    <LayoutContainer authenticated={authenticated}>
+                      <VerifyEmail
+                        authenticated={authenticated}
+                        email={match.params.email}
+                        verificationCode={match.params.verificationCode}
+                      />
+                    </LayoutContainer>
+                  )}
+                </AuthenticatedOrUnauthenticated>
+              )}
+            />
             <Route path={["/log-in", "/sign-up", "/verify-email"]}>
               <Unauthenticated onLoginSuccess={onLoginSuccess} />
             </Route>
