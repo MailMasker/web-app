@@ -1,0 +1,7 @@
+mutation VerifyEmailWithCodeMutation($email: String!, $code: String!) {
+  verifyEmailWithCode(email: $email, code: $code) {
+    id
+    email
+    verified
+  }
+}

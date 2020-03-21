@@ -4,6 +4,7 @@ import AccountCreation from "./AccountCreation";
 import LayoutContainer from "../LayoutContainer";
 import LogIn from "./LogIn";
 import React from "react";
+import VerifyEmail from "./VerifyEmail";
 
 interface UnauthenticatedProps {
   onLoginSuccess: () => void;
@@ -28,6 +29,15 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = ({
               />
             )}
           ></Route>
+          <Route
+            path="/verify-email/:email/code/:verificationCode"
+            render={({ match }) => (
+              <VerifyEmail
+                email={match.params.email}
+                verificationCode={match.params.verificationCode}
+              />
+            )}
+          />
           <Route path="*">
             <Redirect to="/log-in" />
           </Route>

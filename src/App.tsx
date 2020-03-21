@@ -2,6 +2,7 @@ import "antd/dist/antd.css";
 
 import { Button, Result } from "antd";
 import { Link, Route, Router, Switch } from "react-router-dom";
+import React, { useCallback } from "react";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
@@ -12,13 +13,16 @@ import ForgotPassword from "./Unauthenticated/ForgotPassword";
 import Home from "./Home";
 import LayoutContainer from "./LayoutContainer";
 import LogOut from "./LogOut/LogOut";
-import React from "react";
 import Unauthenticated from "./Unauthenticated";
 import { client } from "./apollo-client";
 import { history } from "./history";
 import localStorage from "./lib/localStorage";
 
 const App: React.FC = () => {
+  const onLoginSuccess = useCallback(() => {
+    localStorage.setItem("global", "hasAuthenticatedOnce", "true");
+    history.push("/");
+  }, []);
   return (
     <ApolloProvider client={client}>
       <div
@@ -31,17 +35,8 @@ const App: React.FC = () => {
       >
         <Router history={history}>
           <Switch>
-            <Route path={["/log-in", "/sign-up"]}>
-              <Unauthenticated
-                onLoginSuccess={() => {
-                  localStorage.setItem(
-                    "global",
-                    "hasAuthenticatedOnce",
-                    "true"
-                  );
-                  history.push("/");
-                }}
-              />
+            <Route path={["/log-in", "/sign-up", "/verify-email"]}>
+              <Unauthenticated onLoginSuccess={onLoginSuccess} />
             </Route>
             <Route path="*">
               <Authenticated>

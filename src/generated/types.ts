@@ -44,6 +44,7 @@ export type Mutation = {
   createVerifiedEmail: VerifiedEmail;
   createEmailMask: EmailMask;
   createRoute: Route;
+  verifyEmailWithCode: VerifiedEmail;
 };
 
 
@@ -78,6 +79,12 @@ export type MutationCreateEmailMaskArgs = {
 export type MutationCreateRouteArgs = {
   redirectToVerifiedEmailID: Scalars['ID'];
   emailMaskID: Scalars['ID'];
+};
+
+
+export type MutationVerifyEmailWithCodeArgs = {
+  email: Scalars['String'];
+  code: Scalars['String'];
 };
 
 export type Query = {

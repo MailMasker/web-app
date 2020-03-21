@@ -25,7 +25,6 @@ const Home: React.FC<HomeProps> = () => {
   } else if (data) {
     return (
       <React.Fragment>
-        <div>{JSON.stringify(data)}</div>
         <Title level={2}>Email Masks</Title>
         <List
           itemLayout="horizontal"
@@ -91,7 +90,12 @@ const Home: React.FC<HomeProps> = () => {
         <List
           itemLayout="horizontal"
           locale={{
-            emptyText: "You have no routes."
+            emptyText: (
+              <div>
+                You have no routes.{" "}
+                <Link to="/routes/new">Create one now?</Link>
+              </div>
+            )
           }}
           dataSource={[...data.me.user.routes]}
           renderItem={route => (
