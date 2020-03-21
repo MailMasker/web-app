@@ -16,64 +16,79 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
   const history = useHistory();
   return (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
-      <Header style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>
-          <div
-            style={{
-              width: "120px",
-              height: "31px",
-              background: "rgba(255, 255, 255, 0.2)",
-              margin: "16px 24px 16px 0",
-              float: "left"
-            }}
-          />
-          {authenticated ? (
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={["2"]}
-              style={{ lineHeight: "64px" }}
-              onSelect={() => history.push("/")}
-            >
-              <Menu.Item key="1">Account</Menu.Item>
-            </Menu>
-          ) : (
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={["2"]}
-              style={{ lineHeight: "64px" }}
-              onSelect={() => history.push("/sign-up")}
-            >
-              <Menu.Item key="1">Sign Up</Menu.Item>
-            </Menu>
-          )}
-        </div>
-        <div>
-          {authenticated ? (
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={["2"]}
-              style={{ lineHeight: "64px" }}
-              onSelect={() => history.push("/log-out")}
-            >
-              <Menu.Item key="1">Log Out</Menu.Item>
-            </Menu>
-          ) : (
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={["2"]}
-              style={{ lineHeight: "64px" }}
-              onSelect={() => history.push("/log-in")}
-            >
-              <Menu.Item key="1">Log In</Menu.Item>
-            </Menu>
-          )}
+      <Header>
+        <div
+          style={{
+            display: "flex",
+            maxWidth: "1200px",
+            justifyContent: "space-between",
+            margin: "0px auto"
+          }}
+        >
+          <div>
+            <div
+              style={{
+                width: "120px",
+                height: "31px",
+                background: "rgba(255, 255, 255, 0.2)",
+                margin: "16px 24px 16px 0",
+                float: "left"
+              }}
+            />
+            {authenticated ? (
+              <Menu
+                theme="dark"
+                mode="horizontal"
+                defaultSelectedKeys={["2"]}
+                style={{ lineHeight: "64px" }}
+                onSelect={() => history.push("/")}
+              >
+                <Menu.Item key="1">Account</Menu.Item>
+              </Menu>
+            ) : (
+              <Menu
+                theme="dark"
+                mode="horizontal"
+                defaultSelectedKeys={["2"]}
+                style={{ lineHeight: "64px" }}
+                onSelect={() => history.push("/sign-up")}
+              >
+                <Menu.Item key="1">Sign Up</Menu.Item>
+              </Menu>
+            )}
+          </div>
+          <div>
+            {authenticated ? (
+              <Menu
+                theme="dark"
+                mode="horizontal"
+                defaultSelectedKeys={["2"]}
+                style={{ lineHeight: "64px" }}
+                onSelect={() => history.push("/log-out")}
+              >
+                <Menu.Item key="1">Log Out</Menu.Item>
+              </Menu>
+            ) : (
+              <Menu
+                theme="dark"
+                mode="horizontal"
+                defaultSelectedKeys={["2"]}
+                style={{ lineHeight: "64px" }}
+                onSelect={() => history.push("/log-in")}
+              >
+                <Menu.Item key="1">Log In</Menu.Item>
+              </Menu>
+            )}
+          </div>
         </div>
       </Header>
-      <Content style={{ padding: "0 50px" }}>
+      <Content
+        style={{
+          maxWidth: "1200px",
+          margin: "0px auto",
+          width: "100%"
+        }}
+      >
         <div
           style={{
             background: "#fff",
