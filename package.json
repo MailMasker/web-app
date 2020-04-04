@@ -19,7 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate": "graphql-codegen --config \"./config/codegen/apollo-$S_ENV.yml\""
+    "generate": "graphql-codegen --config \"./config/codegen/apollo-$S_ENV.yml\"",
+    "deploy-dev": "yarn build && aws s3 sync build/ s3://www.1nt.email"
   },
   "eslintConfig": {
     "extends": "react-app"
