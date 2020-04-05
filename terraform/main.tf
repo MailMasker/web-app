@@ -5,6 +5,15 @@ provider "aws" {
   region = "us-east-1"
 }
 
+variable "root_domain_name" {
+  type = map
+
+  default = {
+    dev = "mailmasker-dev.com"
+    prod = "mailmasker.com"
+  }
+}
+
 variable "app_domain_name" {
   type = map
 
@@ -20,15 +29,6 @@ variable "www_domain_name" {
   default = {
     dev = "www.mailmasker-dev.com"
     prod = "www.mailmasker.com"
-  }
-}
-
-variable "root_domain_name" {
-  type = map
-
-  default = {
-    dev = "mailmasker-dev.com"
-    prod = "mailmasker.com"
   }
 }
 
@@ -76,6 +76,8 @@ resource "aws_cloudfront_distribution" "email-forwarder-www" {
     }
   }
 
+  default_root_object = "index.html"
+
   default_cache_behavior {
     target_origin_id = "wwwS3"
 
@@ -99,7 +101,7 @@ resource "aws_cloudfront_distribution" "email-forwarder-www" {
   aliases = [lookup(var.www_domain_name, terraform.workspace)]
 
   viewer_certificate {
-    acm_certificate_arn = "arn:aws:acm:us-east-1:747558615165:certificate/00a1538d-91c8-49ab-8f3f-b8481aafcb47"
+    acm_certificate_arn = "arn:aws:acm:us-east-1:747558615165:certificate/06a648d7-dcf4-40af-8ece-b8a1ae85f1e4"
 	  ssl_support_method = "sni-only"
   }
 }
@@ -148,6 +150,8 @@ resource "aws_cloudfront_distribution" "email-forwarder-app" {
     }
   }
 
+  default_root_object = "index.html"
+
   default_cache_behavior {
     target_origin_id = "email-forwarder-app-S3"
 
@@ -171,17 +175,18 @@ resource "aws_cloudfront_distribution" "email-forwarder-app" {
   aliases = [lookup(var.app_domain_name, terraform.workspace)]
 
   viewer_certificate {
-    acm_certificate_arn = "arn:aws:acm:us-east-1:747558615165:certificate/00a1538d-91c8-49ab-8f3f-b8481aafcb47"
+    acm_certificate_arn = "arn:aws:acm:us-east-1:747558615165:certificate/06a648d7-dcf4-40af-8ece-b8a1ae85f1e4"
 	  ssl_support_method = "sni-only"
   }
 }
 
-resource "aws_route53_zone" "app-zone" {
-  name = lookup(var.app_domain_name, terraform.workspace)
+
+resource "aws_route53_zone" "zone" {
+  name = lookup(var.root_domain_name, terraform.workspace)
 }
 
 resource "aws_route53_record" "email-forwarder-app" {
-  zone_id = aws_route53_zone.app-zone.zone_id
+  zone_id = aws_route53_zone.zone.zone_id
   name    = lookup(var.app_domain_name, terraform.workspace)
   type    = "A"
 
@@ -192,12 +197,8 @@ resource "aws_route53_record" "email-forwarder-app" {
   }
 }
 
-resource "aws_route53_zone" "www-zone" {
-  name = lookup(var.www_domain_name, terraform.workspace)
-}
-
 resource "aws_route53_record" "email-forwarder-www" {
-  zone_id = aws_route53_zone.www-zone.zone_id
+  zone_id = aws_route53_zone.zone.zone_id
   name    = lookup(var.www_domain_name, terraform.workspace)
   type    = "A"
 
