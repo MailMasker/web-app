@@ -6,8 +6,10 @@ import localStorage from "./lib/localStorage";
 
 const apiBaseURL =
   process.env.REACT_APP_ENVIRONMENT === "local"
-    ? "http://localhost:3000/graphql"
-    : "https://n0tccaeafe.execute-api.us-east-1.amazonaws.com/dev/graphql";
+    ? "http://localhost:4201/graphql"
+    : process.env.REACT_APP_ENVIRONMENT === "dev"
+    ? "https://n0tccaeafe.execute-api.us-east-1.amazonaws.com/dev/graphql"
+    : "https://5ezbjkpthf.execute-api.us-east-1.amazonaws.com/prod/graphql";
 
 export const client = new ApolloClient({
   credentials: "include",
@@ -35,5 +37,5 @@ export const client = new ApolloClient({
     } else if (networkError) {
       console.log(`network error:${networkError}`);
     }
-  }
+  },
 });

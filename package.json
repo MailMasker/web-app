@@ -15,12 +15,11 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "REACT_APP_ENVIRONMENT=local react-scripts start",
+    "start": "PORT=4200 REACT_APP_ENVIRONMENT=local react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate": "graphql-codegen --config \"./config/codegen/apollo-$S_ENV.yml\"",
-    "deploy-dev": "yarn build && aws s3 sync build/ s3://www.1nt.email"
+    "generate": "graphql-codegen --config \"./config/codegen/apollo-$S_ENV.yml\""
   },
   "eslintConfig": {
     "extends": "react-app"
