@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-
 import ErrorMessage from "../lib/ErrorMessage";
+import React from "react";
 import { Spin } from "antd";
 import hasGraphQLAuthenticationError from "../lib/hasGraphQLAuthenticationError";
 import { useMeQuery } from "../Home/generated/MeQuery";
@@ -10,7 +9,7 @@ interface AuthenticatedOrUnauthenticatedProps {
 }
 
 const AuthenticatedOrUnauthenticated: React.FC<AuthenticatedOrUnauthenticatedProps> = ({
-  children
+  children,
 }) => {
   const { data, loading, error } = useMeQuery();
 

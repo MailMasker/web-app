@@ -10,12 +10,12 @@ interface LogOutProps {}
 const LogOut: React.FC<LogOutProps> = () => {
   const [
     unauthenticate,
-    { data, loading, error }
+    { data, loading, error },
   ] = useUnauthenticateMutation();
 
   useEffect(() => {
     unauthenticate();
-  }, []);
+  }, [unauthenticate]);
 
   if (loading) {
     return (

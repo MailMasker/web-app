@@ -1,4 +1,4 @@
-import { AutoComplete, Button, Form, Input, Radio, Result, Select } from "antd";
+import { AutoComplete, Button, Form, Radio, Result, Select } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import React, { useState } from "react";
 
@@ -11,10 +11,10 @@ const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
+  wrapperCol: { span: 16 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 }
+  wrapperCol: { offset: 8, span: 16 },
 };
 
 interface CreateRouteProps {}
@@ -38,7 +38,7 @@ const CreateRoute: React.FC<CreateRouteProps> = ({}) => {
             <Button type="primary" key="console">
               Go Home
             </Button>
-          </Link>
+          </Link>,
         ]}
       />
     );
@@ -56,7 +56,7 @@ const CreateRoute: React.FC<CreateRouteProps> = ({}) => {
     emailMaskEmail:
       meQueryData && meQueryData.me.user.emailMasks.length === 1
         ? `${meQueryData.me.user.emailMasks[0].base}@${meQueryData.me.user.emailMasks[0].domain}`
-        : undefined
+        : undefined,
   };
 
   const verifiedEmailOptions: {
@@ -82,16 +82,18 @@ const CreateRoute: React.FC<CreateRouteProps> = ({}) => {
       label: `${base}@${domain}`,
       value: `${base}@${domain}`,
       key: id,
-      id
+      id,
     };
   });
 
   const onFinish = async ({
     redirectToVerifiedEmailID,
-    emailMaskEmail
+    emailMaskEmail,
   }: any) => {
     console.log({ redirectToVerifiedEmailID, emailMaskEmail });
-    const emailMask = emailMaskOptions.find(em => em.value === emailMaskEmail);
+    const emailMask = emailMaskOptions.find(
+      (em) => em.value === emailMaskEmail
+    );
     if (!emailMask) {
       console.error(
         new Error(
@@ -102,7 +104,7 @@ const CreateRoute: React.FC<CreateRouteProps> = ({}) => {
     }
     try {
       await createRoute({
-        variables: { redirectToVerifiedEmailID, emailMaskID: emailMask.id }
+        variables: { redirectToVerifiedEmailID, emailMaskID: emailMask.id },
       });
     } catch (err) {
       console.error(err);
@@ -116,7 +118,7 @@ const CreateRoute: React.FC<CreateRouteProps> = ({}) => {
   const radioStyle = {
     display: "block",
     height: "30px",
-    lineHeight: "30px"
+    lineHeight: "30px",
   };
 
   return (

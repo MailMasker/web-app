@@ -12,3 +12,9 @@ yarn deploy-dev
 ```
 aws-vault exec email-forwarder-dev -- terraform apply
 ```
+
+## Running locally
+
+### Trusting the certificate
+
+https://medium.com/@danielgwilson/https-and-create-react-app-3a30ed31c904

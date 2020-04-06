@@ -10,10 +10,10 @@ const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
+  wrapperCol: { span: 16 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 }
+  wrapperCol: { offset: 8, span: 16 },
 };
 
 interface CreateEmailMaskProps {}
@@ -21,7 +21,7 @@ interface CreateEmailMaskProps {}
 const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
   const [
     createEmailMask,
-    { data, error, loading }
+    { data, error, loading },
   ] = useCreateEmailMaskMutation();
 
   const history = useHistory();
@@ -39,14 +39,14 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
           <Link
             to={{
               pathname: "/routes/new",
-              search: `?emailMaskID=${data.createEmailMask.id}`
+              search: `?emailMaskID=${data.createEmailMask.id}`,
             }}
             key="create-route"
           >
             <Button type="primary" key="console">
               Create Route
             </Button>
-          </Link>
+          </Link>,
         ]}
       />
     );
@@ -55,7 +55,7 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
   const onFinish = async (values: any) => {
     try {
       await createEmailMask({
-        variables: { email: `${values.base}@${values.domain}` }
+        variables: { email: `${values.base}@${values.domain}` },
       });
     } catch (err) {
       console.error(err);
@@ -85,8 +85,8 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
               {
                 required: true,
                 message:
-                  "An alias (aka 'you' part in you@example.com) is required"
-              }
+                  "An alias (aka 'you' part in you@example.com) is required",
+              },
             ]}
           >
             <Input
@@ -102,8 +102,8 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
               {
                 required: true,
                 message:
-                  "You must choose a domain (aka the 'example.com' part in you@example.com)"
-              }
+                  "You must choose a domain (aka the 'example.com' part in you@example.com)",
+              },
             ]}
           >
             <Select placeholder="Select domain">
