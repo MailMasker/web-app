@@ -6,7 +6,7 @@ import localStorage from "./lib/localStorage";
 
 const apiBaseURL =
   process.env.REACT_APP_ENVIRONMENT === "local"
-    ? "http://localhost:4201/graphql"
+    ? "http://127.0.0.1:4201/graphql"
     : process.env.REACT_APP_ENVIRONMENT === "dev"
     ? "https://n0tccaeafe.execute-api.us-east-1.amazonaws.com/dev/graphql"
     : "https://5ezbjkpthf.execute-api.us-east-1.amazonaws.com/prod/graphql";
