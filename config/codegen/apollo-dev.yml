@@ -1,5 +1,5 @@
 overwrite: true
-schema: "https://n0tccaeafe.execute-api.us-east-1.amazonaws.com/dev/graphql"
+schema: "https://api.mailmasker-dev.com/graphql"
 documents: "src/**/*.graphql"
 generates:
   src/generated/fragment-matcher.ts:

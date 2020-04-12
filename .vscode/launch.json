@@ -2,9 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Chrome",
+      "type": "node",
+      "request": "launch",
+      "name": "Run local",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["start"],
+      "noDebug": true
+    },
+    {
       "type": "chrome",
       "request": "launch",
+      "name": "Chrome",
       "url": "https://localhost:4200",
       "webRoot": "${workspaceFolder}/src",
       "sourceMapPathOverrides": {
