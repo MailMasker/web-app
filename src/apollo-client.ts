@@ -6,7 +6,7 @@ import localStorage from "./lib/localStorage";
 
 const apiBaseURL =
   process.env.REACT_APP_ENVIRONMENT === "local"
-    ? "https://localhost:4201/graphql"
+    ? "https://localhost:4201/local/graphql"
     : process.env.REACT_APP_ENVIRONMENT === "dev"
     ? "https://api.mailmasker-dev.com/graphql"
     : "https://api.mailmasker.com/graphql";
@@ -37,5 +37,5 @@ export const client = new ApolloClient({
     } else if (networkError) {
       console.log(`network error:${networkError}`);
     }
-  },
+  }
 });
