@@ -1,35 +1,34 @@
-import * as Types from "../../../generated/types";
+import * as Types from '../../../generated/types';
 
-import gql from "graphql-tag";
-import * as ApolloReactCommon from "@apollo/react-common";
-import * as ApolloReactHooks from "@apollo/react-hooks";
+import gql from 'graphql-tag';
+import * as ApolloReactCommon from '@apollo/react-common';
+import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type VerifyEmailWithCodeMutationVariables = {
-  email: Types.Scalars["String"];
-  code: Types.Scalars["String"];
+  email: Types.Scalars['String'];
+  code: Types.Scalars['String'];
 };
 
-export type VerifyEmailWithCodeMutation = {
-  readonly __typename?: "Mutation";
-} & {
-  readonly verifyEmailWithCode: {
-    readonly __typename?: "VerifiedEmail";
-  } & Pick<Types.VerifiedEmail, "id" | "email" | "verified">;
-};
+
+export type VerifyEmailWithCodeMutation = (
+  { readonly __typename?: 'Mutation' }
+  & { readonly verifyEmailWithCode: (
+    { readonly __typename?: 'VerifiedEmail' }
+    & Pick<Types.VerifiedEmail, 'id' | 'email' | 'verified'>
+  ) }
+);
+
 
 export const VerifyEmailWithCodeMutationDocument = gql`
-  mutation VerifyEmailWithCodeMutation($email: String!, $code: String!) {
-    verifyEmailWithCode(email: $email, code: $code) {
-      id
-      email
-      verified
-    }
+    mutation VerifyEmailWithCodeMutation($email: String!, $code: String!) {
+  verifyEmailWithCode(email: $email, code: $code) {
+    id
+    email
+    verified
   }
-`;
-export type VerifyEmailWithCodeMutationMutationFn = ApolloReactCommon.MutationFunction<
-  VerifyEmailWithCodeMutation,
-  VerifyEmailWithCodeMutationVariables
->;
+}
+    `;
+export type VerifyEmailWithCodeMutationMutationFn = ApolloReactCommon.MutationFunction<VerifyEmailWithCodeMutation, VerifyEmailWithCodeMutationVariables>;
 
 /**
  * __useVerifyEmailWithCodeMutation__
@@ -49,24 +48,9 @@ export type VerifyEmailWithCodeMutationMutationFn = ApolloReactCommon.MutationFu
  *   },
  * });
  */
-export function useVerifyEmailWithCodeMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    VerifyEmailWithCodeMutation,
-    VerifyEmailWithCodeMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    VerifyEmailWithCodeMutation,
-    VerifyEmailWithCodeMutationVariables
-  >(VerifyEmailWithCodeMutationDocument, baseOptions);
-}
-export type VerifyEmailWithCodeMutationHookResult = ReturnType<
-  typeof useVerifyEmailWithCodeMutation
->;
-export type VerifyEmailWithCodeMutationMutationResult = ApolloReactCommon.MutationResult<
-  VerifyEmailWithCodeMutation
->;
-export type VerifyEmailWithCodeMutationMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  VerifyEmailWithCodeMutation,
-  VerifyEmailWithCodeMutationVariables
->;
+export function useVerifyEmailWithCodeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<VerifyEmailWithCodeMutation, VerifyEmailWithCodeMutationVariables>) {
+        return ApolloReactHooks.useMutation<VerifyEmailWithCodeMutation, VerifyEmailWithCodeMutationVariables>(VerifyEmailWithCodeMutationDocument, baseOptions);
+      }
+export type VerifyEmailWithCodeMutationHookResult = ReturnType<typeof useVerifyEmailWithCodeMutation>;
+export type VerifyEmailWithCodeMutationMutationResult = ApolloReactCommon.MutationResult<VerifyEmailWithCodeMutation>;
+export type VerifyEmailWithCodeMutationMutationOptions = ApolloReactCommon.BaseMutationOptions<VerifyEmailWithCodeMutation, VerifyEmailWithCodeMutationVariables>;

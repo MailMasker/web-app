@@ -27,8 +27,11 @@ export type DeleteUserPayload = {
 export type EmailMask = {
    __typename?: 'EmailMask';
   id: Scalars['ID'];
-  base: Scalars['String'];
+  alias: Scalars['String'];
   domain: Scalars['String'];
+  disabled: Scalars['Boolean'];
+  parentEmailMaskID?: Maybe<Scalars['ID']>;
+  children: Array<EmailMask>;
 };
 
 export type Me = {
@@ -73,6 +76,7 @@ export type MutationCreateVerifiedEmailArgs = {
 
 export type MutationCreateEmailMaskArgs = {
   raw: Scalars['String'];
+  parentEmailMaskID?: Maybe<Scalars['ID']>;
 };
 
 

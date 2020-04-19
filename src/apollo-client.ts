@@ -1,8 +1,11 @@
-import ApolloClient, { ApolloError } from "apollo-boost";
-
+import ApolloClient from "apollo-boost";
 import hasGraphQLAuthenticationError from "./lib/hasGraphQLAuthenticationError";
 import { history } from "./history";
 import localStorage from "./lib/localStorage";
+
+if (!process.env.REACT_APP_ENVIRONMENT) {
+  throw new Error("missing process.env.REACT_APP_ENVIRONMENT");
+}
 
 const apiBaseURL =
   process.env.REACT_APP_ENVIRONMENT === "local"
@@ -37,5 +40,5 @@ export const client = new ApolloClient({
     } else if (networkError) {
       console.log(`network error:${networkError}`);
     }
-  }
+  },
 });

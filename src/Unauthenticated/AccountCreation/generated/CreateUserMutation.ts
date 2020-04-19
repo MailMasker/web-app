@@ -1,33 +1,33 @@
-import * as Types from "../../../generated/types";
+import * as Types from '../../../generated/types';
 
-import gql from "graphql-tag";
-import * as ApolloReactCommon from "@apollo/react-common";
-import * as ApolloReactHooks from "@apollo/react-hooks";
+import gql from 'graphql-tag';
+import * as ApolloReactCommon from '@apollo/react-common';
+import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type CreateUserMutationVariables = {
-  username: Types.Scalars["String"];
-  password: Types.Scalars["String"];
-  uuid: Types.Scalars["String"];
+  username: Types.Scalars['String'];
+  password: Types.Scalars['String'];
+  uuid: Types.Scalars['String'];
 };
 
-export type CreateUserMutation = { readonly __typename?: "Mutation" } & {
-  readonly createUser: { readonly __typename?: "CreateUserPayload" } & Pick<
-    Types.CreateUserPayload,
-    "userID"
-  >;
-};
+
+export type CreateUserMutation = (
+  { readonly __typename?: 'Mutation' }
+  & { readonly createUser: (
+    { readonly __typename?: 'CreateUserPayload' }
+    & Pick<Types.CreateUserPayload, 'userID'>
+  ) }
+);
+
 
 export const CreateUserDocument = gql`
-  mutation CreateUser($username: String!, $password: String!, $uuid: String!) {
-    createUser(username: $username, password: $password, uuid: $uuid) {
-      userID
-    }
+    mutation CreateUser($username: String!, $password: String!, $uuid: String!) {
+  createUser(username: $username, password: $password, uuid: $uuid) {
+    userID
   }
-`;
-export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<
-  CreateUserMutation,
-  CreateUserMutationVariables
->;
+}
+    `;
+export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
 
 /**
  * __useCreateUserMutation__
@@ -48,24 +48,9 @@ export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useCreateUserMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    CreateUserMutation,
-    CreateUserMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    CreateUserMutation,
-    CreateUserMutationVariables
-  >(CreateUserDocument, baseOptions);
-}
-export type CreateUserMutationHookResult = ReturnType<
-  typeof useCreateUserMutation
->;
-export type CreateUserMutationResult = ApolloReactCommon.MutationResult<
-  CreateUserMutation
->;
-export type CreateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateUserMutation,
-  CreateUserMutationVariables
->;
+export function useCreateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, baseOptions);
+      }
+export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
+export type CreateUserMutationResult = ApolloReactCommon.MutationResult<CreateUserMutation>;
+export type CreateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;

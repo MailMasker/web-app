@@ -11,7 +11,7 @@ interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
   const { data, loading, error } = useMeQuery({
-    fetchPolicy: "cache-and-network"
+    fetchPolicy: "cache-and-network",
   });
 
   if (loading) {
@@ -34,15 +34,15 @@ const Home: React.FC<HomeProps> = () => {
                 You have no email masks.{" "}
                 <Link to="/masks/create">Create one now?</Link>
               </div>
-            )
+            ),
           }}
           dataSource={[...data.me.user.emailMasks]}
-          renderItem={emailMask => (
+          renderItem={(emailMask) => (
             <List.Item>
               <List.Item.Meta
                 title={
                   <Link to={`/masks/${emailMask.id}`}>
-                    {emailMask.base}@{emailMask.domain}
+                    {emailMask.alias}@{emailMask.domain}
                   </Link>
                 }
                 description="Potential description goes here"
@@ -61,10 +61,10 @@ const Home: React.FC<HomeProps> = () => {
                   Verify your email address now?
                 </Link>
               </div>
-            )
+            ),
           }}
           dataSource={[...data.me.user.verifiedEmails]}
-          renderItem={verifiedEmail => (
+          renderItem={(verifiedEmail) => (
             <List.Item>
               <List.Item.Meta
                 title={
@@ -95,15 +95,15 @@ const Home: React.FC<HomeProps> = () => {
                 You have no routes.{" "}
                 <Link to="/routes/new">Create one now?</Link>
               </div>
-            )
+            ),
           }}
           dataSource={[...data.me.user.routes]}
-          renderItem={route => (
+          renderItem={(route) => (
             <List.Item>
               <List.Item.Meta
                 title={
                   <Link to={`/masks/${route.id}`}>
-                    Redirect emails received at {route.emailMask.base}@
+                    Redirect emails received at {route.emailMask.alias}@
                     {route.emailMask.domain} to{" "}
                     {route.redirectToVerifiedEmail.email}
                   </Link>

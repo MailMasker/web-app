@@ -31,7 +31,7 @@ const App: React.FC = () => {
         className="App"
         style={{
           display: "flex",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
         <Router history={history}>
@@ -68,7 +68,7 @@ const App: React.FC = () => {
                     <Route path="/verified-emails/new">
                       <CreateVerifiedEmail />
                     </Route>
-                    <Route path="/email-masks/new">
+                    <Route path="/masks/create">
                       <CreateEmailMask />
                     </Route>
                     <Route path="/routes/new">

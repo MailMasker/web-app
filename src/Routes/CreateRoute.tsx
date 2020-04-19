@@ -1,13 +1,10 @@
-import { AutoComplete, Button, Form, Radio, Result, Select } from "antd";
-import { Link, useHistory } from "react-router-dom";
-import React, { useState } from "react";
+import { AutoComplete, Button, Form, Radio, Result } from "antd";
 
 import ErrorMessage from "../lib/ErrorMessage";
+import { Link } from "react-router-dom";
+import React from "react";
 import { useCreateRouteMutation } from "./generated/CreateRouteMutation";
 import { useMeQuery } from "../Home/generated/MeQuery";
-import useRandomWords from "../lib/useRandomWords";
-
-const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
@@ -19,20 +16,20 @@ const tailLayout = {
 
 interface CreateRouteProps {}
 
-const CreateRoute: React.FC<CreateRouteProps> = ({}) => {
+const CreateRoute: React.FC<CreateRouteProps> = () => {
   const [createRoute, { data, error, loading }] = useCreateRouteMutation();
   const { data: meQueryData, loading: meQueryLoading } = useMeQuery();
 
-  const history = useHistory();
+  // const history = useHistory();
 
-  const [randomWordsIndex, setRandomWordsIndex] = useState(0);
-  const { allRandomWords, loading: randomWordsLoading } = useRandomWords(10);
+  // const [randomWordsIndex, setRandomWordsIndex] = useState(0);
+  // const { allRandomWords, loading: randomWordsLoading } = useRandomWords(10);
 
   if (data) {
     return (
       <Result
         status="success"
-        title={`${data.createRoute.emailMask.base}@${data.createRoute.emailMask.domain} will now forward to ${data.createRoute.redirectToVerifiedEmail.email}!`}
+        title={`${data.createRoute.emailMask.alias}@${data.createRoute.emailMask.domain} will now forward to ${data.createRoute.redirectToVerifiedEmail.email}!`}
         extra={[
           <Link to="/" key="create-route">
             <Button type="primary" key="console">
@@ -55,7 +52,7 @@ const CreateRoute: React.FC<CreateRouteProps> = ({}) => {
         : undefined,
     emailMaskEmail:
       meQueryData && meQueryData.me.user.emailMasks.length === 1
-        ? `${meQueryData.me.user.emailMasks[0].base}@${meQueryData.me.user.emailMasks[0].domain}`
+        ? `${meQueryData.me.user.emailMasks[0].alias}@${meQueryData.me.user.emailMasks[0].domain}`
         : undefined,
   };
 
@@ -77,10 +74,10 @@ const CreateRoute: React.FC<CreateRouteProps> = ({}) => {
   }[] = (meQueryData && meQueryData.me.user.emailMasks
     ? meQueryData.me.user.emailMasks
     : []
-  ).map(({ base, domain, id }) => {
+  ).map(({ alias, domain, id }) => {
     return {
-      label: `${base}@${domain}`,
-      value: `${base}@${domain}`,
+      label: `${alias}@${domain}`,
+      value: `${alias}@${domain}`,
       key: id,
       id,
     };

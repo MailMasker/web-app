@@ -1,12 +1,18 @@
 import { Button, Form, Input, Result, Select } from "antd";
-import { Link, useHistory } from "react-router-dom";
-import React, { useState } from "react";
 
 import ErrorMessage from "../lib/ErrorMessage";
+import { Link } from "react-router-dom";
+import React from "react";
 import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
-import useRandomWords from "../lib/useRandomWords";
 
 const { Option } = Select;
+
+const supportedEmailDomains =
+  process.env.REACT_APP_ENVIRONMENT === "local"
+    ? ["mailmasker-local.com"]
+    : process.env.REACT_APP_ENVIRONMENT === "dev"
+    ? ["mailmasker-dev.com"]
+    : ["mailmasker.com"];
 
 const layout = {
   labelCol: { span: 8 },
@@ -18,23 +24,23 @@ const tailLayout = {
 
 interface CreateEmailMaskProps {}
 
-const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
+const CreateEmailMask: React.FC<CreateEmailMaskProps> = () => {
   const [
     createEmailMask,
     { data, error, loading },
   ] = useCreateEmailMaskMutation();
 
-  const history = useHistory();
+  // const history = useHistory();
 
-  const [randomWordsIndex, setRandomWordsIndex] = useState(0);
-  const { allRandomWords, loading: randomWordsLoading } = useRandomWords(10);
+  // const [randomWordsIndex, setRandomWordsIndex] = useState(0);
+  // const { allRandomWords, loading: randomWordsLoading } = useRandomWords(10);
 
   if (data) {
     return (
       <Result
         status="success"
-        title={`Your Email Mask ${data.createEmailMask.base}@${data.createEmailMask.domain} has been created!`}
-        subTitle={`Now you just need to set up a "Route" to let us know where you want us to direct emails sent to ${data.createEmailMask.base}@${data.createEmailMask.domain}.`}
+        title={`Your Email Mask ${data.createEmailMask.alias}@${data.createEmailMask.domain} has been created!`}
+        subTitle={`Now you just need to set up a "Route" to let us know where you want us to direct emails sent to ${data.createEmailMask.alias}@${data.createEmailMask.domain}.`}
         extra={[
           <Link
             to={{
@@ -55,7 +61,7 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
   const onFinish = async (values: any) => {
     try {
       await createEmailMask({
-        variables: { email: `${values.base}@${values.domain}` },
+        variables: { email: `${values.alias}@${values.domain}` },
       });
     } catch (err) {
       console.error(err);
@@ -79,7 +85,7 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
       <Form.Item label="Email Address">
         <Input.Group compact>
           <Form.Item
-            name="base"
+            name="alias"
             noStyle
             rules={[
               {
@@ -90,11 +96,12 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
             ]}
           >
             <Input
-              style={{ width: "50%" }}
+              style={{ width: "30%" }}
               placeholder="Choose an alias"
               autoFocus
             />
           </Form.Item>
+          <div style={{ margin: "3px 6px" }}>@</div>
           <Form.Item
             name="domain"
             noStyle
@@ -106,8 +113,10 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = ({}) => {
               },
             ]}
           >
-            <Select placeholder="Select domain">
-              <Option value="1nt.email">@1nt.email</Option>
+            <Select placeholder="Select domain" style={{ width: "30%" }}>
+              {supportedEmailDomains.map((domain) => (
+                <Option value={domain}>{domain}</Option>
+              ))}
             </Select>
           </Form.Item>
         </Input.Group>

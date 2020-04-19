@@ -1,37 +1,33 @@
-import * as Types from "../../generated/types";
+import * as Types from '../../generated/types';
 
-import {
-  VerifiedEmailFragmentDoc,
-  VerifiedEmailFragment
-} from "./VerifiedEmailFragment";
-import gql from "graphql-tag";
-import * as ApolloReactCommon from "@apollo/react-common";
-import * as ApolloReactHooks from "@apollo/react-hooks";
+import { VerifiedEmailFragmentDoc, VerifiedEmailFragment } from './VerifiedEmailFragment';
+import gql from 'graphql-tag';
+import * as ApolloReactCommon from '@apollo/react-common';
+import * as ApolloReactHooks from '@apollo/react-hooks';
+
 
 export type CreateVerifiedEmailMutationVariables = {
-  email: Types.Scalars["String"];
+  email: Types.Scalars['String'];
 };
 
-export type CreateVerifiedEmailMutation = {
-  readonly __typename?: "Mutation";
-} & {
-  readonly createVerifiedEmail: {
-    readonly __typename?: "VerifiedEmail";
-  } & VerifiedEmailFragment;
-};
+
+export type CreateVerifiedEmailMutation = (
+  { readonly __typename?: 'Mutation' }
+  & { readonly createVerifiedEmail: (
+    { readonly __typename?: 'VerifiedEmail' }
+    & VerifiedEmailFragment
+  ) }
+);
+
 
 export const CreateVerifiedEmailDocument = gql`
-  mutation CreateVerifiedEmail($email: String!) {
-    createVerifiedEmail(email: $email) {
-      ...VerifiedEmailFragment
-    }
+    mutation CreateVerifiedEmail($email: String!) {
+  createVerifiedEmail(email: $email) {
+    ...VerifiedEmailFragment
   }
-  ${VerifiedEmailFragmentDoc}
-`;
-export type CreateVerifiedEmailMutationFn = ApolloReactCommon.MutationFunction<
-  CreateVerifiedEmailMutation,
-  CreateVerifiedEmailMutationVariables
->;
+}
+    ${VerifiedEmailFragmentDoc}`;
+export type CreateVerifiedEmailMutationFn = ApolloReactCommon.MutationFunction<CreateVerifiedEmailMutation, CreateVerifiedEmailMutationVariables>;
 
 /**
  * __useCreateVerifiedEmailMutation__
@@ -50,24 +46,9 @@ export type CreateVerifiedEmailMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useCreateVerifiedEmailMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    CreateVerifiedEmailMutation,
-    CreateVerifiedEmailMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    CreateVerifiedEmailMutation,
-    CreateVerifiedEmailMutationVariables
-  >(CreateVerifiedEmailDocument, baseOptions);
-}
-export type CreateVerifiedEmailMutationHookResult = ReturnType<
-  typeof useCreateVerifiedEmailMutation
->;
-export type CreateVerifiedEmailMutationResult = ApolloReactCommon.MutationResult<
-  CreateVerifiedEmailMutation
->;
-export type CreateVerifiedEmailMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateVerifiedEmailMutation,
-  CreateVerifiedEmailMutationVariables
->;
+export function useCreateVerifiedEmailMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateVerifiedEmailMutation, CreateVerifiedEmailMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateVerifiedEmailMutation, CreateVerifiedEmailMutationVariables>(CreateVerifiedEmailDocument, baseOptions);
+      }
+export type CreateVerifiedEmailMutationHookResult = ReturnType<typeof useCreateVerifiedEmailMutation>;
+export type CreateVerifiedEmailMutationResult = ApolloReactCommon.MutationResult<CreateVerifiedEmailMutation>;
+export type CreateVerifiedEmailMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateVerifiedEmailMutation, CreateVerifiedEmailMutationVariables>;

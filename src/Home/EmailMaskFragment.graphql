@@ -1,5 +1,6 @@
 fragment EmailMaskFragment on EmailMask {
   id
-  base
   domain
+  alias
+  parentEmailMaskID
 }

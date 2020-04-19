@@ -4,13 +4,14 @@ import gql from 'graphql-tag';
 
 export type EmailMaskFragment = (
   { readonly __typename?: 'EmailMask' }
-  & Pick<Types.EmailMask, 'id' | 'base' | 'domain'>
+  & Pick<Types.EmailMask, 'id' | 'domain' | 'alias' | 'parentEmailMaskID'>
 );
 
 export const EmailMaskFragmentDoc = gql`
     fragment EmailMaskFragment on EmailMask {
   id
-  base
   domain
+  alias
+  parentEmailMaskID
 }
     `;

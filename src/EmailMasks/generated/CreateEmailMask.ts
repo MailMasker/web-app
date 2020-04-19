@@ -1,33 +1,33 @@
-import * as Types from "../../generated/types";
+import * as Types from '../../generated/types';
 
-import gql from "graphql-tag";
-import * as ApolloReactCommon from "@apollo/react-common";
-import * as ApolloReactHooks from "@apollo/react-hooks";
+import { EmailMaskFragmentDoc, EmailMaskFragment } from '../../Home/generated/EmailMaskFragment';
+import gql from 'graphql-tag';
+import * as ApolloReactCommon from '@apollo/react-common';
+import * as ApolloReactHooks from '@apollo/react-hooks';
+
 
 export type CreateEmailMaskMutationVariables = {
-  email: Types.Scalars["String"];
+  email: Types.Scalars['String'];
 };
 
-export type CreateEmailMaskMutation = { readonly __typename?: "Mutation" } & {
-  readonly createEmailMask: { readonly __typename?: "EmailMask" } & Pick<
-    Types.EmailMask,
-    "id" | "base" | "domain"
-  >;
-};
+
+export type CreateEmailMaskMutation = (
+  { readonly __typename?: 'Mutation' }
+  & { readonly createEmailMask: (
+    { readonly __typename?: 'EmailMask' }
+    & EmailMaskFragment
+  ) }
+);
+
 
 export const CreateEmailMaskDocument = gql`
-  mutation CreateEmailMask($email: String!) {
-    createEmailMask(raw: $email) {
-      id
-      base
-      domain
-    }
+    mutation CreateEmailMask($email: String!) {
+  createEmailMask(raw: $email) {
+    ...EmailMaskFragment
   }
-`;
-export type CreateEmailMaskMutationFn = ApolloReactCommon.MutationFunction<
-  CreateEmailMaskMutation,
-  CreateEmailMaskMutationVariables
->;
+}
+    ${EmailMaskFragmentDoc}`;
+export type CreateEmailMaskMutationFn = ApolloReactCommon.MutationFunction<CreateEmailMaskMutation, CreateEmailMaskMutationVariables>;
 
 /**
  * __useCreateEmailMaskMutation__
@@ -46,24 +46,9 @@ export type CreateEmailMaskMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useCreateEmailMaskMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    CreateEmailMaskMutation,
-    CreateEmailMaskMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    CreateEmailMaskMutation,
-    CreateEmailMaskMutationVariables
-  >(CreateEmailMaskDocument, baseOptions);
-}
-export type CreateEmailMaskMutationHookResult = ReturnType<
-  typeof useCreateEmailMaskMutation
->;
-export type CreateEmailMaskMutationResult = ApolloReactCommon.MutationResult<
-  CreateEmailMaskMutation
->;
-export type CreateEmailMaskMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateEmailMaskMutation,
-  CreateEmailMaskMutationVariables
->;
+export function useCreateEmailMaskMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateEmailMaskMutation, CreateEmailMaskMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateEmailMaskMutation, CreateEmailMaskMutationVariables>(CreateEmailMaskDocument, baseOptions);
+      }
+export type CreateEmailMaskMutationHookResult = ReturnType<typeof useCreateEmailMaskMutation>;
+export type CreateEmailMaskMutationResult = ApolloReactCommon.MutationResult<CreateEmailMaskMutation>;
+export type CreateEmailMaskMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateEmailMaskMutation, CreateEmailMaskMutationVariables>;

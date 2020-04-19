@@ -1,24 +1,24 @@
-import * as Types from "../../generated/types";
+import * as Types from '../../generated/types';
 
-import gql from "graphql-tag";
-import * as ApolloReactCommon from "@apollo/react-common";
-import * as ApolloReactHooks from "@apollo/react-hooks";
+import gql from 'graphql-tag';
+import * as ApolloReactCommon from '@apollo/react-common';
+import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type UnauthenticateMutationVariables = {};
 
-export type UnauthenticateMutation = {
-  readonly __typename?: "Mutation";
-} & Pick<Types.Mutation, "unauthenticate">;
+
+export type UnauthenticateMutation = (
+  { readonly __typename?: 'Mutation' }
+  & Pick<Types.Mutation, 'unauthenticate'>
+);
+
 
 export const UnauthenticateDocument = gql`
-  mutation Unauthenticate {
-    unauthenticate
-  }
-`;
-export type UnauthenticateMutationFn = ApolloReactCommon.MutationFunction<
-  UnauthenticateMutation,
-  UnauthenticateMutationVariables
->;
+    mutation Unauthenticate {
+  unauthenticate
+}
+    `;
+export type UnauthenticateMutationFn = ApolloReactCommon.MutationFunction<UnauthenticateMutation, UnauthenticateMutationVariables>;
 
 /**
  * __useUnauthenticateMutation__
@@ -36,24 +36,9 @@ export type UnauthenticateMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useUnauthenticateMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    UnauthenticateMutation,
-    UnauthenticateMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    UnauthenticateMutation,
-    UnauthenticateMutationVariables
-  >(UnauthenticateDocument, baseOptions);
-}
-export type UnauthenticateMutationHookResult = ReturnType<
-  typeof useUnauthenticateMutation
->;
-export type UnauthenticateMutationResult = ApolloReactCommon.MutationResult<
-  UnauthenticateMutation
->;
-export type UnauthenticateMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  UnauthenticateMutation,
-  UnauthenticateMutationVariables
->;
+export function useUnauthenticateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnauthenticateMutation, UnauthenticateMutationVariables>) {
+        return ApolloReactHooks.useMutation<UnauthenticateMutation, UnauthenticateMutationVariables>(UnauthenticateDocument, baseOptions);
+      }
+export type UnauthenticateMutationHookResult = ReturnType<typeof useUnauthenticateMutation>;
+export type UnauthenticateMutationResult = ApolloReactCommon.MutationResult<UnauthenticateMutation>;
+export type UnauthenticateMutationOptions = ApolloReactCommon.BaseMutationOptions<UnauthenticateMutation, UnauthenticateMutationVariables>;
