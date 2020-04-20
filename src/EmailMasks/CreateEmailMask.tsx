@@ -115,7 +115,9 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = () => {
           >
             <Select placeholder="Select domain" style={{ width: "30%" }}>
               {supportedEmailDomains.map((domain) => (
-                <Option value={domain}>{domain}</Option>
+                <Option value={domain} key={domain}>
+                  {domain}
+                </Option>
               ))}
             </Select>
           </Form.Item>
