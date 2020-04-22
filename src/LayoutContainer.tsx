@@ -11,7 +11,7 @@ interface LayoutContainerProps {
 
 const LayoutContainer: React.FC<LayoutContainerProps> = ({
   authenticated,
-  children
+  children,
 }) => {
   const history = useHistory();
   return (
@@ -22,7 +22,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
             display: "flex",
             maxWidth: "1200px",
             justifyContent: "space-between",
-            margin: "0px auto"
+            margin: "0px auto",
           }}
         >
           <div>
@@ -32,7 +32,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
                 height: "31px",
                 background: "rgba(255, 255, 255, 0.2)",
                 margin: "16px 24px 16px 0",
-                float: "left"
+                float: "left",
               }}
             />
             {authenticated ? (
@@ -86,14 +86,16 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
         style={{
           maxWidth: "1200px",
           margin: "0px auto",
-          width: "100%"
+          width: "100%",
+          display: "flex",
+          alignItems: "stretch",
         }}
       >
         <div
           style={{
             background: "#fff",
             padding: "24px",
-            minHeight: "280px"
+            width: "100%",
           }}
         >
           {children}

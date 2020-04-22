@@ -1,52 +1,60 @@
-import * as Types from '../../generated/types';
+import * as Types from "../../generated/types";
 
-import { VerifiedEmailFragmentDoc, VerifiedEmailFragment } from '../../VerifiedEmails/generated/VerifiedEmailFragment';
-import { EmailMaskFragmentDoc, EmailMaskFragment } from '../../Home/generated/EmailMaskFragment';
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
-
-
+import {
+  VerifiedEmailFragmentDoc,
+  VerifiedEmailFragment
+} from "../../VerifiedEmails/generated/VerifiedEmailFragment";
+import {
+  EmailMaskFragmentDoc,
+  EmailMaskFragment
+} from "../../Home/generated/EmailMaskFragment";
+import gql from "graphql-tag";
+import * as ApolloReactCommon from "@apollo/react-common";
+import * as ApolloReactHooks from "@apollo/react-hooks";
 
 export type CreateRouteMutationVariables = {
-  redirectToVerifiedEmailID: Types.Scalars['ID'];
-  emailMaskID: Types.Scalars['ID'];
+  redirectToVerifiedEmailID: Types.Scalars["ID"];
+  emailMaskID: Types.Scalars["ID"];
 };
 
-
-export type CreateRouteMutation = (
-  { readonly __typename?: 'Mutation' }
-  & { readonly createRoute: (
-    { readonly __typename?: 'Route' }
-    & Pick<Types.Route, 'id' | 'expires' | 'disabled'>
-    & { readonly redirectToVerifiedEmail: (
-      { readonly __typename?: 'VerifiedEmail' }
-      & VerifiedEmailFragment
-    ), readonly emailMask: (
-      { readonly __typename?: 'EmailMask' }
-      & EmailMaskFragment
-    ) }
-  ) }
-);
-
+export type CreateRouteMutation = { readonly __typename?: "Mutation" } & {
+  readonly createRoute: { readonly __typename?: "Route" } & Pick<
+    Types.Route,
+    "id" | "expires" | "disabled"
+  > & {
+      readonly redirectToVerifiedEmail: {
+        readonly __typename?: "VerifiedEmail";
+      } & VerifiedEmailFragment;
+      readonly emailMask: {
+        readonly __typename?: "EmailMask";
+      } & EmailMaskFragment;
+    };
+};
 
 export const CreateRouteDocument = gql`
-    mutation CreateRoute($redirectToVerifiedEmailID: ID!, $emailMaskID: ID!) {
-  createRoute(redirectToVerifiedEmailID: $redirectToVerifiedEmailID, emailMaskID: $emailMaskID) {
-    id
-    redirectToVerifiedEmail {
-      ...VerifiedEmailFragment
+  mutation CreateRoute($redirectToVerifiedEmailID: ID!, $emailMaskID: ID!) {
+    createRoute(
+      redirectToVerifiedEmailID: $redirectToVerifiedEmailID
+      emailMaskID: $emailMaskID
+    ) {
+      id
+      redirectToVerifiedEmail {
+        ...VerifiedEmailFragment
+      }
+      emailMask {
+        ...EmailMaskFragment
+      }
+      expires
+      disabled
     }
-    emailMask {
-      ...EmailMaskFragment
-    }
-    expires
-    disabled
   }
-}
-    ${VerifiedEmailFragmentDoc}
-${EmailMaskFragmentDoc}`;
-export type CreateRouteMutationFn = ApolloReactCommon.MutationFunction<CreateRouteMutation, CreateRouteMutationVariables>;
+  ${VerifiedEmailFragmentDoc}
+  ${EmailMaskFragmentDoc}
+`;
+export type CreateRouteMutationFn = ApolloReactCommon.MutationFunction<
+  CreateRouteMutation,
+  CreateRouteMutationVariables
+>;
 
 /**
  * __useCreateRouteMutation__
@@ -66,9 +74,24 @@ export type CreateRouteMutationFn = ApolloReactCommon.MutationFunction<CreateRou
  *   },
  * });
  */
-export function useCreateRouteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateRouteMutation, CreateRouteMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateRouteMutation, CreateRouteMutationVariables>(CreateRouteDocument, baseOptions);
-      }
-export type CreateRouteMutationHookResult = ReturnType<typeof useCreateRouteMutation>;
-export type CreateRouteMutationResult = ApolloReactCommon.MutationResult<CreateRouteMutation>;
-export type CreateRouteMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateRouteMutation, CreateRouteMutationVariables>;
+export function useCreateRouteMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateRouteMutation,
+    CreateRouteMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    CreateRouteMutation,
+    CreateRouteMutationVariables
+  >(CreateRouteDocument, baseOptions);
+}
+export type CreateRouteMutationHookResult = ReturnType<
+  typeof useCreateRouteMutation
+>;
+export type CreateRouteMutationResult = ApolloReactCommon.MutationResult<
+  CreateRouteMutation
+>;
+export type CreateRouteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateRouteMutation,
+  CreateRouteMutationVariables
+>;

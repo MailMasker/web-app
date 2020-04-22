@@ -1,27 +1,28 @@
-import * as Types from '../../../generated/types';
+import * as Types from "../../../generated/types";
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import gql from "graphql-tag";
+import * as ApolloReactCommon from "@apollo/react-common";
+import * as ApolloReactHooks from "@apollo/react-hooks";
 
 export type LogInMutationVariables = {
-  username: Types.Scalars['String'];
-  password: Types.Scalars['String'];
+  username: Types.Scalars["String"];
+  password: Types.Scalars["String"];
 };
 
-
-export type LogInMutation = (
-  { readonly __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'authenticate'>
-);
-
+export type LogInMutation = { readonly __typename?: "Mutation" } & Pick<
+  Types.Mutation,
+  "authenticate"
+>;
 
 export const LogInDocument = gql`
-    mutation LogIn($username: String!, $password: String!) {
-  authenticate(username: $username, password: $password)
-}
-    `;
-export type LogInMutationFn = ApolloReactCommon.MutationFunction<LogInMutation, LogInMutationVariables>;
+  mutation LogIn($username: String!, $password: String!) {
+    authenticate(username: $username, password: $password)
+  }
+`;
+export type LogInMutationFn = ApolloReactCommon.MutationFunction<
+  LogInMutation,
+  LogInMutationVariables
+>;
 
 /**
  * __useLogInMutation__
@@ -41,9 +42,22 @@ export type LogInMutationFn = ApolloReactCommon.MutationFunction<LogInMutation, 
  *   },
  * });
  */
-export function useLogInMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LogInMutation, LogInMutationVariables>) {
-        return ApolloReactHooks.useMutation<LogInMutation, LogInMutationVariables>(LogInDocument, baseOptions);
-      }
+export function useLogInMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    LogInMutation,
+    LogInMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<LogInMutation, LogInMutationVariables>(
+    LogInDocument,
+    baseOptions
+  );
+}
 export type LogInMutationHookResult = ReturnType<typeof useLogInMutation>;
-export type LogInMutationResult = ApolloReactCommon.MutationResult<LogInMutation>;
-export type LogInMutationOptions = ApolloReactCommon.BaseMutationOptions<LogInMutation, LogInMutationVariables>;
+export type LogInMutationResult = ApolloReactCommon.MutationResult<
+  LogInMutation
+>;
+export type LogInMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  LogInMutation,
+  LogInMutationVariables
+>;

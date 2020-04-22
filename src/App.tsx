@@ -68,7 +68,7 @@ const App: React.FC = () => {
                     <Route path="/verified-emails/new">
                       <CreateVerifiedEmail />
                     </Route>
-                    <Route path="/masks/create">
+                    <Route path="/masks/new">
                       <CreateEmailMask />
                     </Route>
                     <Route path="/routes/new">

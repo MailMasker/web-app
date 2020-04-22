@@ -19,9 +19,16 @@ const Authenticated: React.FC<AuthenticatedProps> = ({ children }) => {
     return <React.Fragment>{children}</React.Fragment>;
   } else if (loading) {
     return (
-      <div>
-        <Spin size="large" />
-      </div>
+      <Spin
+        size="large"
+        style={{
+          margin: "0",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, - 50%)",
+        }}
+      />
     );
   } else if (!!data) {
     return <React.Fragment>{children}</React.Fragment>;

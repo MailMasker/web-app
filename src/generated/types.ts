@@ -6,6 +6,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -24,10 +25,16 @@ export type DeleteUserPayload = {
   authToken?: Maybe<Scalars['String']>;
 };
 
+/**
+ * Once created, an EmailMask is reserved forever so that it cannot be used by another user
+ * An EmailMask cannot be deleted, but a Route.forwardTo can be deleted because it's important for users' data rights.
+ */
 export type EmailMask = {
    __typename?: 'EmailMask';
   id: Scalars['ID'];
+  /** For x+y@1nt.email, "x" is the alias */
   alias: Scalars['String'];
+  /** For x+y@1nt.email, "1nt.email" is the domain */
   domain: Scalars['String'];
   disabled: Scalars['Boolean'];
   parentEmailMaskID?: Maybe<Scalars['ID']>;
@@ -42,9 +49,12 @@ export type Me = {
 export type Mutation = {
    __typename?: 'Mutation';
   authenticate?: Maybe<Scalars['Boolean']>;
+  /** Token is optional because the server will first attempt to read the token from a cookie, if present */
   unauthenticate?: Maybe<Scalars['Boolean']>;
   createUser: CreateUserPayload;
   createVerifiedEmail: VerifiedEmail;
+  resendVerificationEmail: VerifiedEmail;
+  /** For x+y@1nt.email, "x+y@1nt.email" is the raw value (i.e. the entire thing) */
   createEmailMask: EmailMask;
   createRoute: Route;
   verifyEmailWithCode: VerifiedEmail;
@@ -74,6 +84,11 @@ export type MutationCreateVerifiedEmailArgs = {
 };
 
 
+export type MutationResendVerificationEmailArgs = {
+  email: Scalars['String'];
+};
+
+
 export type MutationCreateEmailMaskArgs = {
   raw: Scalars['String'];
   parentEmailMaskID?: Maybe<Scalars['ID']>;
@@ -97,6 +112,7 @@ export type Query = {
   ping: Scalars['String'];
 };
 
+/** A Route can not be hard deleted, but the email address in redirectToVerifiedEmail can be cleared at a user's request */
 export type Route = {
    __typename?: 'Route';
   id: Scalars['ID'];
@@ -107,6 +123,7 @@ export type Route = {
 };
 
 
+/** A User can't be deleted, but its username can be cleared at a user's request */
 export type User = {
    __typename?: 'User';
   id: Scalars['ID'];
@@ -116,9 +133,11 @@ export type User = {
   verifiedEmails: Array<VerifiedEmail>;
 };
 
+/** A VerifiedEmail is one for which ownership has been verified when `verified` is true */
 export type VerifiedEmail = {
    __typename?: 'VerifiedEmail';
   id: Scalars['ID'];
+  /** If deleted, then `email` will be null */
   email?: Maybe<Scalars['String']>;
   verified: Scalars['Boolean'];
 };
