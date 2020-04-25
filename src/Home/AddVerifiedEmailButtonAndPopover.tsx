@@ -2,6 +2,7 @@ import { Button, Form, Input, Popover, Typography, message } from "antd";
 import { MailOutlined, PlusOutlined } from "@ant-design/icons";
 import React, { memo, useCallback, useState } from "react";
 
+import ErrorAlert from "../lib/ErrorAlert";
 import { useCreateVerifiedEmailMutation } from "../VerifiedEmails/generated/CreateVerifiedEmail";
 import { useForm } from "antd/lib/form/util";
 import { useRefreshVerifiedEmailsLazyQuery } from "./generated/RefreshVerifiedEmailsQuery";
@@ -17,17 +18,12 @@ const AddVerifiedEmailButtonAndPopover: React.FC<AddVerifiedEmailButtonAndPopove
 
   const [
     createVerifiedEmail,
-    {
-      data: createVerifiedEmailData,
-      error: createVerifiedEmailError,
-      loading: createVerifiedEmailLoading,
-    },
+    { error: createVerifiedEmailError, loading: createVerifiedEmailLoading },
   ] = useCreateVerifiedEmailMutation();
 
   const [
     refreshVerifiedEmails,
     {
-      data: refreshVerifiedEmailsData,
       error: refreshVerifiedEmailsError,
       loading: refreshVerifiedEmailsLoading,
     },
@@ -47,7 +43,6 @@ const AddVerifiedEmailButtonAndPopover: React.FC<AddVerifiedEmailButtonAndPopove
   );
   const handleFinish = useCallback(
     async (values) => {
-      let data = {};
       try {
         await form.validateFields();
         const { data } = await createVerifiedEmail({
@@ -61,13 +56,22 @@ const AddVerifiedEmailButtonAndPopover: React.FC<AddVerifiedEmailButtonAndPopove
         return;
       }
     },
-    [setNewVerifiedEmailPopoverVisible]
+    [
+      form,
+      createVerifiedEmail,
+      hideNewVerifiedEmailPopover,
+      onSuccess,
+      refreshVerifiedEmails,
+    ]
   );
 
   return (
     <Popover
       content={
         <React.Fragment>
+          <ErrorAlert
+            error={createVerifiedEmailError || refreshVerifiedEmailsError}
+          />
           <div style={{ maxWidth: "340px", marginBottom: "8px" }}>
             <Typography.Text>
               We'll verify that you own this address by email.

@@ -31,7 +31,7 @@ const ResendVerificationEmailCTA: React.FC<ResendVerificationEmailCTAProps> = ({
     },
   ] = useRefreshVerifiedEmailsLazyQuery({ fetchPolicy: "network-only" });
 
-  const [spin, setSpin] = useState(false);
+  const [spinDebounce, setSpinDebounce] = useState(false);
 
   return (
     <React.Fragment>
@@ -56,13 +56,17 @@ const ResendVerificationEmailCTA: React.FC<ResendVerificationEmailCTAProps> = ({
             <Button
               type="link"
               size="small"
-              icon={<SyncOutlined spin={spin} />}
-              disabled={spin}
+              icon={
+                <SyncOutlined
+                  spin={spinDebounce || refreshVerifiedEmailsLoading}
+                />
+              }
+              disabled={spinDebounce}
               onClick={() => {
-                setSpin(true);
+                setSpinDebounce(true);
                 refreshVerifiedEmails();
                 // Since the request finishes so quickly, at least make it apparent that it's doing something
-                setTimeout(() => setSpin(false), 1000);
+                setTimeout(() => setSpinDebounce(false), 1000);
               }}
             />
           </Tooltip>

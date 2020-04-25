@@ -1,9 +1,7 @@
-import { Alert, Typography } from "antd";
 import React, { memo } from "react";
 
+import { Alert } from "antd";
 import { ApolloError } from "apollo-boost";
-
-const { Text } = Typography;
 
 interface ErrorMessageProps {
   error?: { message: string } | ApolloError;

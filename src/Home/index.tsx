@@ -4,7 +4,6 @@ import {
   Empty,
   List,
   PageHeader,
-  Select,
   Space,
   Spin,
   Table,
@@ -30,7 +29,6 @@ dayjs.extend(relativeTime);
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
-const { Option } = Select;
 
 type TableData = {
   key: string;
@@ -225,6 +223,7 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
       resendVerificationEmailData,
       resendVerificationEmailError,
       resendVerificationEmailLoading,
+      resendVerificationEmail,
     ]
   );
 
@@ -389,10 +388,11 @@ interface HomeProps {}
 const Home: React.FC<HomeProps> = () => {
   const [activeTab, setActiveTab] = useState<TabType>("active");
 
-  const { data, loading, error } = useMeQuery({
+  // We don't need to handle loading or error states because
+  // the Me query is always loaded at this point
+  const { data } = useMeQuery({
     fetchPolicy: "cache-first",
   });
-  const now = useMemo(() => dayjs(), []);
 
   const activeData: TableData[] = useMemo(() => {
     if (!data) {

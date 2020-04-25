@@ -47,7 +47,7 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
       console.log("values: ", values);
       setNewMaskModalVisible(false);
     },
-    [setNewMaskModalVisible, form]
+    [setNewMaskModalVisible]
   );
 
   const handleNewMaskCancel = useCallback(() => setNewMaskModalVisible(false), [
