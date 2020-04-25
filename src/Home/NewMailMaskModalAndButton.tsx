@@ -26,7 +26,7 @@ type NewMailMaskModalAndButtonProps = {};
 const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () => {
   const [form] = Form.useForm();
 
-  const { data: meQueryData, error: meQueryError } = useMeQuery({
+  const { data: meQueryData } = useMeQuery({
     fetchPolicy: "cache-first",
   });
 
@@ -80,14 +80,20 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
       // validation may be a reason for failure
       return;
     }
-  }, [setNewMaskModalVisible, form]);
+  }, [
+    setNewMaskModalVisible,
+    form,
+    createEmailMask,
+    createRoute,
+    refreshRoutesAndEmailMasks,
+  ]);
 
   const handleFormFinish = useCallback(
     (values: any) => {
       console.log("values: ", values);
       handleNewMaskOk();
     },
-    [setNewMaskModalVisible]
+    [handleNewMaskOk]
   );
 
   const handleNewMaskCancel = useCallback(() => setNewMaskModalVisible(false), [

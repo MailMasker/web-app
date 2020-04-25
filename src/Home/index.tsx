@@ -2,7 +2,6 @@ import {
   Badge,
   Button,
   Empty,
-  List,
   PageHeader,
   Space,
   Spin,
@@ -12,22 +11,21 @@ import {
   Tooltip,
   Typography,
 } from "antd";
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Link, useHistory } from "react-router-dom";
 import { MeQuery, useMeQuery } from "./generated/MeQuery";
 import React, { useMemo, useState } from "react";
-import { green, orange } from "@ant-design/colors";
+import { grey, orange } from "@ant-design/colors";
 
 import { ColumnProps } from "antd/lib/table";
+import { EditOutlined } from "@ant-design/icons";
 import ErrorAlert from "../lib/ErrorAlert";
 import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
+import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useResendVerificationEmailMutation } from "./generated/ResendVerificationEmail";
 
 dayjs.extend(relativeTime);
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { TabPane } = Tabs;
 
 type TableData = {
@@ -120,15 +118,6 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
   const { data, loading, error } = useMeQuery({
     fetchPolicy: "cache-first",
   });
-  const [
-    resendVerificationEmail,
-    {
-      data: resendVerificationEmailData,
-      loading: resendVerificationEmailLoading,
-      error: resendVerificationEmailError,
-    },
-  ] = useResendVerificationEmailMutation();
-  const history = useHistory();
 
   const columns: ColumnProps<TableData>[] = useMemo(
     () => [
@@ -148,30 +137,14 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
           ) : (
             <span>
               <Text>
-                <span>[Awaiting verification...]</span> {forwardsTo.email}
+                <span>
+                  <i style={{ color: grey[1] }}>Awaiting verification...</i>
+                </span>{" "}
+                {forwardsTo.email}
               </Text>
-              <br />
-              {!resendVerificationEmailData && (
-                <Button
-                  type="link"
-                  style={{ padding: 0 }}
-                  onClick={() => {
-                    resendVerificationEmail({
-                      variables: { email: forwardsTo.email ?? "" },
-                    });
-                  }}
-                >
-                  Resend verification email?
-                </Button>
-              )}
-              {resendVerificationEmailLoading && "Sending..."}
-              {resendVerificationEmailData && (
-                <span style={{ color: green.primary }}>
-                  Verification email resent!
-                </span>
-              )}
-              {resendVerificationEmailError &&
-                `Error: ${resendVerificationEmailError.message}`}
+              <div>
+                <ResendVerificationEmailCTA email={forwardsTo.email ?? ""} />
+              </div>
             </span>
           ),
       },
@@ -218,13 +191,7 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
         ),
       },
     ],
-    [
-      activeTab,
-      resendVerificationEmailData,
-      resendVerificationEmailError,
-      resendVerificationEmailLoading,
-      resendVerificationEmail,
-    ]
+    [activeTab]
   );
 
   if (loading) {
@@ -253,128 +220,6 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
             ),
           }}
-        />
-        <Title level={2} style={{ display: "flex", alignItems: "center" }}>
-          Email Masks
-          <Button
-            style={{ marginLeft: "12px" }}
-            shape="circle"
-            icon={<PlusOutlined />}
-            onClick={() => history.push("/masks/new")}
-          />
-        </Title>
-        <List
-          itemLayout="horizontal"
-          locale={{
-            emptyText: (
-              <div>
-                You have no email masks.{" "}
-                <Link to="/masks/new">Create one now?</Link>
-              </div>
-            ),
-          }}
-          dataSource={[...data.me.user.emailMasks]}
-          renderItem={(emailMask) => (
-            <List.Item key={emailMask.id}>
-              <List.Item.Meta
-                title={
-                  <div>
-                    {emailMask.alias}@{emailMask.domain}
-                  </div>
-                }
-              />
-            </List.Item>
-          )}
-        />
-        <Title level={2} style={{ display: "flex", alignItems: "center" }}>
-          Verified Email Addresses
-          <Button
-            style={{ marginLeft: "12px" }}
-            shape="circle"
-            icon={<PlusOutlined />}
-            onClick={() => history.push("/verified-emails/new")}
-          />
-        </Title>
-        <List
-          itemLayout="horizontal"
-          locale={{
-            emptyText: (
-              <div>
-                You have no verified emails addresses.{" "}
-                <Link to="/verified-emails/new">
-                  Verify your email address now?
-                </Link>
-              </div>
-            ),
-          }}
-          dataSource={[...data.me.user.verifiedEmails]}
-          renderItem={(verifiedEmail) => (
-            <List.Item key={verifiedEmail.id}>
-              <List.Item.Meta
-                title={verifiedEmail.email}
-                description={
-                  verifiedEmail.verified ? (
-                    "Verified"
-                  ) : (
-                    <div>
-                      Awaiting verification...{" "}
-                      {!resendVerificationEmailData && (
-                        <Button
-                          type="link"
-                          onClick={() => {
-                            resendVerificationEmail({
-                              variables: { email: verifiedEmail.email ?? "" },
-                            });
-                          }}
-                        >
-                          Resend verification email?
-                        </Button>
-                      )}
-                      {resendVerificationEmailLoading && "Sending..."}
-                      {resendVerificationEmailData && "Sent!"}
-                      {resendVerificationEmailError &&
-                        `Error: ${resendVerificationEmailError.message}`}
-                    </div>
-                  )
-                }
-              />
-            </List.Item>
-          )}
-        />
-        <Title level={2} style={{ display: "flex", alignItems: "center" }}>
-          Routes
-          <Button
-            style={{ marginLeft: "12px" }}
-            shape="circle"
-            icon={<PlusOutlined />}
-            onClick={() => history.push("/routes/new")}
-          />
-        </Title>
-        <List
-          itemLayout="horizontal"
-          locale={{
-            emptyText: (
-              <div>
-                You have no routes.{" "}
-                <Link to="/routes/new">Create one now?</Link>
-              </div>
-            ),
-          }}
-          dataSource={[...data.me.user.routes]}
-          renderItem={(route) => (
-            <List.Item key={route.id}>
-              <List.Item.Meta
-                title={
-                  <div>
-                    Redirect emails received at {route.emailMask.alias}@
-                    {route.emailMask.domain} to{" "}
-                    {route.redirectToVerifiedEmail.email}
-                  </div>
-                }
-                description={"Never expires"}
-              />
-            </List.Item>
-          )}
         />
       </React.Fragment>
     );
