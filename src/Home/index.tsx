@@ -275,7 +275,7 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
           }}
           dataSource={[...data.me.user.emailMasks]}
           renderItem={(emailMask) => (
-            <List.Item>
+            <List.Item key={emailMask.id}>
               <List.Item.Meta
                 title={
                   <div>
@@ -309,7 +309,7 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
           }}
           dataSource={[...data.me.user.verifiedEmails]}
           renderItem={(verifiedEmail) => (
-            <List.Item>
+            <List.Item key={verifiedEmail.id}>
               <List.Item.Meta
                 title={verifiedEmail.email}
                 description={
@@ -362,7 +362,7 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
           }}
           dataSource={[...data.me.user.routes]}
           renderItem={(route) => (
-            <List.Item>
+            <List.Item key={route.id}>
               <List.Item.Meta
                 title={
                   <div>
@@ -443,7 +443,9 @@ const Home: React.FC<HomeProps> = () => {
           className="site-page-header-responsive"
           title="Mail Masks"
           subTitle="Protect your real email address"
-          extra={[<NewMailMaskModalAndButton />]}
+          extra={[
+            <NewMailMaskModalAndButton key="new-mail-mask-modal-button" />,
+          ]}
         >
           <Space size="large" direction="vertical" style={{ width: "100%" }}>
             <Tabs

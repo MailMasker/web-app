@@ -1,0 +1,20 @@
+query RefreshRoutesAndEmailMasks {
+  me {
+    user {
+      id
+      routes {
+        id
+        redirectToVerifiedEmail {
+          ...VerifiedEmailFragment
+        }
+        emailMask {
+          ...EmailMaskFragment
+        }
+        expiresISO
+      }
+      emailMasks {
+        ...EmailMaskFragment
+      }
+    }
+  }
+}
