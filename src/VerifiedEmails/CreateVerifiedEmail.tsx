@@ -1,16 +1,16 @@
 import { Button, Form, Input, Result } from "antd";
 
-import ErrorMessage from "../lib/ErrorMessage";
+import ErrorAlert from "../lib/ErrorAlert";
 import { Link } from "react-router-dom";
 import React from "react";
 import { useCreateVerifiedEmailMutation } from "./generated/CreateVerifiedEmail";
 
 const layout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
+  wrapperCol: { span: 16 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 }
+  wrapperCol: { offset: 8, span: 16 },
 };
 
 interface CreateVerifiedEmailProps {}
@@ -18,7 +18,7 @@ interface CreateVerifiedEmailProps {}
 const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = () => {
   const [
     createVerifiedEmail,
-    { data, error, loading }
+    { data, error, loading },
   ] = useCreateVerifiedEmailMutation();
 
   if (data) {
@@ -32,7 +32,7 @@ const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = () => {
             <Button type="primary" key="console">
               Go Home
             </Button>
-          </Link>
+          </Link>,
         ]}
       />
     );
@@ -41,7 +41,7 @@ const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = () => {
   const onFinish = async (values: any) => {
     try {
       await createVerifiedEmail({
-        variables: { email: values.email }
+        variables: { email: values.email },
       });
     } catch (err) {
       console.error(err);
@@ -71,7 +71,7 @@ const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = () => {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <ErrorMessage error={error} />
+        <ErrorAlert error={error} />
         <div>
           <Button
             type="primary"

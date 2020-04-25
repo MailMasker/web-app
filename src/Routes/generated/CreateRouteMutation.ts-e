@@ -18,7 +18,7 @@ export type CreateRouteMutation = (
   { readonly __typename?: 'Mutation' }
   & { readonly createRoute: (
     { readonly __typename?: 'Route' }
-    & Pick<Types.Route, 'id' | 'expires' | 'disabled'>
+    & Pick<Types.Route, 'id' | 'expiresISO'>
     & { readonly redirectToVerifiedEmail: (
       { readonly __typename?: 'VerifiedEmail' }
       & VerifiedEmailFragment
@@ -40,8 +40,7 @@ export const CreateRouteDocument = gql`
     emailMask {
       ...EmailMaskFragment
     }
-    expires
-    disabled
+    expiresISO
   }
 }
     ${VerifiedEmailFragmentDoc}

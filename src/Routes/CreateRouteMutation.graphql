@@ -10,7 +10,6 @@ mutation CreateRoute($redirectToVerifiedEmailID: ID!, $emailMaskID: ID!) {
     emailMask {
       ...EmailMaskFragment
     }
-    expires
-    disabled
+    expiresISO
   }
 }

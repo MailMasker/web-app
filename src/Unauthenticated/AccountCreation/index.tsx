@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input, Typography } from "antd";
 
-import ErrorMessage from "../../lib/ErrorMessage";
+import ErrorAlert from "../../lib/ErrorAlert";
 import React from "react";
 import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import { uuidv4 } from "../../lib/uuid";
@@ -9,10 +9,10 @@ const { Title } = Typography;
 
 const layout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
+  wrapperCol: { span: 16 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 }
+  wrapperCol: { offset: 8, span: 16 },
 };
 
 interface AccountCreationProps {
@@ -20,7 +20,7 @@ interface AccountCreationProps {
 }
 
 const AccountCreation = ({
-  onAccountCreationSuccess
+  onAccountCreationSuccess,
 }: AccountCreationProps) => {
   const [form] = Form.useForm();
   const [createAccount, { error, loading }] = useCreateUserMutation();
@@ -31,11 +31,11 @@ const AccountCreation = ({
       variables: {
         username: values.username,
         password: values.password,
-        uuid: uuidv4()
-      }
+        uuid: uuidv4(),
+      },
     })
       .then(onAccountCreationSuccess)
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -75,7 +75,7 @@ const AccountCreation = ({
         </Form.Item>
 
         <Form.Item {...tailLayout}>
-          <ErrorMessage error={error} />
+          <ErrorAlert error={error} />
           <div>
             <Button
               type="primary"

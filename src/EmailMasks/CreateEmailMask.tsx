@@ -1,6 +1,6 @@
 import { Button, Form, Input, Result, Select } from "antd";
 
-import ErrorMessage from "../lib/ErrorMessage";
+import ErrorAlert from "../lib/ErrorAlert";
 import { Link } from "react-router-dom";
 import React from "react";
 import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
@@ -72,7 +72,10 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = () => {
     console.log("Failed:", errorInfo);
   };
 
-  const initialValues: { email: string } = { email: "" };
+  const initialValues: { email: string; domain: string } = {
+    email: "",
+    domain: supportedEmailDomains[0],
+  };
 
   return (
     <Form
@@ -125,7 +128,7 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = () => {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <ErrorMessage error={error} />
+        <ErrorAlert error={error} />
         <div>
           <Button
             type="primary"

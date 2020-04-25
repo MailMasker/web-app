@@ -36,7 +36,6 @@ export type EmailMask = {
   alias: Scalars['String'];
   /** For x+y@1nt.email, "1nt.email" is the domain */
   domain: Scalars['String'];
-  disabled: Scalars['Boolean'];
   parentEmailMaskID?: Maybe<Scalars['ID']>;
   children: Array<EmailMask>;
 };
@@ -118,8 +117,7 @@ export type Route = {
   id: Scalars['ID'];
   redirectToVerifiedEmail: VerifiedEmail;
   emailMask: EmailMask;
-  expires?: Maybe<Scalars['Int']>;
-  disabled: Scalars['Boolean'];
+  expiresISO?: Maybe<Scalars['Int']>;
 };
 
 

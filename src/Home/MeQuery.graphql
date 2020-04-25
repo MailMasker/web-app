@@ -11,8 +11,7 @@ query Me {
         emailMask {
           ...EmailMaskFragment
         }
-        expires
-        disabled
+        expiresISO
       }
       verifiedEmails {
         ...VerifiedEmailFragment

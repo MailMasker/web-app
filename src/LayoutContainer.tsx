@@ -43,7 +43,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
                 style={{ lineHeight: "64px" }}
                 onSelect={() => history.push("/")}
               >
-                <Menu.Item key="1">Account</Menu.Item>
+                <Menu.Item key="1">Mail Masks</Menu.Item>
               </Menu>
             ) : (
               <Menu
@@ -102,7 +102,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
         </div>
       </Content>
       <Footer style={{ textAlign: "center" }}>
-        Email Forwarder ©2020 Dewpoint Solutions, Inc
+        Mail Masker © 2020 Dewpoint Solutions, Inc
       </Footer>
     </Layout>
   );

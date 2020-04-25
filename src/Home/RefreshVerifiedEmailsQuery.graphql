@@ -1,0 +1,10 @@
+query RefreshVerifiedEmails {
+  me {
+    user {
+      id
+      verifiedEmails {
+        ...VerifiedEmailFragment
+      }
+    }
+  }
+}

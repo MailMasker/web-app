@@ -1,7 +1,7 @@
 import { Button, Result } from "antd";
 import React, { useCallback, useEffect } from "react";
 
-import ErrorMessage from "../../lib/ErrorMessage";
+import ErrorAlert from "../../lib/ErrorAlert";
 import { Link } from "react-router-dom";
 import { useVerifyEmailWithCodeMutation } from "./generated/VerifyEmailWithCodeMutation";
 
@@ -14,17 +14,17 @@ interface VerifyEmailProps {
 const VerifyEmail: React.FC<VerifyEmailProps> = ({
   authenticated,
   email,
-  verificationCode
+  verificationCode,
 }) => {
   const [
     verifyEmailWithCode,
-    { data, loading, error }
+    { data, loading, error },
   ] = useVerifyEmailWithCodeMutation();
 
   const verify = useCallback(
     () =>
       verifyEmailWithCode({
-        variables: { email, code: verificationCode }
+        variables: { email, code: verificationCode },
       }),
     [email, verificationCode, verifyEmailWithCode]
   );
@@ -47,7 +47,7 @@ const VerifyEmail: React.FC<VerifyEmailProps> = ({
             <Button type="primary" key="console">
               Go Home
             </Button>
-          </Link>
+          </Link>,
         ]}
       />
     );
@@ -57,7 +57,7 @@ const VerifyEmail: React.FC<VerifyEmailProps> = ({
     return (
       <div>
         {loading && <div>Verifying email address...</div>}
-        {error && <ErrorMessage error={error} />}
+        {error && <ErrorAlert error={error} />}
         {data && <div>Email address verified!</div>}
       </div>
     );
@@ -72,7 +72,7 @@ const VerifyEmail: React.FC<VerifyEmailProps> = ({
       return (
         <div>
           {loading && <div>Verifying email address...</div>}
-          {error && <ErrorMessage error={error} />}
+          {error && <ErrorAlert error={error} />}
           {data && <div>Email address verified!</div>}
         </div>
       );

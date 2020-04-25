@@ -20,7 +20,7 @@ export type MeQuery = (
       & Pick<Types.User, 'id' | 'username'>
       & { readonly routes: ReadonlyArray<(
         { readonly __typename?: 'Route' }
-        & Pick<Types.Route, 'id' | 'expires' | 'disabled'>
+        & Pick<Types.Route, 'id' | 'expiresISO'>
         & { readonly redirectToVerifiedEmail: (
           { readonly __typename?: 'VerifiedEmail' }
           & VerifiedEmailFragment
@@ -54,8 +54,7 @@ export const MeDocument = gql`
         emailMask {
           ...EmailMaskFragment
         }
-        expires
-        disabled
+        expiresISO
       }
       verifiedEmails {
         ...VerifiedEmailFragment

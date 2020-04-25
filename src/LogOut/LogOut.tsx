@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import ErrorMessage from "../lib/ErrorMessage";
+import ErrorAlert from "../lib/ErrorAlert";
 import { Redirect } from "react-router-dom";
 import { Spin } from "antd";
 import { useUnauthenticateMutation } from "./generated/Unauthenticate";
@@ -31,7 +31,7 @@ const LogOut: React.FC<LogOutProps> = () => {
       />
     );
   } else if (error) {
-    return <ErrorMessage error={error} />;
+    return <ErrorAlert error={error} />;
   } else if (!!data) {
     return <Redirect to="/log-in" />;
   }

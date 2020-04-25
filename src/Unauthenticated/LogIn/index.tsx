@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input, Typography } from "antd";
 
-import ErrorMessage from "../../lib/ErrorMessage";
+import ErrorAlert from "../../lib/ErrorAlert";
 import { Link } from "react-router-dom";
 import React from "react";
 import { useLogInMutation } from "./generated/LogInMutation";
@@ -9,10 +9,10 @@ const { Title } = Typography;
 
 const layout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
+  wrapperCol: { span: 16 },
 };
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 }
+  wrapperCol: { offset: 8, span: 16 },
 };
 
 interface LogInProps {
@@ -29,11 +29,11 @@ const LogIn = ({ onLogInSuccess }: LogInProps) => {
     logIn({
       variables: {
         username: values.username,
-        password: values.password
-      }
+        password: values.password,
+      },
     })
       .then(onLogInSuccess)
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -72,12 +72,12 @@ const LogIn = ({ onLogInSuccess }: LogInProps) => {
         {/* history.push("/register")
       history.push("/reset-password") */}
         <Form.Item {...tailLayout}>
-          <ErrorMessage error={error} />
+          <ErrorAlert error={error} />
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <Button

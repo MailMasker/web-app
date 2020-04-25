@@ -1,4 +1,4 @@
-import ErrorMessage from "../lib/ErrorMessage";
+import ErrorAlert from "../lib/ErrorAlert";
 import React from "react";
 import { Spin } from "antd";
 import hasGraphQLAuthenticationError from "../lib/hasGraphQLAuthenticationError";
@@ -19,7 +19,7 @@ const AuthenticatedOrUnauthenticated: React.FC<AuthenticatedOrUnauthenticatedPro
         <React.Fragment>{children({ authenticated: false })}</React.Fragment>
       );
     } else if (error.networkError) {
-      return <ErrorMessage error={error} />;
+      return <ErrorAlert error={error} />;
     }
     // Throw all non-authentication, non-network errors
     throw error;

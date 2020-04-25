@@ -1,6 +1,6 @@
 import { AutoComplete, Button, Form, Radio, Result } from "antd";
 
-import ErrorMessage from "../lib/ErrorMessage";
+import ErrorAlert from "../lib/ErrorAlert";
 import { Link } from "react-router-dom";
 import React from "react";
 import { useCreateRouteMutation } from "./generated/CreateRouteMutation";
@@ -112,12 +112,6 @@ const CreateRoute: React.FC<CreateRouteProps> = () => {
     console.log("Failed:", errorInfo);
   };
 
-  const radioStyle = {
-    display: "block",
-    height: "30px",
-    lineHeight: "30px",
-  };
-
   return (
     <Form
       {...layout}
@@ -151,7 +145,14 @@ const CreateRoute: React.FC<CreateRouteProps> = () => {
       <Form.Item label="Redirect to" name="redirectToVerifiedEmailID">
         <Radio.Group>
           {verifiedEmailOptions.map(({ value, label }) => (
-            <Radio style={radioStyle} value={value}>
+            <Radio
+              style={{
+                display: "block",
+                height: "30px",
+                lineHeight: "30px",
+              }}
+              value={value}
+            >
               {label}
             </Radio>
           ))}
@@ -159,7 +160,7 @@ const CreateRoute: React.FC<CreateRouteProps> = () => {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <ErrorMessage error={error} />
+        <ErrorAlert error={error} />
         <div>
           <Button
             type="primary"
