@@ -21,10 +21,11 @@ import { history } from "./history";
 import localStorage from "./lib/localStorage";
 
 const App: React.FC = () => {
-  const onLoginSuccess = useCallback(() => {
+  const onAuthenticationSuccess = useCallback(() => {
     localStorage.setItem("global", "hasAuthenticatedOnce", "true");
     history.push("/");
   }, []);
+
   return (
     <ApolloProvider client={client}>
       <div
@@ -53,7 +54,9 @@ const App: React.FC = () => {
               )}
             />
             <Route path={["/log-in", "/sign-up", "/verify-email"]}>
-              <Unauthenticated onLoginSuccess={onLoginSuccess} />
+              <Unauthenticated
+                onAuthenticationSuccess={onAuthenticationSuccess}
+              />
             </Route>
             <Route path="*">
               <Authenticated>

@@ -5,18 +5,18 @@ import LogIn from "./LogIn";
 import React from "react";
 
 interface UnauthenticatedProps {
-  onLoginSuccess: () => void;
+  onAuthenticationSuccess: () => void;
 }
 
 const Unauthenticated: React.FC<UnauthenticatedProps> = ({
-  onLoginSuccess,
+  onAuthenticationSuccess,
 }) => {
   return (
     <BrowserRouter>
       <LayoutContainer authenticated={false}>
         <Switch>
           <Route path={["/log-in", "/sign-up", "/forgot-password"]}>
-            <LogIn onLogInSuccess={onLoginSuccess} />
+            <LogIn onAuthenticationSuccess={onAuthenticationSuccess} />
           </Route>
           <Route path="*">
             <Redirect to="/log-in" />

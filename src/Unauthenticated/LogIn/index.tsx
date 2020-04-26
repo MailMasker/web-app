@@ -22,11 +22,13 @@ import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import { useLogInMutation } from "./generated/LogInMutation";
 import { uuidv4 } from "../../lib/uuid";
 
-interface LogInProps {
-  onLogInSuccess: () => void;
+interface LogInSignUpForgotPasswordProps {
+  onAuthenticationSuccess: () => void;
 }
 
-const LogIn = ({ onLogInSuccess }: LogInProps) => {
+const LogInSignUpForgotPassword = ({
+  onAuthenticationSuccess,
+}: LogInSignUpForgotPasswordProps) => {
   const [form] = Form.useForm();
 
   const history = useHistory();
@@ -52,7 +54,7 @@ const LogIn = ({ onLogInSuccess }: LogInProps) => {
         password: values.password,
       },
     })
-      .then(onLogInSuccess)
+      .then(onAuthenticationSuccess)
       .catch((err) => console.error(err));
   };
 
@@ -65,7 +67,7 @@ const LogIn = ({ onLogInSuccess }: LogInProps) => {
         uuid: uuidv4(),
       },
     })
-      .then(onLogInSuccess)
+      .then(onAuthenticationSuccess)
       .catch((err) => console.error(err));
   };
 
@@ -243,4 +245,4 @@ const LogIn = ({ onLogInSuccess }: LogInProps) => {
   );
 };
 
-export default LogIn;
+export default LogInSignUpForgotPassword;
