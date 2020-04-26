@@ -57,6 +57,8 @@ export type Mutation = {
   createEmailMask: EmailMask;
   createRoute: Route;
   updateRoute: Route;
+  sendResetPasswordEmail?: Maybe<Scalars['Boolean']>;
+  resetPassword?: Maybe<Scalars['Boolean']>;
   verifyEmailWithCode: VerifiedEmail;
 };
 
@@ -106,6 +108,18 @@ export type MutationUpdateRouteArgs = {
   redirectToVerifiedEmailID?: Maybe<Scalars['ID']>;
   expiresISO?: Maybe<Scalars['String']>;
   clearExpiresISO?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationSendResetPasswordEmailArgs = {
+  usernameOrEmail: Scalars['String'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  newPassword: Scalars['String'];
+  code: Scalars['String'];
+  userID: Scalars['String'];
 };
 
 

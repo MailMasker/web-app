@@ -16,8 +16,8 @@ import ErrorAlert from "../lib/ErrorAlert";
 import { PlusOutlined } from "@ant-design/icons";
 import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
-import { useCreateEmailMaskMutation } from "../EmailMasks/generated/CreateEmailMask";
-import { useCreateRouteMutation } from "../Routes/generated/CreateRouteMutation";
+import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
+import { useCreateRouteMutation } from "./generated/CreateRouteMutation";
 import { useMeQuery } from "./generated/MeQuery";
 import { useRefreshRoutesAndEmailMasksLazyQuery } from "./generated/RefreshRoutesAndEmailMasksQuery";
 

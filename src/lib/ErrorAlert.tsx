@@ -15,12 +15,21 @@ const render = (
   e: { message: string } | ApolloError,
   otherProps: Omit<ErrorMessageProps, "error">
 ) => {
+  let message = e.message;
+  const prefixToRemove = "GraphQL error: ";
+  if (message.startsWith(prefixToRemove)) {
+    message = message.substr(
+      prefixToRemove.length,
+      message.length - prefixToRemove.length
+    );
+  }
   return (
     <Alert
       message="Error"
-      description={e.message}
+      description={message}
       type="error"
       closable
+      style={{ marginBottom: "12px" }}
       {...otherProps}
     />
   );

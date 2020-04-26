@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Checkbox,
   Form,
@@ -8,6 +9,8 @@ import {
   Space,
   Tooltip,
   Typography,
+  message,
+  notification,
 } from "antd";
 import {
   InfoCircleOutlined,
@@ -20,6 +23,8 @@ import ErrorAlert from "../../lib/ErrorAlert";
 import React from "react";
 import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import { useLogInMutation } from "./generated/LogInMutation";
+import { useResetPasswordMutation } from "./generated/ResetPasswordMutation";
+import { useSendResetPasswordEmailMutation } from "./generated/SendResetPasswordEmailMutation";
 import { uuidv4 } from "../../lib/uuid";
 
 interface LogInSignUpForgotPasswordProps {
@@ -35,6 +40,11 @@ const LogInSignUpForgotPassword = ({
   const signUpMatch = useRouteMatch("/sign-up");
   const logInMatch = useRouteMatch("/log-in");
   const forgotPasswordMatch = useRouteMatch("/forgot-password");
+  const resetPasswordMatch = useRouteMatch<{
+    code: string;
+    userID: string;
+    username: string;
+  }>("/reset-password/user/:userID/code/:code/username/:username");
 
   const [
     logIn,
@@ -45,6 +55,20 @@ const LogInSignUpForgotPassword = ({
     createAccount,
     { error: signUpError, loading: signUpLoading },
   ] = useCreateUserMutation();
+
+  const [
+    sendResetPasswordEmail,
+    {
+      data: sendResetPasswordEmailData,
+      error: sendResetPasswordEmailError,
+      loading: sendResetPasswordEmailLoading,
+    },
+  ] = useSendResetPasswordEmailMutation();
+
+  const [
+    resetPassword,
+    { loading: resetPasswordLoading, error: resetPasswordError },
+  ] = useResetPasswordMutation();
 
   const onSubmitLogIn = (values: any) => {
     console.info("Submitted form: ", values);
@@ -73,6 +97,33 @@ const LogInSignUpForgotPassword = ({
 
   const onSubmitForgotPassword = (values: any) => {
     console.info("Submitted form: ", values);
+    sendResetPasswordEmail({
+      variables: {
+        usernameOrEmail: values.username,
+      },
+    })
+      .then(() => message.success("Email sent"))
+      .catch((err) => console.error(err));
+  };
+
+  const onSubmitResetPassword = (values: any) => {
+    console.info("Submitted form: ", values);
+    resetPassword({
+      variables: {
+        newPassword: values.password,
+        userID: resetPasswordMatch?.params.userID ?? "",
+        code: resetPasswordMatch?.params.code ?? "",
+      },
+    })
+      .then(() => {
+        notification.success({
+          message: `Password updated`,
+          description: "You are now logged in.",
+          placement: "topRight",
+        });
+        onAuthenticationSuccess();
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -114,16 +165,33 @@ const LogInSignUpForgotPassword = ({
                   </div>
                 </React.Fragment>
               )}
+              {resetPasswordMatch && (
+                <React.Fragment>
+                  <div style={{ textAlign: "center", width: "300px" }}>
+                    <Typography.Title level={3}>
+                      Reset Password
+                    </Typography.Title>
+                    <Typography.Text>Choose a new password:</Typography.Text>
+                  </div>
+                </React.Fragment>
+              )}
               <Form
                 name="normal_login"
                 className="login-form"
-                initialValues={{ remember: true }}
+                initialValues={{
+                  remember: true,
+                  username: resetPasswordMatch?.params.username ?? undefined,
+                }}
                 onFinish={
                   logInMatch
                     ? onSubmitLogIn
                     : signUpMatch
                     ? onSubmitSignUp
-                    : onSubmitForgotPassword
+                    : forgotPasswordMatch
+                    ? onSubmitForgotPassword
+                    : resetPasswordMatch
+                    ? onSubmitResetPassword
+                    : () => console.error("unknown case")
                 }
                 style={{ width: "300px" }}
                 form={form}
@@ -144,7 +212,7 @@ const LogInSignUpForgotPassword = ({
                     />
                   </Form.Item>
                 )}
-                {(logInMatch || signUpMatch) && (
+                {(logInMatch || signUpMatch || resetPasswordMatch) && (
                   <Form.Item
                     name="username"
                     rules={[
@@ -159,6 +227,7 @@ const LogInSignUpForgotPassword = ({
                     <Input
                       prefix={<UserOutlined className="site-form-item-icon" />}
                       placeholder="Username"
+                      disabled={!!resetPasswordMatch}
                       suffix={
                         signUpMatch ? (
                           <Tooltip
@@ -175,7 +244,7 @@ const LogInSignUpForgotPassword = ({
                   </Form.Item>
                 )}
 
-                {(logInMatch || signUpMatch) && (
+                {(logInMatch || signUpMatch || resetPasswordMatch) && (
                   <Form.Item
                     name="password"
                     rules={[
@@ -191,6 +260,7 @@ const LogInSignUpForgotPassword = ({
                       prefix={<LockOutlined className="site-form-item-icon" />}
                       type="password"
                       placeholder="Password"
+                      autoFocus={!!resetPasswordMatch}
                     />
                   </Form.Item>
                 )}
@@ -215,20 +285,48 @@ const LogInSignUpForgotPassword = ({
                 ) : null}
 
                 <Form.Item>
-                  <ErrorAlert error={[logInError, signUpError]} />
+                  <ErrorAlert
+                    error={[
+                      logInError,
+                      signUpError,
+                      sendResetPasswordEmailError,
+                      resetPasswordError,
+                    ]}
+                  />
+                  {sendResetPasswordEmailData && (
+                    <Alert
+                      message="Check your email for your username and a link to reset your password."
+                      type="success"
+                      style={{ marginBottom: "12px" }}
+                    />
+                  )}
                   <Button
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
                     style={{ width: "100%" }}
-                    loading={logInLoading || signUpLoading}
-                    disabled={logInLoading || signUpLoading}
+                    loading={
+                      logInLoading ||
+                      signUpLoading ||
+                      sendResetPasswordEmailLoading ||
+                      resetPasswordLoading
+                    }
+                    disabled={
+                      logInLoading ||
+                      signUpLoading ||
+                      sendResetPasswordEmailLoading ||
+                      resetPasswordLoading
+                    }
                   >
                     {logInMatch
                       ? "Log in"
                       : signUpMatch
                       ? "Sign up"
-                      : "Send me an email"}
+                      : forgotPasswordMatch
+                      ? "Send me an email"
+                      : resetPasswordMatch
+                      ? "Reset password"
+                      : ""}
                   </Button>
                   {logInMatch && (
                     <div>

@@ -3,7 +3,7 @@ import { MailOutlined, PlusOutlined } from "@ant-design/icons";
 import React, { memo, useCallback, useState } from "react";
 
 import ErrorAlert from "../lib/ErrorAlert";
-import { useCreateVerifiedEmailMutation } from "../VerifiedEmails/generated/CreateVerifiedEmail";
+import { useCreateVerifiedEmailMutation } from "./generated/CreateVerifiedEmail";
 import { useForm } from "antd/lib/form/util";
 import { useRefreshVerifiedEmailsLazyQuery } from "./generated/RefreshVerifiedEmailsQuery";
 

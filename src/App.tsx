@@ -7,10 +7,6 @@ import React, { useCallback } from "react";
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
 import AuthenticatedOrUnauthenticated from "./AuthenticatedOrUnauthenticated";
-import CreateEmailMask from "./EmailMasks/CreateEmailMask";
-import CreateRoute from "./Routes/CreateRoute";
-import CreateVerifiedEmail from "./VerifiedEmails/CreateVerifiedEmail";
-import ForgotPassword from "./Unauthenticated/ForgotPassword";
 import Home from "./Home";
 import LayoutContainer from "./LayoutContainer";
 import LogOut from "./LogOut/LogOut";
@@ -53,7 +49,15 @@ const App: React.FC = () => {
                 </AuthenticatedOrUnauthenticated>
               )}
             />
-            <Route path={["/log-in", "/sign-up", "/verify-email"]}>
+            <Route
+              path={[
+                "/log-in",
+                "/sign-up",
+                "/verify-email",
+                "/forgot-password",
+                "/reset-password/user/:userID/code/:code/username/:username",
+              ]}
+            >
               <Unauthenticated
                 onAuthenticationSuccess={onAuthenticationSuccess}
               />
@@ -64,18 +68,6 @@ const App: React.FC = () => {
                   <Switch>
                     <Route path="/log-out">
                       <LogOut />
-                    </Route>
-                    <Route path="/forgot-password">
-                      <ForgotPassword />
-                    </Route>
-                    <Route path="/verified-emails/new">
-                      <CreateVerifiedEmail />
-                    </Route>
-                    <Route path="/masks/new">
-                      <CreateEmailMask />
-                    </Route>
-                    <Route path="/routes/new">
-                      <CreateRoute />
                     </Route>
                     <Route path="/" exact>
                       <Home />
