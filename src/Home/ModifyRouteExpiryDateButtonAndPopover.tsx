@@ -67,11 +67,11 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
       label: "never",
     },
     {
-      key: "tomorrow",
+      key: "in-a-day",
       value: dayjs()
-        .add(1, "week")
+        .add(1, "day")
         .toISOString(),
-      label: "tomorrow",
+      label: "in 1 day",
     },
     {
       key: "in-a-week",
@@ -112,21 +112,33 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
   ]);
 
   const handleOk = useCallback(async () => {
+    let update = {};
+    if (form.getFieldValue("duration") === "never") {
+      update = {
+        clearExpiresISO: true,
+      };
+    } else if (form.getFieldValue("duration") === "now") {
+      update = {
+        expiresISO: dayjs().toISOString(),
+      };
+    } else if (form.getFieldValue("duration") === "custom") {
+      update = {
+        expiresISO: dayjs(
+          form.getFieldValue("customDurationISO")
+        ).toISOString(),
+      };
+    } else {
+      update = {
+        expiresISO: dayjs(form.getFieldValue("duration")).toISOString(),
+      };
+    }
+
     try {
       await form.validateFields();
       await updateRoute({
         variables: {
           id: route.id,
-          ...(form.getFieldValue("duration") === "never"
-            ? {
-                clearExpiresISO: true,
-              }
-            : {}),
-          ...(form.getFieldValue("duration") === "now"
-            ? {
-                expiresISO: dayjs().toISOString(),
-              }
-            : {}),
+          ...update,
         },
       });
       hideModal();
@@ -176,7 +188,10 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
             form={form}
             name="horizontal_add_verified_email"
             onFinish={handleOk}
-            initialValues={{ duration: route.expiresISO, customDuration: "" }}
+            initialValues={{
+              duration: route.expiresISO,
+              customDurationISO: "",
+            }}
           >
             <Form.Item
               name="duration"
@@ -189,8 +204,10 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
                 ({ getFieldValue }) => ({
                   validator(rule, value) {
                     if (value === "custom") {
-                      const customDuration = getFieldValue("customDuration");
-                      if (!customDuration) {
+                      const customDurationISO = getFieldValue(
+                        "customDurationISO"
+                      );
+                      if (!customDurationISO) {
                         return Promise.reject(
                           "Please choose a custom duration"
                         );
@@ -210,14 +227,16 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
                     autoFocus={index === 0}
                   >
                     {key === "custom" ? (
-                      <DatePicker
-                        onChange={(date) => {
-                          form.setFieldsValue({
-                            customDuration: date?.toISOString(),
-                            duration: value,
-                          });
-                        }}
-                      />
+                      <React.Fragment>
+                        <DatePicker
+                          onChange={(date) => {
+                            form.setFieldsValue({
+                              customDurationISO: date?.toISOString(),
+                              duration: value,
+                            });
+                          }}
+                        />
+                      </React.Fragment>
                     ) : (
                       <Tooltip
                         title={() => {

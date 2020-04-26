@@ -69,10 +69,6 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
   const initialValues: { email: string; domain: string } = {
     email: "",
     domain: supportedEmailDomains[0],
@@ -84,7 +80,6 @@ const CreateEmailMask: React.FC<CreateEmailMaskProps> = () => {
       name="basic"
       initialValues={initialValues}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
     >
       <Form.Item label="Email Address">
         <Input.Group compact>

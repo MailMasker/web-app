@@ -1,13 +1,14 @@
 import {
   Badge,
-  Button,
   Empty,
+  Modal,
   PageHeader,
   Space,
   Spin,
   Table,
   Tabs,
   Tag,
+  Tooltip,
   Typography,
 } from "antd";
 import { MeQuery, useMeQuery } from "./generated/MeQuery";
@@ -16,6 +17,7 @@ import { grey, orange } from "@ant-design/colors";
 
 import { ColumnProps } from "antd/lib/table";
 import ErrorAlert from "../lib/ErrorAlert";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import ModifyRouteExpiryDateButtonAndPopover from "./ModifyRouteExpiryDateButtonAndPopover";
 import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
 import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
@@ -152,7 +154,53 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
         key: "privacy",
         dataIndex: "privacy",
         render: (privacy) => (
-          <Tag color="green" key={privacy}>
+          <Tag
+            color="green"
+            key={privacy}
+            icon={<InfoCircleOutlined />}
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              Modal.info({
+                title: `About "MAX" Privacy`,
+                content: (
+                  <div>
+                    <p>
+                      This represents highest level of privacy that we could
+                      give you, while still making this service useful. In
+                      short, that means:
+                    </p>
+                    <ul>
+                      <li>
+                        You can delete your verified email addresses at any time
+                        from our systems. After doing so, we no longer know any
+                        personal information about you.
+                      </li>
+                      <li>
+                        Once you use a Mail Mask (ex: jane@mailmasker.com), it
+                        belongs to your account forever. Even if you decide to
+                        terminate your account, it cannot be used by anyone else
+                        in the future.
+                      </li>
+                      <li>
+                        Immediately after we receive an email at one of your
+                        Mail Masks and forward it on to you, we permanently
+                        delete the email content from our servers. Furthermore,
+                        we have a backup mechanism which clears any emails which
+                        might fail to be deleted for some reason after 30 days.
+                      </li>
+                      <li>
+                        After forwarding an email to you, we don't store any
+                        information about your email (not even the subject or
+                        sender). The only thing we store is the date and a count
+                        of emails forwarded / rejected.
+                      </li>
+                    </ul>
+                  </div>
+                ),
+                onOk() {},
+              });
+            }}
+          >
             {privacy}
           </Tag>
         ),
@@ -167,35 +215,29 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
             : undefined;
           return (
             <Text>
-              {routeExpiryDayjs ? dayjs().to(routeExpiryDayjs) : "-"}
+              <Tooltip
+                title={() => {
+                  if (!routeExpiryDayjs) {
+                    return "Emails will be forwarded indefinitely";
+                  }
+                  return routeExpiryDayjs.toDate().toLocaleString();
+                }}
+                placement="left"
+              >
+                <span>
+                  {routeExpiryDayjs ? dayjs().to(routeExpiryDayjs) : "never"}
+                </span>
+              </Tooltip>
               <ModifyRouteExpiryDateButtonAndPopover
                 route={route}
                 mailMaskEmail={parent.mailMaskEmail}
                 onSuccess={({ modifiedRouteID }) => {
                   // TODO: highlight the modified route's row
-                  console.log(
-                    "successfully modified route ID",
-                    modifiedRouteID
-                  );
                 }}
               />
             </Text>
           );
         },
-      },
-      {
-        title: "",
-        key: "action",
-        render: (text, record) => (
-          <span>
-            <Button type="link" style={{ marginRight: 16 }} onClick={() => {}}>
-              Renew
-            </Button>
-            <Button type="link" onClick={() => {}}>
-              Expire Now
-            </Button>
-          </span>
-        ),
       },
     ],
     [activeTab]

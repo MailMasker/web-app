@@ -48,10 +48,6 @@ const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
   const initialValues: { email: string } = { email: "" };
 
   return (
@@ -60,7 +56,6 @@ const CreateVerifiedEmail: React.FC<CreateVerifiedEmailProps> = () => {
       name="basic"
       initialValues={initialValues}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
     >
       <Form.Item
         label="Email Address"

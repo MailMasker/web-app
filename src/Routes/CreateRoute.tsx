@@ -87,7 +87,6 @@ const CreateRoute: React.FC<CreateRouteProps> = () => {
     redirectToVerifiedEmailID,
     emailMaskEmail,
   }: any) => {
-    console.log({ redirectToVerifiedEmailID, emailMaskEmail });
     const emailMask = emailMaskOptions.find(
       (em) => em.value === emailMaskEmail
     );
@@ -108,20 +107,12 @@ const CreateRoute: React.FC<CreateRouteProps> = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
   return (
     <Form
       {...layout}
       name="basic"
       initialValues={initialValues}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      onValuesChange={(changedValues, allValues) =>
-        console.log(changedValues, allValues)
-      }
     >
       <Form.Item label="Emails recieved at" name="emailMaskEmail">
         <AutoComplete
