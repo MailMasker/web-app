@@ -1,9 +1,5 @@
 import * as Types from "../../generated/types";
 
-import {
-  VerifiedEmailFragmentDoc,
-  VerifiedEmailFragment
-} from "../../VerifiedEmails/generated/VerifiedEmailFragment";
 import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/react-common";
 import * as ApolloReactHooks from "@apollo/react-hooks";
@@ -14,7 +10,10 @@ export type RefreshVerifiedEmailsQuery = { readonly __typename?: "Query" } & {
   readonly me: { readonly __typename?: "Me" } & {
     readonly user: { readonly __typename?: "User" } & Pick<Types.User, "id"> & {
         readonly verifiedEmails: ReadonlyArray<
-          { readonly __typename?: "VerifiedEmail" } & VerifiedEmailFragment
+          { readonly __typename?: "VerifiedEmail" } & Pick<
+            Types.VerifiedEmail,
+            "id" | "email" | "verified"
+          >
         >;
       };
   };
@@ -26,12 +25,13 @@ export const RefreshVerifiedEmailsDocument = gql`
       user {
         id
         verifiedEmails {
-          ...VerifiedEmailFragment
+          id
+          email
+          verified
         }
       }
     }
   }
-  ${VerifiedEmailFragmentDoc}
 `;
 
 /**

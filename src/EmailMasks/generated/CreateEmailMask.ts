@@ -1,9 +1,5 @@
 import * as Types from "../../generated/types";
 
-import {
-  EmailMaskFragmentDoc,
-  EmailMaskFragment
-} from "../../Home/generated/EmailMaskFragment";
 import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/react-common";
 import * as ApolloReactHooks from "@apollo/react-hooks";
@@ -13,18 +9,21 @@ export type CreateEmailMaskMutationVariables = {
 };
 
 export type CreateEmailMaskMutation = { readonly __typename?: "Mutation" } & {
-  readonly createEmailMask: {
-    readonly __typename?: "EmailMask";
-  } & EmailMaskFragment;
+  readonly createEmailMask: { readonly __typename?: "EmailMask" } & Pick<
+    Types.EmailMask,
+    "id" | "domain" | "alias" | "parentEmailMaskID"
+  >;
 };
 
 export const CreateEmailMaskDocument = gql`
   mutation CreateEmailMask($email: String!) {
     createEmailMask(raw: $email) {
-      ...EmailMaskFragment
+      id
+      domain
+      alias
+      parentEmailMaskID
     }
   }
-  ${EmailMaskFragmentDoc}
 `;
 export type CreateEmailMaskMutationFn = ApolloReactCommon.MutationFunction<
   CreateEmailMaskMutation,

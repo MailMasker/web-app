@@ -1,10 +1,5 @@
 import * as Types from "../../generated/types";
 
-import {
-  VerifiedEmailFragmentDoc,
-  VerifiedEmailFragment
-} from "../../VerifiedEmails/generated/VerifiedEmailFragment";
-import { EmailMaskFragmentDoc, EmailMaskFragment } from "./EmailMaskFragment";
 import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/react-common";
 import * as ApolloReactHooks from "@apollo/react-hooks";
@@ -23,14 +18,18 @@ export type RefreshRoutesAndEmailMasksQuery = {
           > & {
               readonly redirectToVerifiedEmail: {
                 readonly __typename?: "VerifiedEmail";
-              } & VerifiedEmailFragment;
-              readonly emailMask: {
-                readonly __typename?: "EmailMask";
-              } & EmailMaskFragment;
+              } & Pick<Types.VerifiedEmail, "id" | "email" | "verified">;
+              readonly emailMask: { readonly __typename?: "EmailMask" } & Pick<
+                Types.EmailMask,
+                "id" | "domain" | "alias" | "parentEmailMaskID"
+              >;
             }
         >;
         readonly emailMasks: ReadonlyArray<
-          { readonly __typename?: "EmailMask" } & EmailMaskFragment
+          { readonly __typename?: "EmailMask" } & Pick<
+            Types.EmailMask,
+            "id" | "domain" | "alias" | "parentEmailMaskID"
+          >
         >;
       };
   };
@@ -44,21 +43,27 @@ export const RefreshRoutesAndEmailMasksDocument = gql`
         routes {
           id
           redirectToVerifiedEmail {
-            ...VerifiedEmailFragment
+            id
+            email
+            verified
           }
           emailMask {
-            ...EmailMaskFragment
+            id
+            domain
+            alias
+            parentEmailMaskID
           }
           expiresISO
         }
         emailMasks {
-          ...EmailMaskFragment
+          id
+          domain
+          alias
+          parentEmailMaskID
         }
       }
     }
   }
-  ${VerifiedEmailFragmentDoc}
-  ${EmailMaskFragmentDoc}
 `;
 
 /**

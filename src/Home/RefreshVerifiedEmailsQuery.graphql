@@ -3,7 +3,9 @@ query RefreshVerifiedEmails {
     user {
       id
       verifiedEmails {
-        ...VerifiedEmailFragment
+        id
+        email
+        verified
       }
     }
   }

@@ -1,7 +1,12 @@
-mutation CreateRoute($redirectToVerifiedEmailID: ID!, $emailMaskID: ID!) {
-  createRoute(
+mutation UpdateRoute(
+  $id: ID!
+  $redirectToVerifiedEmailID: ID
+  $expiresISO: String
+) {
+  updateRoute(
+    id: $id
     redirectToVerifiedEmailID: $redirectToVerifiedEmailID
-    emailMaskID: $emailMaskID
+    expiresISO: $expiresISO
   ) {
     id
     redirectToVerifiedEmail {

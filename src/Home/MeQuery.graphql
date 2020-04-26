@@ -6,18 +6,28 @@ query Me {
       routes {
         id
         redirectToVerifiedEmail {
-          ...VerifiedEmailFragment
+          id
+          email
+          verified
         }
         emailMask {
-          ...EmailMaskFragment
+          id
+          domain
+          alias
+          parentEmailMaskID
         }
         expiresISO
       }
       verifiedEmails {
-        ...VerifiedEmailFragment
+        id
+        email
+        verified
       }
       emailMasks {
-        ...EmailMaskFragment
+        id
+        domain
+        alias
+        parentEmailMaskID
       }
     }
   }

@@ -1,13 +1,5 @@
 import * as Types from "../../generated/types";
 
-import {
-  VerifiedEmailFragmentDoc,
-  VerifiedEmailFragment
-} from "../../VerifiedEmails/generated/VerifiedEmailFragment";
-import {
-  EmailMaskFragmentDoc,
-  EmailMaskFragment
-} from "../../Home/generated/EmailMaskFragment";
 import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/react-common";
 import * as ApolloReactHooks from "@apollo/react-hooks";
@@ -24,10 +16,11 @@ export type CreateRouteMutation = { readonly __typename?: "Mutation" } & {
   > & {
       readonly redirectToVerifiedEmail: {
         readonly __typename?: "VerifiedEmail";
-      } & VerifiedEmailFragment;
-      readonly emailMask: {
-        readonly __typename?: "EmailMask";
-      } & EmailMaskFragment;
+      } & Pick<Types.VerifiedEmail, "id" | "email" | "verified">;
+      readonly emailMask: { readonly __typename?: "EmailMask" } & Pick<
+        Types.EmailMask,
+        "id" | "domain" | "alias" | "parentEmailMaskID"
+      >;
     };
 };
 
@@ -39,16 +32,19 @@ export const CreateRouteDocument = gql`
     ) {
       id
       redirectToVerifiedEmail {
-        ...VerifiedEmailFragment
+        id
+        email
+        verified
       }
       emailMask {
-        ...EmailMaskFragment
+        id
+        domain
+        alias
+        parentEmailMaskID
       }
       expiresISO
     }
   }
-  ${VerifiedEmailFragmentDoc}
-  ${EmailMaskFragmentDoc}
 `;
 export type CreateRouteMutationFn = ApolloReactCommon.MutationFunction<
   CreateRouteMutation,

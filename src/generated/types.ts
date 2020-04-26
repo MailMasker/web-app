@@ -56,6 +56,7 @@ export type Mutation = {
   /** For x+y@1nt.email, "x+y@1nt.email" is the raw value (i.e. the entire thing) */
   createEmailMask: EmailMask;
   createRoute: Route;
+  updateRoute: Route;
   verifyEmailWithCode: VerifiedEmail;
 };
 
@@ -100,6 +101,13 @@ export type MutationCreateRouteArgs = {
 };
 
 
+export type MutationUpdateRouteArgs = {
+  id: Scalars['ID'];
+  redirectToVerifiedEmailID?: Maybe<Scalars['ID']>;
+  expiresISO?: Maybe<Scalars['String']>;
+};
+
+
 export type MutationVerifyEmailWithCodeArgs = {
   email: Scalars['String'];
   code: Scalars['String'];
@@ -117,7 +125,7 @@ export type Route = {
   id: Scalars['ID'];
   redirectToVerifiedEmail: VerifiedEmail;
   emailMask: EmailMask;
-  expiresISO?: Maybe<Scalars['Int']>;
+  expiresISO?: Maybe<Scalars['String']>;
 };
 
 

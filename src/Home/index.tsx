@@ -8,7 +8,6 @@ import {
   Table,
   Tabs,
   Tag,
-  Tooltip,
   Typography,
 } from "antd";
 import { MeQuery, useMeQuery } from "./generated/MeQuery";
@@ -16,8 +15,8 @@ import React, { useMemo, useState } from "react";
 import { grey, orange } from "@ant-design/colors";
 
 import { ColumnProps } from "antd/lib/table";
-import { EditOutlined } from "@ant-design/icons";
 import ErrorAlert from "../lib/ErrorAlert";
+import ModifyRouteExpiryDateButtonAndPopover from "./ModifyRouteExpiryDateButtonAndPopover";
 import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
 import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
 import dayjs from "dayjs";
@@ -32,7 +31,7 @@ type TableData = {
   key: string;
   mailMaskEmail: string;
   forwardsTo: MeQuery["me"]["user"]["verifiedEmails"][0];
-  expiresISO: string;
+  route: MeQuery["me"]["user"]["routes"][0];
   privacy: "MAX";
 };
 
@@ -103,7 +102,7 @@ const mapEmailMasksFunctionFactory = ({ filter }: { filter: TabType }) => ({
           key: emailMask.id,
           mailMaskEmail: `${emailMask.alias}@${emailMask.domain}`,
           forwardsTo: verifiedEmail,
-          expiresISO: routeExpiryDayjs ? now.to(routeExpiryDayjs) : "-",
+          route,
           privacy: "MAX",
         },
       ] as TableData[];
@@ -160,21 +159,28 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
       },
       {
         title: activeTab === "expired" ? "Expired" : "Expires",
-        dataIndex: "expiresISO",
-        key: "expiresISO",
-        render: (expiresISO) => (
-          <Text>
-            {expiresISO}
-            <Tooltip title="Edit">
-              <Button
-                type="link"
-                size="small"
-                icon={<EditOutlined />}
-                onClick={() => console.log("editing...")}
+        dataIndex: "route",
+        key: "route",
+        render: (route: MeQuery["me"]["user"]["routes"][0]) => {
+          const routeExpiryDayjs = route.expiresISO
+            ? dayjs(route.expiresISO)
+            : undefined;
+          return (
+            <Text>
+              {routeExpiryDayjs ? dayjs().to(routeExpiryDayjs) : "-"}
+              <ModifyRouteExpiryDateButtonAndPopover
+                route={route}
+                onSuccess={({ modifiedRouteID }) => {
+                  // TODO: highlight the modified route's row
+                  console.log(
+                    "successfully modified route ID",
+                    modifiedRouteID
+                  );
+                }}
               />
-            </Tooltip>
-          </Text>
-        ),
+            </Text>
+          );
+        },
       },
       {
         title: "",

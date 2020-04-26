@@ -1,5 +1,8 @@
 mutation CreateEmailMask($email: String!) {
   createEmailMask(raw: $email) {
-    ...EmailMaskFragment
+    id
+    domain
+    alias
+    parentEmailMaskID
   }
 }

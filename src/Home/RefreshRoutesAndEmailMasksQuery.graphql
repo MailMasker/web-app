@@ -5,15 +5,23 @@ query RefreshRoutesAndEmailMasks {
       routes {
         id
         redirectToVerifiedEmail {
-          ...VerifiedEmailFragment
+          id
+          email
+          verified
         }
         emailMask {
-          ...EmailMaskFragment
+          id
+          domain
+          alias
+          parentEmailMaskID
         }
         expiresISO
       }
       emailMasks {
-        ...EmailMaskFragment
+        id
+        domain
+        alias
+        parentEmailMaskID
       }
     }
   }

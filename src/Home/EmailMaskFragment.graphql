@@ -1,6 +1,0 @@
-fragment EmailMaskFragment on EmailMask {
-  id
-  domain
-  alias
-  parentEmailMaskID
-}

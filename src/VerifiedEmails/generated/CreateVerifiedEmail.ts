@@ -1,9 +1,5 @@
 import * as Types from "../../generated/types";
 
-import {
-  VerifiedEmailFragmentDoc,
-  VerifiedEmailFragment
-} from "./VerifiedEmailFragment";
 import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/react-common";
 import * as ApolloReactHooks from "@apollo/react-hooks";
@@ -17,16 +13,17 @@ export type CreateVerifiedEmailMutation = {
 } & {
   readonly createVerifiedEmail: {
     readonly __typename?: "VerifiedEmail";
-  } & VerifiedEmailFragment;
+  } & Pick<Types.VerifiedEmail, "id" | "email" | "verified">;
 };
 
 export const CreateVerifiedEmailDocument = gql`
   mutation CreateVerifiedEmail($email: String!) {
     createVerifiedEmail(email: $email) {
-      ...VerifiedEmailFragment
+      id
+      email
+      verified
     }
   }
-  ${VerifiedEmailFragmentDoc}
 `;
 export type CreateVerifiedEmailMutationFn = ApolloReactCommon.MutationFunction<
   CreateVerifiedEmailMutation,
