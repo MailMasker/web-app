@@ -105,7 +105,7 @@ const AddVerifiedEmailButtonAndPopover: React.FC<AddVerifiedEmailButtonAndPopove
                   type="primary"
                   htmlType="submit"
                   disabled={
-                    !form.isFieldsTouched(true) ||
+                    !form.isFieldsTouched(["email"]) ||
                     form.getFieldsError().filter(({ errors }) => errors.length)
                       .length > 0
                   }

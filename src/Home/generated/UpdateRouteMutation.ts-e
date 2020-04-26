@@ -8,6 +8,7 @@ export type UpdateRouteMutationVariables = {
   id: Types.Scalars['ID'];
   redirectToVerifiedEmailID?: Types.Maybe<Types.Scalars['ID']>;
   expiresISO?: Types.Maybe<Types.Scalars['String']>;
+  clearExpiresISO?: Types.Maybe<Types.Scalars['Boolean']>;
 };
 
 
@@ -28,8 +29,8 @@ export type UpdateRouteMutation = (
 
 
 export const UpdateRouteDocument = gql`
-    mutation UpdateRoute($id: ID!, $redirectToVerifiedEmailID: ID, $expiresISO: String) {
-  updateRoute(id: $id, redirectToVerifiedEmailID: $redirectToVerifiedEmailID, expiresISO: $expiresISO) {
+    mutation UpdateRoute($id: ID!, $redirectToVerifiedEmailID: ID, $expiresISO: String, $clearExpiresISO: Boolean) {
+  updateRoute(id: $id, redirectToVerifiedEmailID: $redirectToVerifiedEmailID, expiresISO: $expiresISO, clearExpiresISO: $clearExpiresISO) {
     id
     redirectToVerifiedEmail {
       id
@@ -64,6 +65,7 @@ export type UpdateRouteMutationFn = ApolloReactCommon.MutationFunction<UpdateRou
  *      id: // value for 'id'
  *      redirectToVerifiedEmailID: // value for 'redirectToVerifiedEmailID'
  *      expiresISO: // value for 'expiresISO'
+ *      clearExpiresISO: // value for 'clearExpiresISO'
  *   },
  * });
  */

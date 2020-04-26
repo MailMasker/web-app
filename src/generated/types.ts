@@ -105,6 +105,7 @@ export type MutationUpdateRouteArgs = {
   id: Scalars['ID'];
   redirectToVerifiedEmailID?: Maybe<Scalars['ID']>;
   expiresISO?: Maybe<Scalars['String']>;
+  clearExpiresISO?: Maybe<Scalars['Boolean']>;
 };
 
 

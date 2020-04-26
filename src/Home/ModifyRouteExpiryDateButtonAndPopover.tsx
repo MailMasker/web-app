@@ -1,6 +1,17 @@
-import { Button, Form, Input, Popover, Typography, message } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Popover,
+  Radio,
+  Tooltip,
+  Typography,
+  message,
+} from "antd";
 import { EditOutlined, MailOutlined } from "@ant-design/icons";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useMemo, useState } from "react";
 
 import ErrorAlert from "../lib/ErrorAlert";
 import dayjs from "dayjs";
@@ -12,11 +23,13 @@ dayjs.extend(relativeTime);
 
 type ModifyRouteExpiryDateButtonAndPopoverProps = {
   route: { expiresISO?: string | null; id: string };
+  mailMaskEmail: string;
   onSuccess: ({ modifiedRouteID }: { modifiedRouteID: string }) => void;
 };
 
 const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButtonAndPopoverProps> = ({
   route,
+  mailMaskEmail,
   onSuccess,
 }) => {
   const [form] = useForm();
@@ -34,104 +47,206 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
     () => setNewVerifiedEmailPopoverVisible(false),
     [setNewVerifiedEmailPopoverVisible]
   );
-  const handleNewVerifiedEmailPopoverVisibleChange = useCallback(
-    (visible) => setNewVerifiedEmailPopoverVisible(visible),
+
+  const options: {
+    key: string;
+    value: string;
+    label: string;
+  }[] = [
+    ...(route.expiresISO
+      ? [
+          {
+            key: "current",
+            value: route.expiresISO,
+            label: dayjs().to(dayjs(route.expiresISO)),
+          },
+        ]
+      : []),
+    {
+      key: "expire-now",
+      value: "now",
+      label: "now",
+    },
+    {
+      key: "never",
+      value: "never",
+      label: "never",
+    },
+    {
+      key: "tomorrow",
+      value: dayjs()
+        .add(1, "week")
+        .toISOString(),
+      label: "tomorrow",
+    },
+    {
+      key: "in-a-week",
+      value: dayjs()
+        .add(1, "week")
+        .toISOString(),
+      label: "in 1 week",
+    },
+    {
+      key: "in-a-month",
+      value: dayjs()
+        .add(1, "month")
+        .toISOString(),
+      label: "in 1 month",
+    },
+    {
+      key: "in-a-year",
+      value: dayjs()
+        .add(1, "year")
+        .toISOString(),
+      label: "in 1 year",
+    },
+    {
+      key: "custom",
+      value: "custom",
+      label: "",
+    },
+  ];
+
+  const radioStyle = {
+    display: "block",
+    height: "30px",
+    lineHeight: "30px",
+  };
+
+  const showEditRouteExpiryModal = useCallback(
+    () => setNewVerifiedEmailPopoverVisible(true),
     [setNewVerifiedEmailPopoverVisible]
   );
-  const handleFinish = useCallback(
-    async (values) => {
-      // TODO
-      throw new Error("update expiresISO");
 
-      const expiresISO = "";
+  const handleNewMaskOk = useCallback(async () => {
+    try {
+      await form.validateFields();
+      await updateRoute({
+        variables: {
+          id: route.id,
+          ...(form.getFieldValue("duration") === "never"
+            ? {
+                clearExpiresISO: true,
+              }
+            : {}),
+          ...(form.getFieldValue("duration") === "now"
+            ? {
+                expiresISO: dayjs().toISOString(),
+              }
+            : {}),
+        },
+      });
+      hideNewVerifiedEmailPopover();
 
-      // const relativeTimeStatement = route.expiresISO
-      //   ? dayjs(route.expiresISO)
-      //   : undefined;
+      // TODO update message here
+      message.success(`Expiration updated`);
+      onSuccess({ modifiedRouteID: route.id });
+    } catch {
+      return;
+    }
+  }, [setNewVerifiedEmailPopoverVisible, form]);
 
-      // Printing
-      // new Date().toLocaleDateString()
-
-      try {
-        await form.validateFields();
-        const { data } = await updateRoute({
-          variables: { id: route.id, expiresISO },
-        });
-        hideNewVerifiedEmailPopover();
-
-        // TODO update message here
-        message.success(`Expiration updated`);
-        onSuccess({ modifiedRouteID: route.id });
-      } catch {
-        return;
-      }
-    },
-    [form, hideNewVerifiedEmailPopover, onSuccess]
+  const handleNewMaskCancel = useCallback(
+    () => setNewVerifiedEmailPopoverVisible(false),
+    [setNewVerifiedEmailPopoverVisible]
   );
 
   return (
-    <Popover
-      content={
+    <React.Fragment>
+      <Button
+        type="link"
+        size="small"
+        icon={<EditOutlined />}
+        onClick={showEditRouteExpiryModal}
+      />
+      <Modal
+        title="Expiry Date"
+        visible={newVerifiedEmailPopoverVisible}
+        onOk={handleNewMaskOk}
+        onCancel={handleNewMaskCancel}
+        okButtonProps={{
+          loading: updateRouteLoading,
+          disabled:
+            updateRouteLoading ||
+            form.getFieldsError().filter(({ errors }) => errors.length).length >
+              0,
+        }}
+      >
         <React.Fragment>
           <ErrorAlert error={updateRouteError} />
-          <div style={{ maxWidth: "340px", marginBottom: "8px" }}>
+          <div style={{ marginBottom: "12px" }}>
             <Typography.Text>
-              We'll verify that you own this address by email.
+              When should we stop forwarding email to{" "}
+              <Typography.Text strong>{mailMaskEmail}</Typography.Text>?
             </Typography.Text>
           </div>
           <Form
             form={form}
             name="horizontal_add_verified_email"
-            layout="inline"
-            onFinish={handleFinish}
+            onFinish={handleNewMaskOk}
+            initialValues={{ duration: route.expiresISO, customDuration: "" }}
           >
             <Form.Item
-              name="email"
+              name="duration"
+              shouldUpdate={true}
               rules={[
                 {
                   required: true,
-                  message: "your@realemail.com",
+                  message: "Please select when this Mail Mask should expire",
                 },
+                ({ getFieldValue }) => ({
+                  validator(rule, value) {
+                    if (value === "custom") {
+                      const customDuration = getFieldValue("customDuration");
+                      if (!customDuration) {
+                        return Promise.reject(
+                          "Please choose a custom duration"
+                        );
+                      }
+                    }
+                    return Promise.resolve();
+                  },
+                }),
               ]}
             >
-              <Input
-                prefix={<MailOutlined />}
-                placeholder="Email"
-                type="email"
-                autoComplete="on"
-              />
-            </Form.Item>
-            <Form.Item shouldUpdate={true}>
-              {() => (
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  disabled={
-                    !form.isFieldsTouched(true) ||
-                    form.getFieldsError().filter(({ errors }) => errors.length)
-                      .length > 0
-                  }
-                  loading={updateRouteLoading}
-                >
-                  Start Verification
-                </Button>
-              )}
+              <Radio.Group>
+                {options.map(({ key, value, label }, index) => (
+                  <Radio
+                    value={value}
+                    key={key}
+                    style={radioStyle}
+                    autoFocus={index === 0}
+                  >
+                    {key === "custom" ? (
+                      <DatePicker
+                        onChange={(date) => {
+                          form.setFieldsValue({
+                            customDuration: date?.toISOString(),
+                            duration: value,
+                          });
+                        }}
+                      />
+                    ) : (
+                      <Tooltip
+                        title={() => {
+                          if (key === "never") {
+                            return "Emails will be forwarded indefinitely";
+                          }
+                          return new Date(value).toLocaleDateString();
+                        }}
+                        placement="right"
+                      >
+                        <span>{label}</span>
+                      </Tooltip>
+                    )}
+                  </Radio>
+                ))}
+              </Radio.Group>
             </Form.Item>
           </Form>
         </React.Fragment>
-      }
-      title={`Verify new "forward to" address`}
-      trigger="click"
-      visible={newVerifiedEmailPopoverVisible}
-      onVisibleChange={handleNewVerifiedEmailPopoverVisibleChange}
-    >
-      <Button
-        type="link"
-        size="small"
-        icon={<EditOutlined />}
-        onClick={() => console.log("editing...")}
-      />
-    </Popover>
+      </Modal>
+    </React.Fragment>
   );
 };
 

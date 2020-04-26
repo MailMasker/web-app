@@ -153,7 +153,6 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
               createEmailMaskLoading ||
               createRouteLoading ||
               refreshRoutesAndEmailMasksLoading ||
-              !form.isFieldsTouched([], true) ||
               form.getFieldsError().filter(({ errors }) => errors.length)
                 .length > 0,
           }}

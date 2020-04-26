@@ -2,11 +2,13 @@ mutation UpdateRoute(
   $id: ID!
   $redirectToVerifiedEmailID: ID
   $expiresISO: String
+  $clearExpiresISO: Boolean
 ) {
   updateRoute(
     id: $id
     redirectToVerifiedEmailID: $redirectToVerifiedEmailID
     expiresISO: $expiresISO
+    clearExpiresISO: $clearExpiresISO
   ) {
     id
     redirectToVerifiedEmail {

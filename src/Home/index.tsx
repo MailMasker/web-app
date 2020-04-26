@@ -161,7 +161,7 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
         title: activeTab === "expired" ? "Expired" : "Expires",
         dataIndex: "route",
         key: "route",
-        render: (route: MeQuery["me"]["user"]["routes"][0]) => {
+        render: (route: MeQuery["me"]["user"]["routes"][0], parent) => {
           const routeExpiryDayjs = route.expiresISO
             ? dayjs(route.expiresISO)
             : undefined;
@@ -170,6 +170,7 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
               {routeExpiryDayjs ? dayjs().to(routeExpiryDayjs) : "-"}
               <ModifyRouteExpiryDateButtonAndPopover
                 route={route}
+                mailMaskEmail={parent.mailMaskEmail}
                 onSuccess={({ modifiedRouteID }) => {
                   // TODO: highlight the modified route's row
                   console.log(
@@ -254,7 +255,11 @@ const Home: React.FC<HomeProps> = () => {
       routes: data.me.user.routes,
       verifiedEmails: data.me.user.verifiedEmails,
     });
-  }, [data]);
+  }, [
+    data?.me.user.emailMasks,
+    data?.me.user.routes,
+    data?.me.user.verifiedEmails,
+  ]);
 
   const expiringSoonData: TableData[] = useMemo(() => {
     if (!data) {
