@@ -2,17 +2,15 @@ import {
   Button,
   DatePicker,
   Form,
-  Input,
   Modal,
-  Popover,
   Radio,
   Tooltip,
   Typography,
   message,
 } from "antd";
-import { EditOutlined, MailOutlined } from "@ant-design/icons";
-import React, { memo, useCallback, useMemo, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 
+import { EditOutlined } from "@ant-design/icons";
 import ErrorAlert from "../lib/ErrorAlert";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -39,14 +37,10 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
     { error: updateRouteError, loading: updateRouteLoading },
   ] = useUpdateRouteMutation();
 
-  const [
-    newVerifiedEmailPopoverVisible,
-    setNewVerifiedEmailPopoverVisible,
-  ] = useState(false);
-  const hideNewVerifiedEmailPopover = useCallback(
-    () => setNewVerifiedEmailPopoverVisible(false),
-    [setNewVerifiedEmailPopoverVisible]
-  );
+  const [modalVisible, setModalVisible] = useState(false);
+  const hideModal = useCallback(() => setModalVisible(false), [
+    setModalVisible,
+  ]);
 
   const options: {
     key: string;
@@ -113,12 +107,11 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
     lineHeight: "30px",
   };
 
-  const showEditRouteExpiryModal = useCallback(
-    () => setNewVerifiedEmailPopoverVisible(true),
-    [setNewVerifiedEmailPopoverVisible]
-  );
+  const showEditRouteExpiryModal = useCallback(() => setModalVisible(true), [
+    setModalVisible,
+  ]);
 
-  const handleNewMaskOk = useCallback(async () => {
+  const handleOk = useCallback(async () => {
     try {
       await form.validateFields();
       await updateRoute({
@@ -136,7 +129,7 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
             : {}),
         },
       });
-      hideNewVerifiedEmailPopover();
+      hideModal();
 
       // TODO update message here
       message.success(`Expiration updated`);
@@ -144,12 +137,11 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
     } catch {
       return;
     }
-  }, [setNewVerifiedEmailPopoverVisible, form]);
+  }, [setModalVisible, form]);
 
-  const handleNewMaskCancel = useCallback(
-    () => setNewVerifiedEmailPopoverVisible(false),
-    [setNewVerifiedEmailPopoverVisible]
-  );
+  const handleCancel = useCallback(() => setModalVisible(false), [
+    setModalVisible,
+  ]);
 
   return (
     <React.Fragment>
@@ -161,9 +153,9 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
       />
       <Modal
         title="Expiry Date"
-        visible={newVerifiedEmailPopoverVisible}
-        onOk={handleNewMaskOk}
-        onCancel={handleNewMaskCancel}
+        visible={modalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
         okButtonProps={{
           loading: updateRouteLoading,
           disabled:
@@ -183,7 +175,7 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
           <Form
             form={form}
             name="horizontal_add_verified_email"
-            onFinish={handleNewMaskOk}
+            onFinish={handleOk}
             initialValues={{ duration: route.expiresISO, customDuration: "" }}
           >
             <Form.Item
