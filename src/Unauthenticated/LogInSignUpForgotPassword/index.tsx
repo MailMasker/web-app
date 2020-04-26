@@ -159,8 +159,9 @@ const LogInSignUpForgotPassword = ({
                     </Typography.Title>
                     <br />
                     <Typography.Text>
-                      We will attempt to send you an email with your username
-                      and a link to reset your password.
+                      We will send an email containing your username and a link
+                      to reset your password to each of the verified addresses
+                      associated with your account.
                     </Typography.Text>
                   </div>
                 </React.Fragment>
