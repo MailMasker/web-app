@@ -149,7 +149,7 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
     } catch {
       return;
     }
-  }, [setModalVisible, form]);
+  }, [form, hideModal, onSuccess, route.id, updateRoute]);
 
   const handleCancel = useCallback(() => setModalVisible(false), [
     setModalVisible,

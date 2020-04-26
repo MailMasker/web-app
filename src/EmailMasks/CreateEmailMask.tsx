@@ -3,7 +3,6 @@ import { Button, Form, Input, Result, Select } from "antd";
 import ErrorAlert from "../lib/ErrorAlert";
 import { Link } from "react-router-dom";
 import React from "react";
-import dayjs from "dayjs";
 import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
 
 const { Option } = Select;

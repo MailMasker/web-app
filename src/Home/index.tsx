@@ -297,11 +297,7 @@ const Home: React.FC<HomeProps> = () => {
       routes: data.me.user.routes,
       verifiedEmails: data.me.user.verifiedEmails,
     });
-  }, [
-    data?.me.user.emailMasks,
-    data?.me.user.routes,
-    data?.me.user.verifiedEmails,
-  ]);
+  }, [data]);
 
   const expiringSoonData: TableData[] = useMemo(() => {
     if (!data) {
