@@ -2,8 +2,10 @@ import { Layout, Menu } from "antd";
 
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { useMeQuery } from "./Home/generated/MeQuery";
 
 const { Header, Content, Footer } = Layout;
+const { SubMenu } = Menu;
 
 interface LayoutContainerProps {
   authenticated: boolean;
@@ -14,6 +16,8 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
   children,
 }) => {
   const history = useHistory();
+  const { data: meQueryData } = useMeQuery({ fetchPolicy: "cache-only" });
+
   return (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
       <Header>
@@ -35,15 +39,29 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
                 float: "left",
               }}
             />
+          </div>
+          <div>
             {authenticated ? (
               <Menu
-                theme="dark"
+                onClick={console.log}
+                selectedKeys={["setting:1"]}
                 mode="horizontal"
-                defaultSelectedKeys={["2"]}
-                style={{ lineHeight: "64px" }}
-                onSelect={() => history.push("/")}
+                theme="dark"
               >
-                <Menu.Item key="1">Mail Masks</Menu.Item>
+                <SubMenu title={meQueryData?.me.user.username ?? "Account"}>
+                  <Menu.Item
+                    key="setting:1"
+                    onSelect={() => history.push("/account")}
+                  >
+                    Settings
+                  </Menu.Item>
+                  <Menu.Item
+                    key="setting:2"
+                    onSelect={() => history.push("/log-out")}
+                  >
+                    Log Out
+                  </Menu.Item>
+                </SubMenu>
               </Menu>
             ) : (
               <Menu
@@ -53,30 +71,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
                 style={{ lineHeight: "64px" }}
                 onSelect={() => history.push("/sign-up")}
               >
-                <Menu.Item key="1">Sign Up</Menu.Item>
-              </Menu>
-            )}
-          </div>
-          <div>
-            {authenticated ? (
-              <Menu
-                theme="dark"
-                mode="horizontal"
-                defaultSelectedKeys={["2"]}
-                style={{ lineHeight: "64px" }}
-                onSelect={() => history.push("/log-out")}
-              >
-                <Menu.Item key="1">Log Out</Menu.Item>
-              </Menu>
-            ) : (
-              <Menu
-                theme="dark"
-                mode="horizontal"
-                defaultSelectedKeys={["2"]}
-                style={{ lineHeight: "64px" }}
-                onSelect={() => history.push("/log-in")}
-              >
-                <Menu.Item key="1">Log In</Menu.Item>
+                <Menu.Item key="1">Contact Support</Menu.Item>
               </Menu>
             )}
           </div>

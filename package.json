@@ -16,11 +16,12 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "HTTPS=true PORT=4200 REACT_APP_ENVIRONMENT=local react-scripts start",
+    "start": "SSL_CRT_FILE=localhost+1.pem SSL_KEY_FILE=localhost+1-key.pem HTTPS=true PORT=4200 REACT_APP_ENVIRONMENT=local react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate": "graphql-codegen --config \"./config/codegen/apollo-$S_ENV.yml\""
+    "generate": "graphql-codegen --config \"./config/codegen/apollo-$S_ENV.yml\"",
+    "certs": "mkcert localhost 127.0.0.1"
   },
   "eslintConfig": {
     "extends": "react-app"

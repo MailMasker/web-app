@@ -27,6 +27,8 @@ import { useResetPasswordMutation } from "./generated/ResetPasswordMutation";
 import { useSendResetPasswordEmailMutation } from "./generated/SendResetPasswordEmailMutation";
 import { uuidv4 } from "../../lib/uuid";
 
+const { Title } = Typography;
+
 interface LogInSignUpForgotPasswordProps {
   onAuthenticationSuccess: () => void;
 }
@@ -151,6 +153,17 @@ const LogInSignUpForgotPassword = ({
                 <Radio.Button value="/sign-up">Sign Up</Radio.Button>
                 <Radio.Button value="/log-in">Log In</Radio.Button>
               </Radio.Group>
+              <Title>
+                {logInMatch
+                  ? "Log In"
+                  : signUpMatch
+                  ? "Sign Up"
+                  : forgotPasswordMatch
+                  ? "Forgot Password"
+                  : resetPasswordMatch
+                  ? "Reset Password"
+                  : () => console.error("unknown case")}
+              </Title>
               {forgotPasswordMatch && (
                 <React.Fragment>
                   <div style={{ textAlign: "center", width: "300px" }}>
