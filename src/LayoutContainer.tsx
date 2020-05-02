@@ -19,7 +19,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
   const { data: meQueryData } = useMeQuery({ fetchPolicy: "cache-only" });
 
   return (
-    <Layout className="layout" style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Header>
         <div
           style={{
@@ -47,16 +47,12 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
                 selectedKeys={["setting:1"]}
                 mode="horizontal"
                 theme="dark"
+                onSelect={(param) => history.push(`/${param.selectedKeys[0]}`)}
               >
                 <SubMenu title={meQueryData?.me.user.username ?? "Account"}>
+                  <Menu.Item key="settings">Settings</Menu.Item>
                   <Menu.Item
-                    key="setting:1"
-                    onSelect={() => history.push("/account")}
-                  >
-                    Settings
-                  </Menu.Item>
-                  <Menu.Item
-                    key="setting:2"
+                    key="log-out"
                     onSelect={() => history.push("/log-out")}
                   >
                     Log Out

@@ -10,6 +10,7 @@ import AuthenticatedOrUnauthenticated from "./AuthenticatedOrUnauthenticated";
 import Home from "./Home";
 import LayoutContainer from "./LayoutContainer";
 import LogOut from "./LogOut/LogOut";
+import Settings from "./Settings";
 import Unauthenticated from "./Unauthenticated";
 import VerifyEmail from "./Unauthenticated/VerifyEmail";
 import { client } from "./apollo-client";
@@ -68,6 +69,9 @@ const App: React.FC = () => {
                   <Switch>
                     <Route path="/log-out">
                       <LogOut />
+                    </Route>
+                    <Route path="/settings">
+                      <Settings />
                     </Route>
                     <Route path="/" exact>
                       <Home />

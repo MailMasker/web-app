@@ -293,7 +293,9 @@ const LogInSignUpForgotPassword = ({
                       >
                         <Checkbox>Remember me</Checkbox>
                       </Form.Item>
-                      <Link to={"/forgot-password"}>Forgot password?</Link>
+                      {logInMatch && (
+                        <Link to={"/forgot-password"}>Forgot password?</Link>
+                      )}
                     </div>
                   </Form.Item>
                 ) : null}
@@ -345,6 +347,11 @@ const LogInSignUpForgotPassword = ({
                   {logInMatch && (
                     <div>
                       Or <Link to={"/sign-up"}>sign up now!</Link>
+                    </div>
+                  )}
+                  {signUpMatch && (
+                    <div>
+                      Or <Link to={"/log-in"}>log in now!</Link>
                     </div>
                   )}
                 </Form.Item>
