@@ -1,9 +1,9 @@
 import { PageHeader, Space, Spin, Tabs } from "antd";
-import React, { useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
 import ErrorAlert from "../lib/ErrorAlert";
 import PrivacySettings from "./PrivacySettings";
+import React from "react";
 import { useMeQuery } from "../Home/generated/MeQuery";
 
 type TabType =

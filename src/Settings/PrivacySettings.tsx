@@ -1,4 +1,4 @@
-import { Button, Card, Empty, Space, Table, Typography } from "antd";
+import { Button, Empty, Space, Table, Typography } from "antd";
 import { CheckCircleTwoTone, StopTwoTone } from "@ant-design/icons";
 import React, { useMemo } from "react";
 
@@ -68,7 +68,7 @@ const PrivacySettings: React.FC<{}> = () => {
     {
       key: "counts",
       dataType:
-        "Counts of number of emails received, forwarded, and intentionally dropped",
+        "Counts of number of emails received, forwarded, and intentionally ignored",
       storage: "Indefinitely",
       exportable: { exportable: true },
       deletable: { deletable: false },
@@ -77,7 +77,7 @@ const PrivacySettings: React.FC<{}> = () => {
           <div>
             <Text strong>
               We count the number of times that an email is received, as well as
-              when it's forwarded or dropped due to the Mail Mask being
+              when it's forwarded or ignored due to the Mail Mask being
               intentionally stopped.
             </Text>
           </div>
@@ -140,7 +140,11 @@ const PrivacySettings: React.FC<{}> = () => {
             <Text strong>
               We store your username in plain-text. Your password, on the other
               hand, is hashed using an industry-standard algorithm called{" "}
-              <a href="https://en.wikipedia.org/wiki/Bcrypt" target="_blank">
+              <a
+                href="https://en.wikipedia.org/wiki/Bcrypt"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 bcrypt
               </a>
               . We have no way to read or know your password, nor does any
