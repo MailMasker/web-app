@@ -262,8 +262,12 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
     return (
       <React.Fragment>
         <Table
+          bordered
           columns={columns}
           dataSource={tableData}
+          pagination={
+            tableData.length > 10 ? { position: ["bottomRight"] } : false
+          }
           locale={{
             emptyText: (
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />

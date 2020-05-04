@@ -1,43 +1,16 @@
-import {
-  Badge,
-  Button,
-  Empty,
-  Modal,
-  PageHeader,
-  Space,
-  Spin,
-  Table,
-  Tabs,
-  Tag,
-  Tooltip,
-  Typography,
-} from "antd";
-import {
-  CheckCircleTwoTone,
-  DeleteTwoTone,
-  ExclamationCircleOutlined,
-  InfoCircleOutlined,
-} from "@ant-design/icons";
-import { MeQuery, useMeQuery } from "../Home/generated/MeQuery";
-import React, { useMemo, useState } from "react";
-import { grey, orange } from "@ant-design/colors";
+import { PageHeader, Space, Spin, Tabs } from "antd";
+import React, { useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
-import { ColumnProps } from "antd/lib/table";
 import ErrorAlert from "../lib/ErrorAlert";
-import ResendVerificationEmailCTA from "../Home/ResendVerificationEmailCTA";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+import PrivacySettings from "./PrivacySettings";
+import { useMeQuery } from "../Home/generated/MeQuery";
 
-dayjs.extend(relativeTime);
-
-const { Text, Title } = Typography;
-
-type TableData = {
-  key: string;
-  email: string;
-  verified: { verified: boolean; id: string };
-  delete: { id: string };
-};
+type TabType =
+  | "verified-emails"
+  | "email-masks"
+  | "password"
+  | "privacy-data-delete-account";
 
 const SettingsContent: React.FC<{}> = () => {
   // We don't need to handle loading or error states because
@@ -46,74 +19,9 @@ const SettingsContent: React.FC<{}> = () => {
     fetchPolicy: "cache-first",
   });
 
-  const tableData =
-    data?.me.user.verifiedEmails.map((verifiedEmail) => ({
-      key: verifiedEmail.id,
-      email: verifiedEmail.email ?? "",
-      verified: { verified: verifiedEmail.verified, id: verifiedEmail.id },
-      delete: { id: verifiedEmail.id },
-    })) ?? [];
+  const history = useHistory();
 
-  const columns: ColumnProps<TableData>[] = useMemo(
-    () => [
-      {
-        title: "Email",
-        dataIndex: "email",
-        key: "email",
-        render: (email) => <Text>{email}</Text>,
-      },
-      {
-        title: "Verified",
-        dataIndex: "verified",
-        key: "verified",
-        render: ({ verified, id }: { verified: boolean; id: string }, row) =>
-          verified ? (
-            <Text>
-              <CheckCircleTwoTone twoToneColor="#52c41a" />
-            </Text>
-          ) : (
-            <span>
-              <Text>
-                <span>
-                  <i style={{ color: grey[1] }}>Awaiting verification...</i>
-                </span>{" "}
-              </Text>
-              <div>
-                <ResendVerificationEmailCTA email={row.email ?? ""} />
-              </div>
-            </span>
-          ),
-      },
-      {
-        title: "",
-        key: "delete",
-        dataIndex: "delete",
-        render: ({ id }) => (
-          <Tooltip title="Remove Verified Email">
-            <Button
-              icon={<DeleteTwoTone />}
-              type="link"
-              onClick={() =>
-                Modal.confirm({
-                  title: "Do you want to remove this Verified Email?",
-                  icon: <ExclamationCircleOutlined />,
-                  content:
-                    "When clicked the OK button, this dialog will be closed after 1 second",
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                    }).catch(() => console.log("Oops errors!"));
-                  },
-                  onCancel() {},
-                })
-              }
-            />
-          </Tooltip>
-        ),
-      },
-    ],
-    []
-  );
+  const tabMatch = useRouteMatch<{ tab: TabType }>("/settings/:tab");
 
   if (loading) {
     return (
@@ -133,15 +41,29 @@ const SettingsContent: React.FC<{}> = () => {
   } else if (data) {
     return (
       <React.Fragment>
-        <Table
-          columns={columns}
-          dataSource={tableData}
-          locale={{
-            emptyText: (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
-            ),
-          }}
-        />
+        <Tabs
+          defaultActiveKey={tabMatch?.params.tab ?? "verified-emails"}
+          onChange={(activeKey: string) =>
+            history.push(`/settings/${activeKey}`)
+          }
+          animated={{ tabPane: false, inkBar: true }}
+        >
+          <Tabs.TabPane tab="Verified Emails" key="verified-emails">
+            Content of Tab Pane 1
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Reserved Mail Masks" key="reserved-mail-masks">
+            Content of Tab Pane 2
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Password" key="password">
+            Content of Tab Pane 3
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            tab="Privacy, Data, Delete Account"
+            key="privacy-data-delete-account"
+          >
+            <PrivacySettings />
+          </Tabs.TabPane>
+        </Tabs>
       </React.Fragment>
     );
   } else {
@@ -153,11 +75,7 @@ const Settings: React.FC<{}> = () => {
   return (
     <React.Fragment>
       <Space size="large" direction="vertical" style={{ width: "100%" }}>
-        <PageHeader
-          className="site-page-header-responsive"
-          title="Mail Masks"
-          subTitle="Protect your real email address"
-        >
+        <PageHeader title="Settings">
           <Space size="large" direction="vertical" style={{ width: "100%" }}>
             <SettingsContent />
           </Space>
