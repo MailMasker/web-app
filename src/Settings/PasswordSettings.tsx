@@ -29,8 +29,8 @@ import { ColumnProps } from "antd/lib/table";
 
 const { Text, Title } = Typography;
 
-const ReservedMailMasksSettings: React.FC<{}> = () => {
+const PasswordSettings: React.FC<{}> = () => {
   return <React.Fragment></React.Fragment>;
 };
 
-export default ReservedMailMasksSettings;
+export default PasswordSettings;

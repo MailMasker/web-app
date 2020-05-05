@@ -2,8 +2,11 @@ import { PageHeader, Space, Spin, Tabs } from "antd";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
 import ErrorAlert from "../lib/ErrorAlert";
+import PasswordSettings from "./PasswordSettings";
 import PrivacySettings from "./PrivacySettings";
 import React from "react";
+import ReservedMailMasksSettings from "./ReservedMailMasksSettings";
+import VerifiedEmailsSettings from "./VerifiedEmailsSettings";
 import { useMeQuery } from "../Home/generated/MeQuery";
 
 type TabType =
@@ -49,13 +52,13 @@ const SettingsContent: React.FC<{}> = () => {
           animated={{ tabPane: false, inkBar: true }}
         >
           <Tabs.TabPane tab="Verified Emails" key="verified-emails">
-            Content of Tab Pane 1
+            <VerifiedEmailsSettings />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Reserved Mail Masks" key="reserved-mail-masks">
-            Content of Tab Pane 2
+            <ReservedMailMasksSettings />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Password" key="password">
-            Content of Tab Pane 3
+            <PasswordSettings />
           </Tabs.TabPane>
           <Tabs.TabPane
             tab="Privacy, Data, Delete Account"

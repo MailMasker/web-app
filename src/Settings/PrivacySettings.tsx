@@ -1,12 +1,26 @@
 import { Button, Empty, Space, Table, Typography } from "antd";
 import { CheckCircleTwoTone, StopTwoTone } from "@ant-design/icons";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 import { ColumnProps } from "antd/lib/table";
+import ErrorAlert from "../lib/ErrorAlert";
+import dayjs from "dayjs";
+import { saveAs } from "file-saver";
+import { useExportDataLazyQuery } from "./generated/ExportData";
 
 const { Text, Title } = Typography;
 
 const PrivacySettings: React.FC<{}> = () => {
+  const [exportData, setExportData] = useState(false);
+  const [
+    exportDataQuery,
+    {
+      data: exportDataData,
+      loading: exportDataLoading,
+      error: exportDataError,
+    },
+  ] = useExportDataLazyQuery();
+
   const privacyTableData = [
     {
       key: "content",
@@ -288,14 +302,32 @@ const PrivacySettings: React.FC<{}> = () => {
           <Space direction="vertical" size="small" style={{ width: "100%" }}>
             <Title level={3}>Data</Title>
             <Text>
-              You can export all your data at any time (note: we don't plan to
-              support importing) for any reason. See the table above for a
-              summary of what data is exportable (in summary: everything except
-              email content, since we don't store email content after processing
-              it).
+              You can export all your data at any time for any reason (note: we
+              don't plan to support importing). For a summary of what data is
+              exportable, see the table above.
             </Text>
             <div>
-              <Button>Export Data</Button>
+              {exportDataLoading ? (
+                <div>Preparing for download...</div>
+              ) : exportDataData ? (
+                <Button
+                  onClick={() => {
+                    var blob = new Blob([exportDataData.exportData], {
+                      type: "text/json;charset=utf-8",
+                    });
+                    saveAs(
+                      blob,
+                      `Mail-Masker-Export-${dayjs().toISOString()}.json`
+                    );
+                  }}
+                >
+                  Download Exported Data
+                </Button>
+              ) : exportDataError ? (
+                <ErrorAlert error={exportDataError} />
+              ) : (
+                <Button onClick={() => exportDataQuery()}>Export Data</Button>
+              )}
             </div>
           </Space>
         </div>

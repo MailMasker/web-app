@@ -22,7 +22,7 @@ import {
   StopTwoTone,
 } from "@ant-design/icons";
 import { MeQuery, useMeQuery } from "../Home/generated/MeQuery";
-import React, { useMemo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import { grey, orange } from "@ant-design/colors";
 
 import { ColumnProps } from "antd/lib/table";
@@ -30,7 +30,7 @@ import ResendVerificationEmailCTA from "../Home/ResendVerificationEmailCTA";
 
 const { Text, Title } = Typography;
 
-const PrivacySettings: React.FC<{}> = () => {
+const VerifiedEmailSettings: React.FC<{}> = () => {
   // We don't need to handle loading or error states because
   // the Me query is always loaded at this point
   const { data, loading, error } = useMeQuery({
@@ -124,4 +124,4 @@ const PrivacySettings: React.FC<{}> = () => {
   );
 };
 
-export default PrivacySettings;
+export default memo(VerifiedEmailSettings);

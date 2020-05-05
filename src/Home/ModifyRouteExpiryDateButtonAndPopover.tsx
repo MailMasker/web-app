@@ -164,7 +164,7 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
         onClick={showEditRouteExpiryModal}
       />
       <Modal
-        title="Expiry Date"
+        title="Stop-forwarding Date"
         visible={modalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -242,6 +242,9 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
                         title={() => {
                           if (key === "never") {
                             return "Emails will be forwarded indefinitely";
+                          }
+                          if (key === "expire-now") {
+                            return "We will stop forwarding emails immediately";
                           }
                           return new Date(value).toLocaleDateString();
                         }}

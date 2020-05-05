@@ -132,6 +132,7 @@ export type Query = {
    __typename?: 'Query';
   me: Me;
   ping: Scalars['String'];
+  exportData: Scalars['String'];
 };
 
 /** A Route can not be hard deleted, but the email address in redirectToVerifiedEmail can be cleared at a user's request */
