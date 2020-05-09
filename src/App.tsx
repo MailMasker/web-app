@@ -4,6 +4,7 @@ import { Button, Result } from "antd";
 import { Link, Route, Router, Switch } from "react-router-dom";
 import React, { useCallback } from "react";
 
+import AccountDeletion from "./lib/AccountDeletion";
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
 import AuthenticatedOrUnauthenticated from "./AuthenticatedOrUnauthenticated";
@@ -56,6 +57,7 @@ const App: React.FC = () => {
                 "/sign-up",
                 "/verify-email",
                 "/forgot-password",
+                "/delete-account-success",
                 "/reset-password/user/:userID/code/:code/username/:username",
               ]}
             >
@@ -72,6 +74,9 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="/settings">
                       <Settings />
+                    </Route>
+                    <Route path="/delete-account">
+                      <AccountDeletion />
                     </Route>
                     <Route path="/" exact>
                       <Home />

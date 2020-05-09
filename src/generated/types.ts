@@ -22,7 +22,9 @@ export type CreateUserPayload = {
 
 export type DeleteUserPayload = {
    __typename?: 'DeleteUserPayload';
-  authToken?: Maybe<Scalars['String']>;
+  scrambledUsername: Scalars['String'];
+  dataBeforeDeletion: Scalars['String'];
+  dataAfterDeletion: Scalars['String'];
 };
 
 /**
@@ -51,6 +53,7 @@ export type Mutation = {
   /** Token is optional because the server will first attempt to read the token from a cookie, if present */
   unauthenticate?: Maybe<Scalars['Boolean']>;
   createUser: CreateUserPayload;
+  deleteUser: DeleteUserPayload;
   createVerifiedEmail: VerifiedEmail;
   resendVerificationEmail: VerifiedEmail;
   /** For x+y@1nt.email, "x+y@1nt.email" is the raw value (i.e. the entire thing) */
@@ -78,6 +81,11 @@ export type MutationCreateUserArgs = {
   username: Scalars['String'];
   password: Scalars['String'];
   uuid: Scalars['String'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  password: Scalars['String'];
 };
 
 

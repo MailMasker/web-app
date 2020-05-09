@@ -1,11 +1,13 @@
 import { PageHeader, Space, Spin, Tabs } from "antd";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
+import DataExport from "./DataExport";
 import ErrorAlert from "../lib/ErrorAlert";
 import PasswordSettings from "./PasswordSettings";
 import PrivacySettings from "./PrivacySettings";
 import React from "react";
 import ReservedMailMasksSettings from "./ReservedMailMasksSettings";
+import StartAccountDeletion from "./StartAccountDeletion";
 import VerifiedEmailsSettings from "./VerifiedEmailsSettings";
 import { useMeQuery } from "../Home/generated/MeQuery";
 
@@ -13,7 +15,9 @@ type TabType =
   | "verified-emails"
   | "email-masks"
   | "password"
-  | "privacy-data-delete-account";
+  | "privacy"
+  | "delete-account"
+  | "export-data";
 
 const SettingsContent: React.FC<{}> = () => {
   // We don't need to handle loading or error states because
@@ -25,6 +29,8 @@ const SettingsContent: React.FC<{}> = () => {
   const history = useHistory();
 
   const tabMatch = useRouteMatch<{ tab: TabType }>("/settings/:tab");
+
+  console.log("tabMatch", tabMatch);
 
   if (loading) {
     return (
@@ -45,7 +51,7 @@ const SettingsContent: React.FC<{}> = () => {
     return (
       <React.Fragment>
         <Tabs
-          defaultActiveKey={tabMatch?.params.tab ?? "verified-emails"}
+          activeKey={tabMatch?.params.tab ?? "verified-emails"}
           onChange={(activeKey: string) =>
             history.push(`/settings/${activeKey}`)
           }
@@ -60,11 +66,14 @@ const SettingsContent: React.FC<{}> = () => {
           <Tabs.TabPane tab="Password" key="password">
             <PasswordSettings />
           </Tabs.TabPane>
-          <Tabs.TabPane
-            tab="Privacy, Data, Delete Account"
-            key="privacy-data-delete-account"
-          >
+          <Tabs.TabPane tab="Privacy" key="privacy">
             <PrivacySettings />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Export Data" key="export-data">
+            <DataExport />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Delete Account" key="delete-account">
+            <StartAccountDeletion />
           </Tabs.TabPane>
         </Tabs>
       </React.Fragment>

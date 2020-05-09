@@ -223,6 +223,7 @@ const LogInSignUpForgotPassword = ({
                     <Input
                       prefix={<UserOutlined className="site-form-item-icon" />}
                       placeholder="Username or email"
+                      autoComplete="username"
                     />
                   </Form.Item>
                 )}
@@ -242,6 +243,7 @@ const LogInSignUpForgotPassword = ({
                       prefix={<UserOutlined className="site-form-item-icon" />}
                       placeholder="Username"
                       disabled={!!resetPasswordMatch}
+                      autoComplete="username"
                       suffix={
                         signUpMatch ? (
                           <Tooltip
@@ -275,6 +277,9 @@ const LogInSignUpForgotPassword = ({
                       type="password"
                       placeholder="Password"
                       autoFocus={!!resetPasswordMatch}
+                      autoComplete={
+                        logInMatch ? "current-password" : "new-password"
+                      }
                     />
                   </Form.Item>
                 )}

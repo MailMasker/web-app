@@ -1,4 +1,4 @@
-import { Button, Empty, Space, Table, Typography } from "antd";
+import { Button, Empty, Space, Spin, Table, Typography } from "antd";
 import { CheckCircleTwoTone, StopTwoTone } from "@ant-design/icons";
 import React, { useMemo, useState } from "react";
 
@@ -6,27 +6,16 @@ import { ColumnProps } from "antd/lib/table";
 import ErrorAlert from "../lib/ErrorAlert";
 import dayjs from "dayjs";
 import { saveAs } from "file-saver";
-import { useExportDataLazyQuery } from "./generated/ExportData";
 
 const { Text, Title } = Typography;
 
 const PrivacySettings: React.FC<{}> = () => {
-  const [exportData, setExportData] = useState(false);
-  const [
-    exportDataQuery,
-    {
-      data: exportDataData,
-      loading: exportDataLoading,
-      error: exportDataError,
-    },
-  ] = useExportDataLazyQuery();
-
   const privacyTableData = [
     {
       key: "content",
       dataType: "Content of email (sender, subject, body, etc)",
       storage: "A few seconds *",
-      exportable: { exportable: false },
+      exportable: { exportable: null },
       deletable: { deletable: false },
       expandableDescription: (
         <Space direction="vertical" style={{ margin: "12px" }}>
@@ -177,7 +166,7 @@ const PrivacySettings: React.FC<{}> = () => {
     key: string;
     dataType: string;
     storage: string;
-    exportable: { exportable: boolean };
+    exportable: { exportable: boolean | null };
     deletable: { deletable: boolean };
     expandableDescription: React.ReactNode;
   }>[] = useMemo(
@@ -200,7 +189,9 @@ const PrivacySettings: React.FC<{}> = () => {
         key: "exportable",
         render: ({ exportable }) => (
           <Text>
-            {exportable ? (
+            {exportable === null ? (
+              <span>N/A</span>
+            ) : exportable ? (
               <CheckCircleTwoTone twoToneColor="#52c41a" />
             ) : (
               <StopTwoTone />
@@ -229,114 +220,74 @@ const PrivacySettings: React.FC<{}> = () => {
   );
 
   return (
-    <React.Fragment>
-      <Space direction="vertical" size="large" style={{ width: "100%" }}>
-        <div>
-          <Title level={3}>Privacy</Title>
-          <Space direction="vertical" size="small" style={{ width: "100%" }}>
-            <div>
-              <p>
-                Here's a summary of your data in our system (expand each row for
-                more detail):
-              </p>
-              <Table
-                size="small"
-                bordered
-                columns={privacyColumns}
-                dataSource={privacyTableData}
-                pagination={
-                  privacyTableData.length > 10
-                    ? { position: ["bottomRight"] }
-                    : false
-                }
-                locale={{
-                  emptyText: (
-                    <Empty
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                      description="None"
-                    />
-                  ),
-                }}
-                expandRowByClick
-                expandable={{
-                  expandedRowRender: (record) => record.expandableDescription,
-                  rowExpandable: (record) => !!record.expandableDescription,
-                }}
-              />
-            </div>
-            <div>
-              <p style={{ marginTop: "16px" }}>
-                And for completeness, here's a list of common things that we
-                don't do:
-              </p>
-              <ul>
-                <li>
-                  We don't use Google Analytics, Facebook SDKs, or anything else
-                  that allows other companies to track you
-                </li>
-                <li>We don't store or collect your IP address</li>
-                <li>
-                  We don't set any cookies except the one that keeps you logged
-                  in here at MailMasker.com
-                </li>
-                <li>
-                  We will never give or sell your information to another
-                  company. If for some reason there's a benefit to you in the
-                  future that we do so, we'll only do so if with your expressed
-                  consent.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p>
-                For more, see our{" "}
-                <Button type="link" style={{ margin: 0, padding: 0 }}>
-                  Privacy Policy
-                </Button>
-                .
-              </p>
-            </div>
-          </Space>
-        </div>
-        <div>
-          <Space direction="vertical" size="small" style={{ width: "100%" }}>
-            <Title level={3}>Data</Title>
-            <Text>
-              You can export all your data at any time for any reason (note: we
-              don't plan to support importing). For a summary of what data is
-              exportable, see the table above.
-            </Text>
-            <div>
-              {exportDataLoading ? (
-                <div>Preparing for download...</div>
-              ) : exportDataData ? (
-                <Button
-                  onClick={() => {
-                    var blob = new Blob([exportDataData.exportData], {
-                      type: "text/json;charset=utf-8",
-                    });
-                    saveAs(
-                      blob,
-                      `Mail-Masker-Export-${dayjs().toISOString()}.json`
-                    );
-                  }}
-                >
-                  Download Exported Data
-                </Button>
-              ) : exportDataError ? (
-                <ErrorAlert error={exportDataError} />
-              ) : (
-                <Button onClick={() => exportDataQuery()}>Export Data</Button>
-              )}
-            </div>
-          </Space>
-        </div>
-        <div>
-          <Title level={3}>Delete Account</Title>
-          <Button danger>Delete Account</Button>
-        </div>
-      </Space>
-    </React.Fragment>
+    <Space direction="vertical" size="large" style={{ width: "100%" }}>
+      <div>
+        <Title level={3}>Privacy</Title>
+        <Space direction="vertical" size="small" style={{ width: "100%" }}>
+          <div>
+            <p>
+              Here's a summary of your data in our system (expand each row for
+              more detail):
+            </p>
+            <Table
+              size="small"
+              bordered
+              columns={privacyColumns}
+              dataSource={privacyTableData}
+              pagination={
+                privacyTableData.length > 10
+                  ? { position: ["bottomRight"] }
+                  : false
+              }
+              locale={{
+                emptyText: (
+                  <Empty
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    description="None"
+                  />
+                ),
+              }}
+              expandRowByClick
+              expandable={{
+                expandedRowRender: (record) => record.expandableDescription,
+                rowExpandable: (record) => !!record.expandableDescription,
+              }}
+            />
+          </div>
+          <div>
+            <p style={{ marginTop: "16px" }}>
+              And for completeness, here's a list of common things that we don't
+              do:
+            </p>
+            <ul>
+              <li>
+                We don't use Google Analytics, Facebook SDKs, or anything else
+                that allows other companies to track you
+              </li>
+              <li>We don't store or collect your IP address</li>
+              <li>
+                We don't set any cookies except the one that keeps you logged in
+                here at MailMasker.com
+              </li>
+              <li>
+                We will never give or sell your information to another company.
+                If for some reason there's a benefit to you in the future that
+                we do so, we'll only do so if with your expressed consent.
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>
+              For more, see our{" "}
+              <Button type="link" style={{ margin: 0, padding: 0 }}>
+                Privacy Policy
+              </Button>
+              .
+            </p>
+          </div>
+        </Space>
+      </div>
+    </Space>
   );
 };
 

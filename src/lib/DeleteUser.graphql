@@ -1,0 +1,7 @@
+mutation DeleteUser($password: String!) {
+  deleteUser(password: $password) {
+    scrambledUsername
+    dataBeforeDeletion
+    dataAfterDeletion
+  }
+}
