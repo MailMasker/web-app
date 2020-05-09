@@ -3,6 +3,7 @@ import { Spin, message } from "antd";
 
 import ErrorAlert from "../lib/ErrorAlert";
 import { Redirect } from "react-router-dom";
+import { useApolloClient } from "@apollo/react-hooks";
 import { useUnauthenticateMutation } from "./generated/Unauthenticate";
 
 interface LogOutProps {}
@@ -13,8 +14,16 @@ const LogOut: React.FC<LogOutProps> = () => {
     { data, loading, error },
   ] = useUnauthenticateMutation();
 
+  const apolloClient = useApolloClient();
+
   useEffect(() => {
-    unauthenticate();
+    try {
+      unauthenticate();
+    } catch (err) {
+      throw err;
+    } finally {
+      apolloClient.clearStore();
+    }
   }, [unauthenticate]);
 
   if (loading) {

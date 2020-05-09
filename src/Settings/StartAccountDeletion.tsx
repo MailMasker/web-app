@@ -66,12 +66,12 @@ const StartAccountDeletion: React.FC<{}> = () => {
             usable by you.
           </li>
         </ul>
-        <Link to="/delete-account">
-          <Button danger size="large">
-            Begin Account Deletion & Data Export
-          </Button>
-        </Link>
       </div>
+      <Link to="/delete-account">
+        <Button danger size="large">
+          Begin Account Deletion & Data Export
+        </Button>
+      </Link>
     </Space>
   );
 };

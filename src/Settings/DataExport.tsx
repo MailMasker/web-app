@@ -68,6 +68,7 @@ const DataExport: React.FC<{}> = () => {
               setTimeout(() => setDebouncedWait(false), 2000);
               exportDataQuery();
             }}
+            type="primary"
             loading={exportDataLoading || debouncedWait}
             disabled={exportDataLoading || debouncedWait}
           >
