@@ -1,5 +1,6 @@
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
+import AccountDeletion from "../lib/AccountDeletion";
 import LayoutContainer from "../LayoutContainer";
 import LogInSignUpForgotPassword from "./LogInSignUpForgotPassword";
 import React from "react";
@@ -26,6 +27,9 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = ({
             <LogInSignUpForgotPassword
               onAuthenticationSuccess={onAuthenticationSuccess}
             />
+          </Route>
+          <Route path="/account-deleted">
+            <AccountDeletion />
           </Route>
           <Route path="/reset-password">
             <Redirect to="/forgot-password" />

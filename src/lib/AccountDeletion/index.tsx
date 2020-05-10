@@ -10,18 +10,25 @@ import {
 } from "antd";
 import {
   CheckCircleOutlined,
+  DownloadOutlined,
   LoadingOutlined,
   LockOutlined,
   SmileOutlined,
   SolutionOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
+import {
+  DeleteUserMutation,
+  useDeleteUserMutation,
+} from "../generated/DeleteUser";
+import React, { useEffect, useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
+import Bugsnag from "@bugsnag/js";
 import ErrorAlert from "../ErrorAlert";
 import dayjs from "dayjs";
 import { saveAs } from "file-saver";
-import { useDeleteUserMutation } from "../generated/DeleteUser";
+import { useApolloClient } from "@apollo/react-hooks";
 
 const AccountDeletion: React.FC<{}> = () => {
   const [
@@ -33,17 +40,38 @@ const AccountDeletion: React.FC<{}> = () => {
     },
   ] = useDeleteUserMutation();
 
+  const deleteAccountMatch = useRouteMatch("/delete-account");
+  const accountDeletedMatch = useRouteMatch("/account-deleted");
+  const history = useHistory<{
+    accountDeletionResult?: DeleteUserMutation;
+  }>();
   const [debouncedWait, setDebouncedWait] = useState(false);
-  const [resultDELETEME, setResultDELETEME] = useState<typeof deleteUserData>(
-    undefined
-  );
+
+  const accountDeletionResult: DeleteUserMutation | undefined =
+    history.location.state?.accountDeletionResult;
+
+  const apolloClient = useApolloClient();
 
   const initialValues: { password: string } = {
     password: "",
   };
 
   const current =
-    deleteUserLoading || debouncedWait ? 1 : resultDELETEME ? 2 : 0;
+    deleteUserLoading || debouncedWait ? 1 : accountDeletionResult ? 2 : 0;
+
+  if (accountDeletedMatch && !accountDeletionResult) {
+    debugger;
+    Bugsnag.notify(new Error("Missing accountDeletionResult"));
+    return (
+      <ErrorAlert
+        error={
+          new Error(
+            "Something went wrong and we don't have anything useful to show."
+          )
+        }
+      />
+    );
+  }
 
   return (
     <Space
@@ -56,16 +84,15 @@ const AccountDeletion: React.FC<{}> = () => {
         <Steps.Step title="Delete Account & Erase Data" />
         <Steps.Step title="Recovery Info & Data Export" />
       </Steps>
-      <ErrorAlert error={deleteUserError} />
       <Result
         title={
-          resultDELETEME
+          accountDeletionResult
             ? "Your account has been deleted, and your data erased."
             : "Are you sure you want to delete you account and erase its data?"
         }
-        status={resultDELETEME ? "success" : "warning"}
+        status={accountDeletionResult ? "success" : "warning"}
         extra={
-          resultDELETEME ? (
+          accountDeletionResult ? (
             <div
               style={{
                 display: "flex",
@@ -84,7 +111,7 @@ const AccountDeletion: React.FC<{}> = () => {
                   to save it now!):
                 </p>
                 <Typography.Text copyable strong>
-                  {resultDELETEME.deleteUser.scrambledUsername}
+                  {accountDeletionResult.deleteUser.scrambledUsername}
                 </Typography.Text>
               </Card>
               <Card
@@ -98,9 +125,10 @@ const AccountDeletion: React.FC<{}> = () => {
                 </Typography.Text>
                 <Button
                   style={{ marginTop: "12px" }}
+                  icon={<DownloadOutlined />}
                   onClick={() => {
                     var blob = new Blob(
-                      [resultDELETEME.deleteUser.dataBeforeDeletion],
+                      [accountDeletionResult.deleteUser.dataBeforeDeletion],
                       {
                         type: "text/json;charset=utf-8",
                       }
@@ -111,13 +139,14 @@ const AccountDeletion: React.FC<{}> = () => {
                     );
                   }}
                 >
-                  Download data before deletion
+                  Data before Account deletion
                 </Button>
                 <Button
                   style={{ marginTop: "12px" }}
+                  icon={<DownloadOutlined />}
                   onClick={() => {
                     var blob = new Blob(
-                      [resultDELETEME.deleteUser.dataBeforeDeletion],
+                      [accountDeletionResult.deleteUser.dataAfterDeletion],
                       {
                         type: "text/json;charset=utf-8",
                       }
@@ -128,25 +157,29 @@ const AccountDeletion: React.FC<{}> = () => {
                     );
                   }}
                 >
-                  Download data after deletion
+                  Data on record after Account deletion
                 </Button>
               </Card>
             </div>
           ) : (
             <Form
-              name="confirm-password"
+              name="confirm-password-and-delete-account"
               initialValues={initialValues}
               onFinish={(values) => {
                 setDebouncedWait(true);
-                setTimeout(() => {
+                setTimeout(async () => {
                   setDebouncedWait(false);
-                  setResultDELETEME({
-                    deleteUser: {
-                      scrambledUsername: "abc123",
-                      dataBeforeDeletion: "before",
-                      dataAfterDeletion: "after",
-                    },
-                  });
+                  apolloClient.clearStore();
+                  try {
+                    const { data } = await deleteUser({
+                      variables: { password: values.password },
+                    });
+                    history.push("/account-deleted", {
+                      accountDeletionResult: data,
+                    });
+                  } catch (err) {
+                    console.error(err);
+                  }
                 }, 1500);
               }}
             >
@@ -178,6 +211,10 @@ const AccountDeletion: React.FC<{}> = () => {
                     disabled={deleteUserLoading || debouncedWait}
                   />
                 </Form.Item>
+                <ErrorAlert
+                  error={deleteUserError}
+                  style={{ textAlign: "left" }}
+                />
                 <Button
                   danger
                   type="primary"

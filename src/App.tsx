@@ -57,7 +57,7 @@ const App: React.FC = () => {
                 "/sign-up",
                 "/verify-email",
                 "/forgot-password",
-                "/delete-account-success",
+                "/account-deleted",
                 "/reset-password/user/:userID/code/:code/username/:username",
               ]}
             >
