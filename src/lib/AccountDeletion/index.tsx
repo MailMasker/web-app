@@ -103,7 +103,7 @@ const AccountDeletion: React.FC<{}> = () => {
             >
               <Card
                 title="Future Account Recovery"
-                style={{ width: 300, margin: "12px", textAlign: "left" }}
+                style={{ width: 400, margin: "12px", textAlign: "left" }}
               >
                 <p>
                   We allow you to recover your account and regain access to your
@@ -116,7 +116,7 @@ const AccountDeletion: React.FC<{}> = () => {
               </Card>
               <Card
                 title="Final Data Snapshot"
-                style={{ width: 300, margin: "12px", textAlign: "left" }}
+                style={{ width: 400, margin: "12px", textAlign: "left" }}
               >
                 <Typography.Text>
                   To give you a better sense of what data has been deleted, and
@@ -157,7 +157,7 @@ const AccountDeletion: React.FC<{}> = () => {
                     );
                   }}
                 >
-                  Data on record after Account deletion
+                  Data after Account deletion
                 </Button>
               </Card>
             </div>

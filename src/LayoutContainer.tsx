@@ -69,7 +69,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
                 style={{ lineHeight: "64px" }}
                 onSelect={() => history.push("/sign-up")}
               >
-                <Menu.Item key="1">Contact Support</Menu.Item>
+                <Menu.Item key="1">Help</Menu.Item>
               </Menu>
             )}
           </div>

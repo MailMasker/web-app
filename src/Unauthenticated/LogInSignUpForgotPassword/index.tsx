@@ -182,9 +182,6 @@ const LogInSignUpForgotPassword = ({
               {resetPasswordMatch && (
                 <React.Fragment>
                   <div style={{ textAlign: "center", width: "300px" }}>
-                    <Typography.Title level={3}>
-                      Reset Password
-                    </Typography.Title>
                     <Typography.Text>Choose a new password:</Typography.Text>
                   </div>
                 </React.Fragment>
@@ -306,15 +303,15 @@ const LogInSignUpForgotPassword = ({
                 ) : null}
 
                 <Form.Item>
-                  <ErrorAlert
-                    error={[
-                      logInError,
-                      signUpError,
-                      sendResetPasswordEmailError,
-                      resetPasswordError,
-                    ]}
-                  />
-                  {sendResetPasswordEmailData && (
+                  {logInMatch && <ErrorAlert error={logInError} />}
+                  {signUpMatch && <ErrorAlert error={signUpError} />}
+                  {forgotPasswordMatch && (
+                    <ErrorAlert error={sendResetPasswordEmailError} />
+                  )}
+                  {resetPasswordMatch && (
+                    <ErrorAlert error={resetPasswordError} />
+                  )}
+                  {resetPasswordMatch && sendResetPasswordEmailData && (
                     <Alert
                       message="Check your email for your username and a link to reset your password."
                       type="success"
