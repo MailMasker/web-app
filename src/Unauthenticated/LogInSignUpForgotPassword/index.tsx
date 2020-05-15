@@ -55,7 +55,7 @@ const LogInSignUpForgotPassword = ({
 
   const [
     createAccount,
-    { error: signUpError, loading: signUpLoading },
+    { data: signUpData, error: signUpError, loading: signUpLoading },
   ] = useCreateUserMutation();
 
   const [
@@ -78,6 +78,7 @@ const LogInSignUpForgotPassword = ({
       variables: {
         username: values.username,
         password: values.password,
+        persistent: values.remember,
       },
     })
       .then(onAuthenticationSuccess)
@@ -91,9 +92,11 @@ const LogInSignUpForgotPassword = ({
         username: values.username,
         password: values.password,
         uuid: uuidv4(),
+        persistent: values.remember as boolean,
       },
     })
       .then(onAuthenticationSuccess)
+      .then(() => message.success(`Account created!`))
       .catch((err) => console.error(err));
   };
 
@@ -325,7 +328,7 @@ const LogInSignUpForgotPassword = ({
                     style={{ width: "100%" }}
                     loading={
                       logInLoading ||
-                      signUpLoading ||
+                      ((signUpLoading || signUpData) && !signUpError) ||
                       sendResetPasswordEmailLoading ||
                       resetPasswordLoading
                     }

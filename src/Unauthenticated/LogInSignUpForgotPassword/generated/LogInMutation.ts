@@ -7,6 +7,7 @@ import * as ApolloReactHooks from "@apollo/react-hooks";
 export type LogInMutationVariables = {
   username: Types.Scalars["String"];
   password: Types.Scalars["String"];
+  persistent: Types.Scalars["Boolean"];
 };
 
 export type LogInMutation = { readonly __typename?: "Mutation" } & Pick<
@@ -15,8 +16,16 @@ export type LogInMutation = { readonly __typename?: "Mutation" } & Pick<
 >;
 
 export const LogInDocument = gql`
-  mutation LogIn($username: String!, $password: String!) {
-    authenticate(username: $username, password: $password)
+  mutation LogIn(
+    $username: String!
+    $password: String!
+    $persistent: Boolean!
+  ) {
+    authenticate(
+      username: $username
+      password: $password
+      persistent: $persistent
+    )
   }
 `;
 export type LogInMutationFn = ApolloReactCommon.MutationFunction<
@@ -39,6 +48,7 @@ export type LogInMutationFn = ApolloReactCommon.MutationFunction<
  *   variables: {
  *      username: // value for 'username'
  *      password: // value for 'password'
+ *      persistent: // value for 'persistent'
  *   },
  * });
  */

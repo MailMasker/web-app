@@ -1,3 +1,7 @@
-mutation LogIn($username: String!, $password: String!) {
-  authenticate(username: $username, password: $password)
+mutation LogIn($username: String!, $password: String!, $persistent: Boolean!) {
+  authenticate(
+    username: $username
+    password: $password
+    persistent: $persistent
+  )
 }

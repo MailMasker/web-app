@@ -1,32 +1,15 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Empty,
-  Modal,
-  PageHeader,
-  Space,
-  Spin,
-  Table,
-  Tabs,
-  Tag,
-  Tooltip,
-  Typography,
-} from "antd";
+import { Button, Empty, Modal, Table, Tooltip, Typography } from "antd";
 import {
   CheckCircleTwoTone,
   DeleteTwoTone,
   ExclamationCircleOutlined,
-  InfoCircleOutlined,
-  InfoCircleTwoTone,
-  StopTwoTone,
 } from "@ant-design/icons";
-import { MeQuery, useMeQuery } from "../Home/generated/MeQuery";
-import React, { memo, useMemo, useState } from "react";
-import { grey, orange } from "@ant-design/colors";
+import React, { memo, useMemo } from "react";
 
 import { ColumnProps } from "antd/lib/table";
 import ResendVerificationEmailCTA from "../Home/ResendVerificationEmailCTA";
+import { grey } from "@ant-design/colors";
+import { useMeQuery } from "../Home/generated/MeQuery";
 
 const { Text, Title } = Typography;
 
@@ -111,6 +94,7 @@ const VerifiedEmailSettings: React.FC<{}> = () => {
 
   return (
     <React.Fragment>
+      <Title level={3}>Verified Emails</Title>
       <Table
         columns={verifiedEmailsColumns}
         dataSource={verifiedEmailsTableData}

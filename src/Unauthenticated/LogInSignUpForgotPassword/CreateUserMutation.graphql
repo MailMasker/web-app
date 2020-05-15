@@ -1,5 +1,15 @@
-mutation CreateUser($username: String!, $password: String!, $uuid: String!) {
-  createUser(username: $username, password: $password, uuid: $uuid) {
+mutation CreateUser(
+  $username: String!
+  $password: String!
+  $uuid: String!
+  $persistent: Boolean!
+) {
+  createUser(
+    username: $username
+    password: $password
+    uuid: $uuid
+    persistent: $persistent
+  ) {
     userID
   }
 }

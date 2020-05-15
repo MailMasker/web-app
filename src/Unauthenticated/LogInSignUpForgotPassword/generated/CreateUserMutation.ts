@@ -8,6 +8,7 @@ export type CreateUserMutationVariables = {
   username: Types.Scalars["String"];
   password: Types.Scalars["String"];
   uuid: Types.Scalars["String"];
+  persistent: Types.Scalars["Boolean"];
 };
 
 export type CreateUserMutation = { readonly __typename?: "Mutation" } & {
@@ -18,8 +19,18 @@ export type CreateUserMutation = { readonly __typename?: "Mutation" } & {
 };
 
 export const CreateUserDocument = gql`
-  mutation CreateUser($username: String!, $password: String!, $uuid: String!) {
-    createUser(username: $username, password: $password, uuid: $uuid) {
+  mutation CreateUser(
+    $username: String!
+    $password: String!
+    $uuid: String!
+    $persistent: Boolean!
+  ) {
+    createUser(
+      username: $username
+      password: $password
+      uuid: $uuid
+      persistent: $persistent
+    ) {
       userID
     }
   }
@@ -45,6 +56,7 @@ export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<
  *      username: // value for 'username'
  *      password: // value for 'password'
  *      uuid: // value for 'uuid'
+ *      persistent: // value for 'persistent'
  *   },
  * });
  */

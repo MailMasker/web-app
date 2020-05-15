@@ -69,6 +69,7 @@ export type Mutation = {
 export type MutationAuthenticateArgs = {
   username: Scalars['String'];
   password: Scalars['String'];
+  persistent: Scalars['Boolean'];
 };
 
 
@@ -81,6 +82,7 @@ export type MutationCreateUserArgs = {
   username: Scalars['String'];
   password: Scalars['String'];
   uuid: Scalars['String'];
+  persistent: Scalars['Boolean'];
 };
 
 

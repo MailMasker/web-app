@@ -3,7 +3,6 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 
 import DataExport from "./DataExport";
 import ErrorAlert from "../lib/ErrorAlert";
-import PasswordSettings from "./PasswordSettings";
 import PrivacySettings from "./PrivacySettings";
 import React from "react";
 import ReservedMailMasksSettings from "./ReservedMailMasksSettings";
@@ -14,7 +13,6 @@ import { useMeQuery } from "../Home/generated/MeQuery";
 type TabType =
   | "verified-emails"
   | "email-masks"
-  | "password"
   | "privacy"
   | "delete-account"
   | "export-data";
@@ -62,9 +60,6 @@ const SettingsContent: React.FC<{}> = () => {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Reserved Mail Masks" key="reserved-mail-masks">
             <ReservedMailMasksSettings />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Password" key="password">
-            <PasswordSettings />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Privacy" key="privacy">
             <PrivacySettings />
