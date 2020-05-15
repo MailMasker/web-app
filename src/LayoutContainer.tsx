@@ -1,7 +1,8 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Typography } from "antd";
+import { Link, useHistory } from "react-router-dom";
 
+import HeaderLogo from "./HeaderLogo";
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { useMeQuery } from "./Home/generated/MeQuery";
 
 const { Header, Content, Footer } = Layout;
@@ -30,17 +31,12 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
           }}
         >
           <div>
-            <a href="/">
-              <div
-                style={{
-                  width: "120px",
-                  height: "31px",
-                  background: "rgba(255, 255, 255, 0.2)",
-                  margin: "16px 24px 16px 0",
-                  float: "left",
-                }}
-              />
-            </a>
+            <Link to="/">
+              <HeaderLogo style={{ marginLeft: "48px" }} />
+              <Typography.Title style={{ color: "white" }}>
+                Mail Masker
+              </Typography.Title>
+            </Link>
           </div>
           <div>
             {authenticated ? (

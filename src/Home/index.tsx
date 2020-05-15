@@ -354,7 +354,7 @@ const Home: React.FC<HomeProps> = () => {
               <TabPane
                 tab={
                   <span>
-                    Expiring Soon
+                    Stops Forwarding Soon
                     {expiringSoonData.length > 0 && (
                       <Badge
                         count={expiringSoonData.length}
@@ -374,7 +374,7 @@ const Home: React.FC<HomeProps> = () => {
               <TabPane
                 tab={
                   <span>
-                    Expired
+                    Stopped
                     {expiredData.length > 0 && (
                       <Badge
                         count={expiredData.length}

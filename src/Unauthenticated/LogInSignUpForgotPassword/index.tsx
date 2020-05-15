@@ -123,7 +123,8 @@ const LogInSignUpForgotPassword = ({
       .then(() => {
         notification.success({
           message: `Password updated`,
-          description: "You are now logged in.",
+          description:
+            "You are now logged in, and you've been logged-out from all other devices.",
           placement: "topRight",
         });
         onAuthenticationSuccess();
