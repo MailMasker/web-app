@@ -32,7 +32,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
         >
           <div>
             <Link to="/">
-              <HeaderLogo style={{ marginLeft: "48px" }} />
+              <HeaderLogo style={{ marginLeft: "24px" }} />
               <Typography.Title style={{ color: "white" }}>
                 Mail Masker
               </Typography.Title>

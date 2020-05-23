@@ -11,6 +11,13 @@ import ReactDOM from "react-dom";
 Bugsnag.start({
   apiKey: "cab2c44ac75b0030bbdd178046a5b1da",
   plugins: [new BugsnagPluginReact(React)],
+  enabledReleaseStages: ["production", "development"],
+  releaseStage:
+    process.env.REACT_APP_ENVIRONMENT === "local"
+      ? "local"
+      : process.env.REACT_APP_ENVIRONMENT === "dev"
+      ? "development"
+      : "production",
 });
 
 const ErrorBoundary = Bugsnag.getPlugin("react");
