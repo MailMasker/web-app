@@ -1,0 +1,62 @@
+import * as Types from "../../generated/types";
+
+import gql from "graphql-tag";
+import * as ApolloReactCommon from "@apollo/react-common";
+import * as ApolloReactHooks from "@apollo/react-hooks";
+
+export type CreateCheckoutSessionMutationVariables = {
+  priceID: Types.Scalars["String"];
+};
+
+export type CreateCheckoutSessionMutation = {
+  readonly __typename?: "Mutation";
+} & Pick<Types.Mutation, "createCheckoutSession">;
+
+export const CreateCheckoutSessionDocument = gql`
+  mutation CreateCheckoutSession($priceID: String!) {
+    createCheckoutSession(priceID: $priceID)
+  }
+`;
+export type CreateCheckoutSessionMutationFn = ApolloReactCommon.MutationFunction<
+  CreateCheckoutSessionMutation,
+  CreateCheckoutSessionMutationVariables
+>;
+
+/**
+ * __useCreateCheckoutSessionMutation__
+ *
+ * To run a mutation, you first call `useCreateCheckoutSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCheckoutSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCheckoutSessionMutation, { data, loading, error }] = useCreateCheckoutSessionMutation({
+ *   variables: {
+ *      priceID: // value for 'priceID'
+ *   },
+ * });
+ */
+export function useCreateCheckoutSessionMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateCheckoutSessionMutation,
+    CreateCheckoutSessionMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    CreateCheckoutSessionMutation,
+    CreateCheckoutSessionMutationVariables
+  >(CreateCheckoutSessionDocument, baseOptions);
+}
+export type CreateCheckoutSessionMutationHookResult = ReturnType<
+  typeof useCreateCheckoutSessionMutation
+>;
+export type CreateCheckoutSessionMutationResult = ApolloReactCommon.MutationResult<
+  CreateCheckoutSessionMutation
+>;
+export type CreateCheckoutSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateCheckoutSessionMutation,
+  CreateCheckoutSessionMutationVariables
+>;

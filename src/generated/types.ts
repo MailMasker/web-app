@@ -56,13 +56,15 @@ export type Mutation = {
   deleteUser: DeleteUserPayload;
   createVerifiedEmail: VerifiedEmail;
   resendVerificationEmail: VerifiedEmail;
-  /** For x+y@1nt.email, "x+y@1nt.email" is the raw value (i.e. the entire thing) */
+  /** for x+y@1nt.email, "x+y@1nt.email" is the raw value (i.e. the entire thing) */
   createEmailMask: EmailMask;
   createRoute: Route;
   updateRoute: Route;
   sendResetPasswordEmail?: Maybe<Scalars['Boolean']>;
   resetPassword?: Maybe<Scalars['Boolean']>;
   verifyEmailWithCode: VerifiedEmail;
+  /** returns a Checkout Session ID */
+  createCheckoutSession: Scalars['String'];
 };
 
 
@@ -136,6 +138,11 @@ export type MutationResetPasswordArgs = {
 export type MutationVerifyEmailWithCodeArgs = {
   email: Scalars['String'];
   code: Scalars['String'];
+};
+
+
+export type MutationCreateCheckoutSessionArgs = {
+  priceID: Scalars['String'];
 };
 
 export type Query = {

@@ -1,0 +1,3 @@
+mutation CreateCheckoutSession($priceID: String!) {
+  createCheckoutSession(priceID: $priceID)
+}

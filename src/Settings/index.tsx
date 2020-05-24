@@ -1,6 +1,7 @@
 import { PageHeader, Space, Spin, Tabs } from "antd";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
+import BillingSettings from "./BillingSettings";
 import DataExport from "./DataExport";
 import ErrorAlert from "../lib/ErrorAlert";
 import PrivacySettings from "./PrivacySettings";
@@ -14,6 +15,7 @@ type TabType =
   | "verified-emails"
   | "email-masks"
   | "privacy"
+  | "billing"
   | "delete-account"
   | "export-data";
 
@@ -66,6 +68,9 @@ const SettingsContent: React.FC<{}> = () => {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Export Data" key="export-data">
             <DataExport />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Plan & Billing" key="billing">
+            <BillingSettings />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Delete Account" key="delete-account">
             <StartAccountDeletion />
