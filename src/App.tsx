@@ -72,6 +72,12 @@ const App: React.FC = () => {
                     <Route path="/log-out">
                       <LogOut />
                     </Route>
+                    <Route path="/checkout-success">
+                      <div>checkout success!</div>
+                    </Route>
+                    <Route path="/checkout-cancel">
+                      <div>checkout cancel!</div>
+                    </Route>
                     <Route path="/settings">
                       <Settings />
                     </Route>
