@@ -145,6 +145,10 @@ export type MutationCreateCheckoutSessionArgs = {
   priceID: Scalars['String'];
 };
 
+export type Plan = {
+  displayName: Scalars['String'];
+};
+
 export type Query = {
    __typename?: 'Query';
   me: Me;
@@ -161,6 +165,11 @@ export type Route = {
   expiresISO?: Maybe<Scalars['String']>;
 };
 
+export type SubscriptionPlan = Plan & {
+   __typename?: 'SubscriptionPlan';
+  displayName: Scalars['String'];
+};
+
 
 /** A User can't be deleted, but its username can be cleared at a user's request */
 export type User = {
@@ -170,6 +179,7 @@ export type User = {
   routes: Array<Route>;
   emailMasks: Array<EmailMask>;
   verifiedEmails: Array<VerifiedEmail>;
+  plan?: Maybe<Plan>;
 };
 
 /** A VerifiedEmail is one for which ownership has been verified when `verified` is true */

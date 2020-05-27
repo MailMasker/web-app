@@ -12,6 +12,12 @@ export type MeQuery = { readonly __typename?: "Query" } & {
       Types.User,
       "id" | "username"
     > & {
+        readonly plan?: Types.Maybe<
+          { readonly __typename?: "SubscriptionPlan" } & Pick<
+            Types.SubscriptionPlan,
+            "displayName"
+          >
+        >;
         readonly routes: ReadonlyArray<
           { readonly __typename?: "Route" } & Pick<
             Types.Route,
@@ -48,6 +54,9 @@ export const MeDocument = gql`
       user {
         id
         username
+        plan {
+          displayName
+        }
         routes {
           id
           redirectToVerifiedEmail {

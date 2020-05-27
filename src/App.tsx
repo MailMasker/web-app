@@ -1,13 +1,14 @@
 import "antd/dist/antd.css";
 
 import { Button, Result } from "antd";
-import { Link, Route, Router, Switch } from "react-router-dom";
+import { Link, Redirect, Route, Router, Switch } from "react-router-dom";
 import React, { useCallback } from "react";
 
 import AccountDeletion from "./lib/AccountDeletion";
 import { ApolloProvider } from "@apollo/react-hooks";
 import Authenticated from "./Authenticated";
 import AuthenticatedOrUnauthenticated from "./AuthenticatedOrUnauthenticated";
+import CheckoutSuccess from "./CheckoutCallback/CheckoutSuccess";
 import Home from "./Home";
 import LayoutContainer from "./LayoutContainer";
 import LogOut from "./LogOut/LogOut";
@@ -73,11 +74,9 @@ const App: React.FC = () => {
                       <LogOut />
                     </Route>
                     <Route path="/checkout-success">
-                      <div>checkout success!</div>
+                      <CheckoutSuccess />
                     </Route>
-                    <Route path="/checkout-cancel">
-                      <div>checkout cancel!</div>
-                    </Route>
+                    <Redirect path="/checkout-cancel" to="/" />
                     <Route path="/settings">
                       <Settings />
                     </Route>

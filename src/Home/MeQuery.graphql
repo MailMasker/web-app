@@ -3,6 +3,9 @@ query Me {
     user {
       id
       username
+      plan {
+        displayName
+      }
       routes {
         id
         redirectToVerifiedEmail {
