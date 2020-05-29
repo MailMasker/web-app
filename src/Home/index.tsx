@@ -206,7 +206,7 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
         ),
       },
       {
-        title: activeTab === "expired" ? "Expired" : "Expires",
+        title: activeTab === "expired" ? "Stopped" : "Stops",
         dataIndex: "route",
         key: "route",
         render: (route: MeQuery["me"]["user"]["routes"][0], parent) => {

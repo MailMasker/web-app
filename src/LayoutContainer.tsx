@@ -1,4 +1,4 @@
-import { Layout, Menu, Typography } from "antd";
+import { Layout, Menu, Tag, Typography } from "antd";
 import { Link, useHistory } from "react-router-dom";
 
 import HeaderLogo from "./HeaderLogo";
@@ -30,12 +30,9 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
             margin: "0px auto",
           }}
         >
-          <div>
+          <div style={{ display: "flex", alignItems: "bottom" }}>
             <Link to="/">
               <HeaderLogo style={{ marginLeft: "24px" }} />
-              <Typography.Title style={{ color: "white" }}>
-                Mail Masker
-              </Typography.Title>
             </Link>
           </div>
           <div>

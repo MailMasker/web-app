@@ -76,7 +76,7 @@ const App: React.FC = () => {
                     <Route path="/checkout-success">
                       <CheckoutSuccess />
                     </Route>
-                    <Redirect path="/checkout-cancel" to="/" />
+                    <Redirect path="/checkout-cancel" to="/settings/billing" />
                     <Route path="/settings">
                       <Settings />
                     </Route>
