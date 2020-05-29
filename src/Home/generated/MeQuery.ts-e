@@ -15,8 +15,8 @@ export type MeQuery = (
       { readonly __typename?: 'User' }
       & Pick<Types.User, 'id' | 'username'>
       & { readonly plan?: Types.Maybe<(
-        { readonly __typename?: 'SubscriptionPlan' }
-        & Pick<Types.SubscriptionPlan, 'displayName'>
+        { readonly __typename?: 'Plan' }
+        & Pick<Types.Plan, 'displayName' | 'type'>
       )>, readonly routes: ReadonlyArray<(
         { readonly __typename?: 'Route' }
         & Pick<Types.Route, 'id' | 'expiresISO'>
@@ -47,6 +47,7 @@ export const MeDocument = gql`
       username
       plan {
         displayName
+        type
       }
       routes {
         id

@@ -5,6 +5,7 @@ query Me {
       username
       plan {
         displayName
+        type
       }
       routes {
         id

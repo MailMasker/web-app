@@ -13,9 +13,9 @@ export type MeQuery = { readonly __typename?: "Query" } & {
       "id" | "username"
     > & {
         readonly plan?: Types.Maybe<
-          { readonly __typename?: "SubscriptionPlan" } & Pick<
-            Types.SubscriptionPlan,
-            "displayName"
+          { readonly __typename?: "Plan" } & Pick<
+            Types.Plan,
+            "displayName" | "type"
           >
         >;
         readonly routes: ReadonlyArray<
@@ -56,6 +56,7 @@ export const MeDocument = gql`
         username
         plan {
           displayName
+          type
         }
         routes {
           id

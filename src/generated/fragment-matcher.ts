@@ -12,17 +12,7 @@
       }
       const result: IntrospectionResultData = {
   "__schema": {
-    "types": [
-      {
-        "kind": "INTERFACE",
-        "name": "Plan",
-        "possibleTypes": [
-          {
-            "name": "SubscriptionPlan"
-          }
-        ]
-      }
-    ]
+    "types": []
   }
 };
       export default result;

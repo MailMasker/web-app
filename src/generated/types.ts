@@ -146,8 +146,15 @@ export type MutationCreateCheckoutSessionArgs = {
 };
 
 export type Plan = {
+   __typename?: 'Plan';
+  type: PlanType;
   displayName: Scalars['String'];
 };
+
+export enum PlanType {
+  Free = 'FREE',
+  Premium = 'PREMIUM'
+}
 
 export type Query = {
    __typename?: 'Query';
@@ -163,11 +170,6 @@ export type Route = {
   redirectToVerifiedEmail: VerifiedEmail;
   emailMask: EmailMask;
   expiresISO?: Maybe<Scalars['String']>;
-};
-
-export type SubscriptionPlan = Plan & {
-   __typename?: 'SubscriptionPlan';
-  displayName: Scalars['String'];
 };
 
 
