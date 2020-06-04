@@ -1,34 +1,34 @@
 import {
-  Alert,
   Button,
   Checkbox,
   Form,
   Input,
-  PageHeader,
   Radio,
   Space,
   Steps,
   Tooltip,
   Typography,
   message,
-  notification,
 } from "antd";
 import {
   InfoCircleOutlined,
   LockOutlined,
+  MailOutlined,
+  SyncOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 import ErrorAlert from "../../lib/ErrorAlert";
-import React from "react";
+import { green } from "@ant-design/colors";
+// @ts-ignore
+import randomWords from "random-words";
 import { useCreateUserMutation } from "./generated/CreateUserMutation";
-import { useLogInMutation } from "../LogInForgotPassword/generated/LogInMutation";
-import { useResetPasswordMutation } from "../LogInForgotPassword/generated/ResetPasswordMutation";
-import { useSendResetPasswordEmailMutation } from "../LogInForgotPassword/generated/SendResetPasswordEmailMutation";
+import useDebounce from "../../lib/useDebounce";
+import { useHistory } from "react-router-dom";
+import { useIsEmailMaskAvailableLazyQuery } from "./generated/IsEmailMaskAvailableQuery";
+import useIsMobile from "../../lib/useIsMobile";
 import { uuidv4 } from "../../lib/uuid";
-
-const { Title } = Typography;
 
 interface SignUpProps {
   onAuthenticationSuccess: () => void;
@@ -37,80 +37,352 @@ interface SignUpProps {
 const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
   const [form] = Form.useForm();
 
-  const history = useHistory<{ username: string }>();
+  const isMobile = useIsMobile();
+
+  const history = useHistory<{
+    username: string | undefined;
+    step: number | undefined;
+    mailMaskAlias: string | undefined;
+    emailAddress: string | undefined;
+  }>();
 
   const [
     createAccount,
     { data: signUpData, error: signUpError, loading: signUpLoading },
   ] = useCreateUserMutation();
 
-  const onSubmitSignUp = (values: any) => {
-    console.info("Submitted form: ", values);
-    createAccount({
-      variables: {
-        username: values.username,
-        password: values.password,
-        uuid: uuidv4(),
-        persistent: values.remember as boolean,
-      },
-    })
-      .then(onAuthenticationSuccess)
-      .then(() => message.success(`Account created!`))
-      .catch((err) => console.error(err));
-  };
+  const [
+    isEmailMaskAvailable,
+    {
+      data: isEmailMaskAvailableData,
+      error: isEmailMaskAvailableError,
+      loading: isEmailMaskAvailableLoading,
+    },
+  ] = useIsEmailMaskAvailableLazyQuery();
+
+  const step = history.location.state?.step ?? 0;
+
+  const onSubmit =
+    step === 0
+      ? (values: any) => {
+          history.push({
+            pathname: "/sign-up",
+            state: {
+              ...history.location.state,
+              mailMaskAlias: values.mailMaskAlias,
+              step: 1,
+            },
+          });
+        }
+      : step === 1
+      ? (values: any) => {
+          history.push({
+            pathname: "/sign-up",
+            state: {
+              ...history.location.state,
+              emailAddress: values.emailAddress,
+              step: 2,
+            },
+          });
+        }
+      : (values: any) => {
+          console.info("Submitted form: ", values);
+          console.info("emailAddress: ", history.location.state?.emailAddress);
+          console.info(
+            "mailMaskAlias: ",
+            history.location.state?.mailMaskAlias
+          );
+          createAccount({
+            variables: {
+              username: values.username,
+              password: values.password,
+              uuid: uuidv4(),
+              persistent: values.remember as boolean,
+              emailMask: `${mailMaskAlias}@mailmasker.com`,
+              verifiedEmail: history.location.state?.emailAddress ?? "",
+            },
+          })
+            .then(onAuthenticationSuccess)
+            .then(() => message.success(`Account created!`))
+            .catch((err) => console.error(err));
+        };
+
+  const [mailMaskAlias, setMailMaskAlias] = useState<string>(
+    form.getFieldValue("mailMaskAlias")
+  );
+
+  const debouncedDesiredEmailMaskAlias = useDebounce(mailMaskAlias, 500);
+
+  // Effect for API call
+  useEffect(
+    () => {
+      if (debouncedDesiredEmailMaskAlias) {
+        isEmailMaskAvailable({
+          variables: {
+            email: debouncedDesiredEmailMaskAlias + "@mailmasker.com",
+          },
+        });
+      }
+    },
+    [debouncedDesiredEmailMaskAlias] // Only call effect if debounced search term changes
+  );
 
   return (
     <React.Fragment>
       <React.Fragment>
         <Space size="large" direction="vertical" style={{ width: "100%" }}>
-          <PageHeader title="">
-            <Space
-              size="large"
-              direction="vertical"
+          <Space
+            size="large"
+            direction="vertical"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: isMobile ? "stretch" : "center",
+              width: "100%",
+            }}
+          >
+            <Radio.Group
+              onChange={(e) => {
+                history.push(e.target.value);
+              }}
+              style={{ marginBottom: 8 }}
+              value={history.location.pathname}
+            >
+              <Radio.Button value="/sign-up">Sign Up</Radio.Button>
+              <Radio.Button value="/log-in">Log In</Radio.Button>
+            </Radio.Group>
+            <Typography.Title level={2}>Sign Up</Typography.Title>
+            <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "100%",
+                minWidth: isMobile ? "100%" : "500px",
+                padding: "24px",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                borderColor: "rgba(0,0,0,0.1)",
+                backgroundColor: "rgba(0,0,0,0.03)",
+                borderRadius: "4px",
               }}
             >
-              <Radio.Group
-                onChange={(e) => {
-                  history.push(e.target.value);
-                }}
-                style={{ marginBottom: 8 }}
-                value={history.location.pathname}
+              <Steps
+                progressDot
+                current={step}
+                direction={isMobile ? "vertical" : "horizontal"}
+                style={{ width: "100%" }}
               >
-                <Radio.Button value="/sign-up">Sign Up</Radio.Button>
-                <Radio.Button value="/log-in">Log In</Radio.Button>
-              </Radio.Group>
-              <Title>Sign Up</Title>
-              <div style={{ minWidth: "500px" }}>
-                <Steps progressDot current={1} style={{ minWidth: "500px" }}>
-                  <Steps.Step
-                    title="Finished"
-                    description="This is a description."
-                  />
-                  <Steps.Step
-                    title="In Progress"
-                    description="This is a description."
-                  />
-                  <Steps.Step
-                    title="Waiting"
-                    description="This is a description."
-                  />
-                </Steps>
-              </div>
+                <Steps.Step
+                  title="Create Mail Mask"
+                  description="to give out"
+                />
+                <Steps.Step
+                  title="Your Email"
+                  description="where we forward to"
+                />
+                <Steps.Step title="Credentials" description="how you'll log in">
+                  Childs
+                </Steps.Step>
+              </Steps>
+            </div>
+            {step === 0 ? (
               <Form
-                name="normal_login"
+                name="choose_mail_mask"
+                key="choose_mail_mask"
+                initialValues={{
+                  remember: true,
+                  mailMaskAlias: "",
+                }}
+                onFinish={onSubmit}
+                style={{ width: "300px", marginTop: "24px" }}
+                form={form}
+                onValuesChange={(values) => {
+                  if (Object.keys(values).includes("mailMaskAlias")) {
+                    setMailMaskAlias(values.mailMaskAlias);
+                  }
+                }}
+              >
+                <div style={{ textAlign: "center" }}>
+                  <Typography.Title level={4}>
+                    Choose your Mail Mask
+                  </Typography.Title>
+                  <p>
+                    This is what you'll give out to companies and services that
+                    you want privacy from.
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "24px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Form.Item
+                    name="mailMaskAlias"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please choose your Mail Mask",
+                      },
+                    ]}
+                    style={{ marginBottom: 0 }}
+                    validateStatus={
+                      isEmailMaskAvailableLoading
+                        ? "validating"
+                        : isEmailMaskAvailableData &&
+                          isEmailMaskAvailableData.isEmailMaskAvailable
+                        ? "success"
+                        : isEmailMaskAvailableError ||
+                          (isEmailMaskAvailableData &&
+                            !isEmailMaskAvailableData.isEmailMaskAvailable)
+                        ? "error"
+                        : undefined
+                    }
+                    help={
+                      !mailMaskAlias
+                        ? undefined
+                        : isEmailMaskAvailableLoading ||
+                          mailMaskAlias != debouncedDesiredEmailMaskAlias
+                        ? "Checking availability..."
+                        : isEmailMaskAvailableData &&
+                          isEmailMaskAvailableData.isEmailMaskAvailable
+                        ? `${debouncedDesiredEmailMaskAlias}@mailmasker.com is available`
+                        : isEmailMaskAvailableError
+                        ? isEmailMaskAvailableError.message
+                        : isEmailMaskAvailableData &&
+                          !isEmailMaskAvailableData.isEmailMaskAvailable
+                        ? "Already taken – please try something else"
+                        : undefined
+                    }
+                  >
+                    <Input
+                      placeholder="you"
+                      style={{ textAlign: "end" }}
+                      autoComplete="none"
+                      addonAfter="@mailmasker.com"
+                      autoFocus
+                    />
+                  </Form.Item>
+                  <Tooltip placement="right" title="Random">
+                    <Button
+                      type="link"
+                      style={{ padding: 0, marginLeft: "12px" }}
+                      onClick={() => {
+                        const randomAlias =
+                          randomWords(1) + Math.floor(Math.random() * 100);
+                        form.setFieldsValue({
+                          mailMaskAlias: randomAlias,
+                        });
+                        setMailMaskAlias(randomAlias);
+                      }}
+                    >
+                      <SyncOutlined />
+                    </Button>
+                  </Tooltip>
+                </div>
+                <Form.Item>
+                  <ErrorAlert error={signUpError} />
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                    style={{ width: "100%", marginTop: "36px" }}
+                    disabled={
+                      isEmailMaskAvailableLoading ||
+                      !mailMaskAlias ||
+                      isEmailMaskAvailableData?.isEmailMaskAvailable === false
+                    }
+                  >
+                    Next
+                  </Button>
+                </Form.Item>
+              </Form>
+            ) : step === 1 ? (
+              <Form
+                name="email_address"
+                key="email_address"
                 initialValues={{
                   remember: true,
                   username: history.location.state?.username ?? "",
                 }}
-                onFinish={onSubmitSignUp}
-                style={{ width: "300px" }}
+                onFinish={onSubmit}
+                style={{ width: "300px", marginTop: "24px" }}
                 form={form}
               >
+                <div style={{ textAlign: "center", marginBottom: "24px" }}>
+                  <Typography.Title level={4}>
+                    Your Real Email Address
+                  </Typography.Title>
+                  <p>
+                    Where should we forward email sent to{" "}
+                    <strong>
+                      {history.location.state?.mailMaskAlias ?? "you"}
+                      @mailmasker.com
+                    </strong>{" "}
+                    ?
+                  </p>
+                </div>
+                <Form.Item
+                  name="emailAddress"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your real email address",
+                      type: "email",
+                    },
+                  ]}
+                >
+                  <Input
+                    autoFocus
+                    prefix={<MailOutlined />}
+                    placeholder="you@example.com"
+                    style={{ textAlign: "center" }}
+                    autoComplete="email"
+                    suffix={
+                      <Tooltip
+                        placement="right"
+                        title="If you ever delete your account, this email address will be permanently erased from our system."
+                      >
+                        <InfoCircleOutlined
+                          style={{
+                            color: "rgba(0,0,0,.45)",
+                            marginLeft: "8px",
+                          }}
+                        />
+                      </Tooltip>
+                    }
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <ErrorAlert error={signUpError} />
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                    style={{ width: "100%", marginTop: "12px" }}
+                    loading={(signUpLoading || signUpData) && !signUpError}
+                    disabled={signUpLoading}
+                  >
+                    Next
+                  </Button>
+                </Form.Item>
+              </Form>
+            ) : (
+              <Form
+                name="credentials"
+                key="credentials"
+                initialValues={{
+                  remember: true,
+                  username: history.location.state?.username ?? "",
+                }}
+                onFinish={onSubmit}
+                style={{ width: "300px", marginTop: "24px" }}
+                form={form}
+              >
+                <div style={{ textAlign: "center", marginBottom: "24px" }}>
+                  <Typography.Title level={4}>Credentials</Typography.Title>
+                  <p>This is how you'll log in later.</p>
+                </div>
                 <Form.Item
                   name="username"
                   rules={[
@@ -121,7 +393,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   ]}
                 >
                   <Input
-                    prefix={<UserOutlined className="site-form-item-icon" />}
+                    prefix={<UserOutlined />}
                     placeholder="Username"
                     autoComplete="username"
                     suffix={
@@ -145,8 +417,8 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     },
                   ]}
                 >
-                  <Input
-                    prefix={<LockOutlined className="site-form-item-icon" />}
+                  <Input.Password
+                    prefix={<LockOutlined />}
                     type="password"
                     placeholder="Password"
                     autoComplete={"new-password"}
@@ -157,6 +429,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     style={{
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
                     <Form.Item name="remember" valuePropName="checked" noStyle>
@@ -178,19 +451,21 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
-                    style={{ width: "100%" }}
                     loading={(signUpLoading || signUpData) && !signUpError}
                     disabled={signUpLoading}
+                    size="large"
+                    style={{
+                      width: "100%",
+                      backgroundColor: green[5],
+                      borderColor: green[5],
+                    }}
                   >
-                    Sign up
+                    Finish
                   </Button>
-                  <div>
-                    Or <Link to={"/log-in"}>log in now!</Link>
-                  </div>
                 </Form.Item>
               </Form>
-            </Space>
-          </PageHeader>
+            )}
+          </Space>
         </Space>
       </React.Fragment>
     </React.Fragment>

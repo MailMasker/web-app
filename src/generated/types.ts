@@ -85,6 +85,8 @@ export type MutationCreateUserArgs = {
   password: Scalars['String'];
   uuid: Scalars['String'];
   persistent: Scalars['Boolean'];
+  emailMask: Scalars['String'];
+  verifiedEmail: Scalars['String'];
 };
 
 
@@ -161,6 +163,12 @@ export type Query = {
   me: Me;
   ping: Scalars['String'];
   exportData: Scalars['String'];
+  isEmailMaskAvailable?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type QueryIsEmailMaskAvailableArgs = {
+  email: Scalars['String'];
 };
 
 /** A Route can not be hard deleted, but the email address in redirectToVerifiedEmail can be cleared at a user's request */

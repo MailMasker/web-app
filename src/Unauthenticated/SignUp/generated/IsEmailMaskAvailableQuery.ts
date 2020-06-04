@@ -1,0 +1,68 @@
+import * as Types from "../../../generated/types";
+
+import gql from "graphql-tag";
+import * as ApolloReactCommon from "@apollo/react-common";
+import * as ApolloReactHooks from "@apollo/react-hooks";
+
+export type IsEmailMaskAvailableQueryVariables = {
+  email: Types.Scalars["String"];
+};
+
+export type IsEmailMaskAvailableQuery = {
+  readonly __typename?: "Query";
+} & Pick<Types.Query, "isEmailMaskAvailable">;
+
+export const IsEmailMaskAvailableDocument = gql`
+  query IsEmailMaskAvailable($email: String!) {
+    isEmailMaskAvailable(email: $email)
+  }
+`;
+
+/**
+ * __useIsEmailMaskAvailableQuery__
+ *
+ * To run a query within a React component, call `useIsEmailMaskAvailableQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsEmailMaskAvailableQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsEmailMaskAvailableQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useIsEmailMaskAvailableQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    IsEmailMaskAvailableQuery,
+    IsEmailMaskAvailableQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<
+    IsEmailMaskAvailableQuery,
+    IsEmailMaskAvailableQueryVariables
+  >(IsEmailMaskAvailableDocument, baseOptions);
+}
+export function useIsEmailMaskAvailableLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    IsEmailMaskAvailableQuery,
+    IsEmailMaskAvailableQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<
+    IsEmailMaskAvailableQuery,
+    IsEmailMaskAvailableQueryVariables
+  >(IsEmailMaskAvailableDocument, baseOptions);
+}
+export type IsEmailMaskAvailableQueryHookResult = ReturnType<
+  typeof useIsEmailMaskAvailableQuery
+>;
+export type IsEmailMaskAvailableLazyQueryHookResult = ReturnType<
+  typeof useIsEmailMaskAvailableLazyQuery
+>;
+export type IsEmailMaskAvailableQueryResult = ApolloReactCommon.QueryResult<
+  IsEmailMaskAvailableQuery,
+  IsEmailMaskAvailableQueryVariables
+>;

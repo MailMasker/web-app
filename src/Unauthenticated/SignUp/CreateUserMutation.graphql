@@ -3,12 +3,16 @@ mutation CreateUser(
   $password: String!
   $uuid: String!
   $persistent: Boolean!
+  $verifiedEmail: String!
+  $emailMask: String!
 ) {
   createUser(
     username: $username
     password: $password
     uuid: $uuid
     persistent: $persistent
+    verifiedEmail: $verifiedEmail
+    emailMask: $emailMask
   ) {
     userID
   }

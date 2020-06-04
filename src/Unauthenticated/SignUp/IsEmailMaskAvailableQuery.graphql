@@ -1,0 +1,3 @@
+query IsEmailMaskAvailable($email: String!) {
+  isEmailMaskAvailable(email: $email)
+}

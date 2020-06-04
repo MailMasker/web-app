@@ -9,6 +9,8 @@ export type CreateUserMutationVariables = {
   password: Types.Scalars["String"];
   uuid: Types.Scalars["String"];
   persistent: Types.Scalars["Boolean"];
+  verifiedEmail: Types.Scalars["String"];
+  emailMask: Types.Scalars["String"];
 };
 
 export type CreateUserMutation = { readonly __typename?: "Mutation" } & {
@@ -24,12 +26,16 @@ export const CreateUserDocument = gql`
     $password: String!
     $uuid: String!
     $persistent: Boolean!
+    $verifiedEmail: String!
+    $emailMask: String!
   ) {
     createUser(
       username: $username
       password: $password
       uuid: $uuid
       persistent: $persistent
+      verifiedEmail: $verifiedEmail
+      emailMask: $emailMask
     ) {
       userID
     }
@@ -57,6 +63,8 @@ export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<
  *      password: // value for 'password'
  *      uuid: // value for 'uuid'
  *      persistent: // value for 'persistent'
+ *      verifiedEmail: // value for 'verifiedEmail'
+ *      emailMask: // value for 'emailMask'
  *   },
  * });
  */
