@@ -7,6 +7,7 @@ import {
   PageHeader,
   Radio,
   Space,
+  Steps,
   Tooltip,
   Typography,
   message,
@@ -21,7 +22,6 @@ import { Link, useHistory, useRouteMatch } from "react-router-dom";
 
 import ErrorAlert from "../../lib/ErrorAlert";
 import React from "react";
-import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import { useLogInMutation } from "./generated/LogInMutation";
 import { useResetPasswordMutation } from "./generated/ResetPasswordMutation";
 import { useSendResetPasswordEmailMutation } from "./generated/SendResetPasswordEmailMutation";
@@ -29,17 +29,16 @@ import { uuidv4 } from "../../lib/uuid";
 
 const { Title } = Typography;
 
-interface LogInSignUpForgotPasswordProps {
+interface LogInForgotPasswordProps {
   onAuthenticationSuccess: () => void;
 }
 
-const LogInSignUpForgotPassword = ({
+const LogInForgotPassword = ({
   onAuthenticationSuccess,
-}: LogInSignUpForgotPasswordProps) => {
+}: LogInForgotPasswordProps) => {
   const [form] = Form.useForm();
 
   const history = useHistory();
-  const signUpMatch = useRouteMatch("/sign-up");
   const logInMatch = useRouteMatch("/log-in");
   const forgotPasswordMatch = useRouteMatch("/forgot-password");
   const resetPasswordMatch = useRouteMatch<{
@@ -52,11 +51,6 @@ const LogInSignUpForgotPassword = ({
     logIn,
     { error: logInError, loading: logInLoading },
   ] = useLogInMutation();
-
-  const [
-    createAccount,
-    { data: signUpData, error: signUpError, loading: signUpLoading },
-  ] = useCreateUserMutation();
 
   const [
     sendResetPasswordEmail,
@@ -82,21 +76,6 @@ const LogInSignUpForgotPassword = ({
       },
     })
       .then(onAuthenticationSuccess)
-      .catch((err) => console.error(err));
-  };
-
-  const onSubmitSignUp = (values: any) => {
-    console.info("Submitted form: ", values);
-    createAccount({
-      variables: {
-        username: values.username,
-        password: values.password,
-        uuid: uuidv4(),
-        persistent: values.remember as boolean,
-      },
-    })
-      .then(onAuthenticationSuccess)
-      .then(() => message.success(`Account created!`))
       .catch((err) => console.error(err));
   };
 
@@ -160,8 +139,6 @@ const LogInSignUpForgotPassword = ({
               <Title>
                 {logInMatch
                   ? "Log In"
-                  : signUpMatch
-                  ? "Sign Up"
                   : forgotPasswordMatch
                   ? "Forgot Password"
                   : resetPasswordMatch
@@ -200,8 +177,6 @@ const LogInSignUpForgotPassword = ({
                 onFinish={
                   logInMatch
                     ? onSubmitLogIn
-                    : signUpMatch
-                    ? onSubmitSignUp
                     : forgotPasswordMatch
                     ? onSubmitForgotPassword
                     : resetPasswordMatch
@@ -228,7 +203,7 @@ const LogInSignUpForgotPassword = ({
                     />
                   </Form.Item>
                 )}
-                {(logInMatch || signUpMatch || resetPasswordMatch) && (
+                {(logInMatch || resetPasswordMatch) && (
                   <Form.Item
                     name="username"
                     rules={[
@@ -245,23 +220,11 @@ const LogInSignUpForgotPassword = ({
                       placeholder="Username"
                       disabled={!!resetPasswordMatch}
                       autoComplete="username"
-                      suffix={
-                        signUpMatch ? (
-                          <Tooltip
-                            placement="right"
-                            title="If you use a password manager like 1Password, we recommend you create a random username, rather than using your personal email address, for extra anonymity."
-                          >
-                            <InfoCircleOutlined
-                              style={{ color: "rgba(0,0,0,.45)" }}
-                            />
-                          </Tooltip>
-                        ) : null
-                      }
                     />
                   </Form.Item>
                 )}
 
-                {(logInMatch || signUpMatch || resetPasswordMatch) && (
+                {(logInMatch || resetPasswordMatch) && (
                   <Form.Item
                     name="password"
                     rules={[
@@ -284,7 +247,7 @@ const LogInSignUpForgotPassword = ({
                     />
                   </Form.Item>
                 )}
-                {logInMatch || signUpMatch ? (
+                {logInMatch ? (
                   <Form.Item>
                     <div
                       style={{
@@ -308,7 +271,6 @@ const LogInSignUpForgotPassword = ({
 
                 <Form.Item>
                   {logInMatch && <ErrorAlert error={logInError} />}
-                  {signUpMatch && <ErrorAlert error={signUpError} />}
                   {forgotPasswordMatch && (
                     <ErrorAlert error={sendResetPasswordEmailError} />
                   )}
@@ -329,21 +291,17 @@ const LogInSignUpForgotPassword = ({
                     style={{ width: "100%" }}
                     loading={
                       logInLoading ||
-                      ((signUpLoading || signUpData) && !signUpError) ||
                       sendResetPasswordEmailLoading ||
                       resetPasswordLoading
                     }
                     disabled={
                       logInLoading ||
-                      signUpLoading ||
                       sendResetPasswordEmailLoading ||
                       resetPasswordLoading
                     }
                   >
                     {logInMatch
                       ? "Log in"
-                      : signUpMatch
-                      ? "Sign up"
                       : forgotPasswordMatch
                       ? "Send me an email"
                       : resetPasswordMatch
@@ -352,12 +310,15 @@ const LogInSignUpForgotPassword = ({
                   </Button>
                   {logInMatch && (
                     <div>
-                      Or <Link to={"/sign-up"}>sign up now!</Link>
-                    </div>
-                  )}
-                  {signUpMatch && (
-                    <div>
-                      Or <Link to={"/log-in"}>log in now!</Link>
+                      Or{" "}
+                      <Link
+                        to={{
+                          pathname: "/sign-up",
+                          state: { username: form.getFieldValue("username") },
+                        }}
+                      >
+                        sign up now!
+                      </Link>
                     </div>
                   )}
                 </Form.Item>
@@ -370,4 +331,4 @@ const LogInSignUpForgotPassword = ({
   );
 };
 
-export default LogInSignUpForgotPassword;
+export default LogInForgotPassword;

@@ -27,13 +27,7 @@ const App: React.FC = () => {
 
   return (
     <ApolloProvider client={client}>
-      <div
-        className="App"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <div className="App">
         <Router history={history}>
           <Switch>
             <Route

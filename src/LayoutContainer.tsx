@@ -20,7 +20,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
   const { data: meQueryData } = useMeQuery({ fetchPolicy: "cache-only" });
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh", backgroundColor: "#fff" }}>
       <Header>
         <div
           style={{
