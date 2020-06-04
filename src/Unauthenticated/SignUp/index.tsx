@@ -62,6 +62,8 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
 
   const step = history.location.state?.step ?? 0;
 
+  console.log(history.location.state);
+
   const onSubmit =
     step === 0
       ? (values: any) => {
@@ -92,7 +94,8 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
               password: values.password,
               uuid: uuidv4(),
               persistent: values.remember as boolean,
-              emailMask: `${mailMaskAlias}@mailmasker.com`,
+              emailMask: `${history.location.state?.mailMaskAlias ??
+                ""}@mailmasker.com`,
               verifiedEmail: history.location.state?.emailAddress ?? "",
             },
           })
@@ -101,11 +104,13 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
             .catch((err) => console.error(err));
         };
 
-  const [mailMaskAlias, setMailMaskAlias] = useState<string>(
-    form.getFieldValue("mailMaskAlias")
+  const [mailMaskAliasInputValue, setMailMaskAliasInputValue] = useState<
+    string
+  >(form.getFieldValue("mailMaskAlias"));
+  const debouncedDesiredEmailMaskAlias = useDebounce(
+    mailMaskAliasInputValue,
+    500
   );
-
-  const debouncedDesiredEmailMaskAlias = useDebounce(mailMaskAlias, 500);
 
   // Effect for API call
   useEffect(
@@ -189,7 +194,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                 form={form}
                 onValuesChange={(values) => {
                   if (Object.keys(values).includes("mailMaskAlias")) {
-                    setMailMaskAlias(values.mailMaskAlias);
+                    setMailMaskAliasInputValue(values.mailMaskAlias);
                   }
                 }}
               >
@@ -233,10 +238,11 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                         : undefined
                     }
                     help={
-                      !mailMaskAlias
+                      !mailMaskAliasInputValue
                         ? undefined
                         : isEmailMaskAvailableLoading ||
-                          mailMaskAlias != debouncedDesiredEmailMaskAlias
+                          mailMaskAliasInputValue !=
+                            debouncedDesiredEmailMaskAlias
                         ? "Checking availability..."
                         : isEmailMaskAvailableData &&
                           isEmailMaskAvailableData.isEmailMaskAvailable
@@ -267,7 +273,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                         form.setFieldsValue({
                           mailMaskAlias: randomAlias,
                         });
-                        setMailMaskAlias(randomAlias);
+                        setMailMaskAliasInputValue(randomAlias);
                       }}
                     >
                       <SyncOutlined />
@@ -283,7 +289,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     style={{ width: "100%", marginTop: "36px" }}
                     disabled={
                       isEmailMaskAvailableLoading ||
-                      !mailMaskAlias ||
+                      !mailMaskAliasInputValue ||
                       isEmailMaskAvailableData?.isEmailMaskAvailable === false
                     }
                   >
