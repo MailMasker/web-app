@@ -1,18 +1,28 @@
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
+import React, { useCallback } from "react";
 
 import AccountDeletion from "../lib/AccountDeletion";
 import LayoutContainer from "../LayoutContainer";
 import LogInForgotPassword from "./LogInForgotPassword";
-import React from "react";
 import SignUp from "./SignUp";
+import localStorage from "../lib/localStorage";
 
-interface UnauthenticatedProps {
-  onAuthenticationSuccess: () => void;
-}
+interface UnauthenticatedProps {}
 
-const Unauthenticated: React.FC<UnauthenticatedProps> = ({
-  onAuthenticationSuccess,
-}) => {
+const Unauthenticated: React.FC<UnauthenticatedProps> = ({}) => {
+  const history = useHistory();
+
+  const onAuthenticationSuccess = useCallback(() => {
+    localStorage.setItem("global", "hasAuthenticatedOnce", "true");
+    history.push("/");
+  }, [history]);
+
   return (
     <BrowserRouter>
       <LayoutContainer authenticated={false}>

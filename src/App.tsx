@@ -23,16 +23,8 @@ import Settings from "./Settings";
 import Unauthenticated from "./Unauthenticated";
 import VerifyEmail from "./Unauthenticated/VerifyEmail";
 import { client } from "./apollo-client";
-import localStorage from "./lib/localStorage";
 
 const App: React.FC = () => {
-  const history = useHistory();
-
-  const onAuthenticationSuccess = useCallback(() => {
-    localStorage.setItem("global", "hasAuthenticatedOnce", "true");
-    history.push("/");
-  }, [history]);
-
   return (
     <ApolloProvider client={client}>
       <div className="App">
@@ -64,9 +56,7 @@ const App: React.FC = () => {
                 "/reset-password/user/:userID/code/:code/username/:username",
               ]}
             >
-              <Unauthenticated
-                onAuthenticationSuccess={onAuthenticationSuccess}
-              />
+              <Unauthenticated />
             </Route>
             <Route path="*">
               <Authenticated>

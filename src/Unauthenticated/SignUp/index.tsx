@@ -393,6 +393,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   ]}
                 >
                   <Input
+                    autoFocus
                     prefix={<UserOutlined />}
                     placeholder="Username"
                     autoComplete="username"
