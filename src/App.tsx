@@ -1,7 +1,14 @@
 import "antd/dist/antd.css";
 
+import {
+  BrowserRouter,
+  Link,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
 import { Button, Result } from "antd";
-import { Link, Redirect, Route, Router, Switch } from "react-router-dom";
 import React, { useCallback } from "react";
 
 import AccountDeletion from "./lib/AccountDeletion";
@@ -16,19 +23,20 @@ import Settings from "./Settings";
 import Unauthenticated from "./Unauthenticated";
 import VerifyEmail from "./Unauthenticated/VerifyEmail";
 import { client } from "./apollo-client";
-import { history } from "./history";
 import localStorage from "./lib/localStorage";
 
 const App: React.FC = () => {
+  const history = useHistory();
+
   const onAuthenticationSuccess = useCallback(() => {
     localStorage.setItem("global", "hasAuthenticatedOnce", "true");
     history.push("/");
-  }, []);
+  }, [history]);
 
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <Router history={history}>
+        <BrowserRouter>
           <Switch>
             <Route
               path="/verify-email/:email/code/:verificationCode"
@@ -97,7 +105,7 @@ const App: React.FC = () => {
               </Authenticated>
             </Route>
           </Switch>
-        </Router>
+        </BrowserRouter>
       </div>
     </ApolloProvider>
   );

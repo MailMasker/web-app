@@ -28,9 +28,23 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = ({
               onAuthenticationSuccess={onAuthenticationSuccess}
             />
           </Route>
-          <Route path={["/sign-up"]}>
-            <SignUp onAuthenticationSuccess={onAuthenticationSuccess} />
-          </Route>
+          <Route
+            path={["/sign-up"]}
+            render={(routeProps) => {
+              const state = routeProps.history?.location?.state as
+                | {
+                    step: number | undefined;
+                  }
+                | undefined;
+              const step = state?.step ?? 0;
+              return (
+                <SignUp
+                  onAuthenticationSuccess={onAuthenticationSuccess}
+                  key={step}
+                />
+              );
+            }}
+          />
           <Route path="/account-deleted">
             <AccountDeletion />
           </Route>

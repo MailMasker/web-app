@@ -23,6 +23,7 @@ Bugsnag.start({
 const ErrorBoundary = Bugsnag.getPlugin("react");
 
 ReactDOM.render(
+  // @ts-ignore
   <ErrorBoundary>
     <App />
   </ErrorBoundary>,

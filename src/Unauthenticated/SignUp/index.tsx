@@ -65,24 +65,18 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
   const onSubmit =
     step === 0
       ? (values: any) => {
-          history.push({
-            pathname: "/sign-up",
-            state: {
-              ...history.location.state,
-              mailMaskAlias: values.mailMaskAlias,
-              step: 1,
-            },
+          history.push("/sign-up", {
+            ...history.location.state,
+            mailMaskAlias: values.mailMaskAlias,
+            step: 1,
           });
         }
       : step === 1
       ? (values: any) => {
-          history.push({
-            pathname: "/sign-up",
-            state: {
-              ...history.location.state,
-              emailAddress: values.emailAddress,
-              step: 2,
-            },
+          history.push("/sign-up", {
+            ...history.location.state,
+            emailAddress: values.emailAddress,
+            step: 2,
           });
         }
       : (values: any) => {
