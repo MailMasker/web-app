@@ -52,32 +52,26 @@ const Settings = () => {
     return (
       <React.Fragment>
         <Tabs
-          activeKey={tabMatch?.params.tab ?? "username-password"}
+          activeKey={tabMatch?.params.tab ?? "account"}
           onChange={(activeKey: string) =>
             history.push(`/settings/${activeKey}`)
           }
           animated={{ tabPane: false, inkBar: true }}
         >
+          <Tabs.TabPane tab="Account" key="account">
+            <VerifiedEmailsSettings />
+            <ReservedMailMasksSettings />
+          </Tabs.TabPane>
           <Tabs.TabPane tab="Username & Password" key="username-password">
             <UsernameAndPassword />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Verified Emails" key="verified-emails">
-            <VerifiedEmailsSettings />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Reserved Mail Masks" key="reserved-mail-masks">
-            <ReservedMailMasksSettings />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Privacy" key="privacy">
+          <Tabs.TabPane tab="Privacy & Data Export" key="data-privacy">
             <PrivacySettings />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Export Data" key="export-data">
             <DataExport />
+            <StartAccountDeletion />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Plan & Billing" key="billing">
             <BillingSettings />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Delete Account" key="delete-account">
-            <StartAccountDeletion />
           </Tabs.TabPane>
         </Tabs>
       </React.Fragment>

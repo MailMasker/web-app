@@ -355,7 +355,7 @@ const Home: React.FC<HomeProps> = () => {
               <TabPane
                 tab={
                   <span>
-                    Stops Forwarding Soon
+                    Stops Soon
                     {expiringSoonData.length > 0 && (
                       <Badge
                         count={expiringSoonData.length}

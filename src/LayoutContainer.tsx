@@ -1,4 +1,4 @@
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu } from "antd";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 
 import HeaderLogo from "./HeaderLogo";
@@ -6,7 +6,6 @@ import React from "react";
 import { SettingOutlined } from "@ant-design/icons";
 
 const { Header, Content, Footer } = Layout;
-const { SubMenu } = Menu;
 
 interface LayoutContainerProps {
   authenticated: boolean;
@@ -44,7 +43,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
         <div
           style={{
             display: "flex",
-            maxWidth: "1200px",
+            maxWidth: "800px",
             justifyContent: "space-between",
             margin: "0px auto",
           }}
@@ -54,7 +53,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
               <HeaderLogo style={{ marginLeft: "24px" }} />
             </Link>
           </div>
-          <div>
+          <div style={{ marginRight: "24px" }}>
             {authenticated ? (
               <Menu
                 onClick={console.log}
@@ -64,7 +63,6 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
                 onSelect={(param) => history.push(`${param.selectedKeys[0]}`)}
               >
                 <Menu.Item key="/">Mail Masks</Menu.Item>
-                <Menu.Item key="/log-out">Log Out</Menu.Item>
                 <Menu.Item key="/settings">
                   <SettingOutlined />
                 </Menu.Item>
@@ -85,7 +83,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
       </Header>
       <Content
         style={{
-          maxWidth: "1200px",
+          maxWidth: "800px",
           margin: "0px auto",
           width: "100%",
           display: "flex",
@@ -102,8 +100,26 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
           {children}
         </div>
       </Content>
-      <Footer style={{ textAlign: "center" }}>
-        Mail Masker © 2020 Dewpoint Solutions, Inc
+      <Footer>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            maxWidth: "800px",
+            width: "100%",
+            margin: "0px auto",
+          }}
+        >
+          <div>Mail Masker © 2020 Dewpoint Solutions, Inc</div>
+          <div>
+            <Link to="/help">
+              <Button type="link">Help</Button>
+            </Link>
+            <Link to="/log-out">
+              <Button type="link">Log Out</Button>
+            </Link>
+          </div>
+        </div>
       </Footer>
     </Layout>
   );
