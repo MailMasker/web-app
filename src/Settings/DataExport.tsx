@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 import { useExportDataLazyQuery } from "./generated/ExportData";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 const DataExport: React.FC<{}> = () => {
   const [

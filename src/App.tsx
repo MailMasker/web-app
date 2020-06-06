@@ -1,15 +1,7 @@
 import "antd/dist/antd.css";
 
-import {
-  BrowserRouter,
-  Link,
-  Redirect,
-  Route,
-  Switch,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter, Link, Redirect, Route, Switch } from "react-router-dom";
 import { Button, Result } from "antd";
-import React, { useCallback } from "react";
 
 import AccountDeletion from "./lib/AccountDeletion";
 import { ApolloProvider } from "@apollo/react-hooks";
@@ -19,6 +11,7 @@ import CheckoutSuccess from "./CheckoutCallback/CheckoutSuccess";
 import Home from "./Home";
 import LayoutContainer from "./LayoutContainer";
 import LogOut from "./LogOut/LogOut";
+import React from "react";
 import Settings from "./Settings";
 import Unauthenticated from "./Unauthenticated";
 import VerifyEmail from "./Unauthenticated/VerifyEmail";

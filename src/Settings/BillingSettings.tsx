@@ -1,13 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  List,
-  Popover,
-  Result,
-  Space,
-  Typography,
-} from "antd";
+import { Button, List, Popover, Result, Space, Typography } from "antd";
 
 import Bugsnag from "@bugsnag/js";
 import ErrorAlert from "../lib/ErrorAlert";
@@ -18,7 +9,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useCreateCheckoutSessionMutation } from "./generated/CreateCheckoutSessionMutation";
 import { useMeQuery } from "../Home/generated/MeQuery";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 if (!process.env.REACT_APP_STRIPE_PUBLIC_KEY) {
   Bugsnag.notify("missing process.env.REACT_APP_STRIPE_PUBLIC_KEY");

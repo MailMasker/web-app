@@ -15,7 +15,7 @@ import localStorage from "../lib/localStorage";
 
 interface UnauthenticatedProps {}
 
-const Unauthenticated: React.FC<UnauthenticatedProps> = ({}) => {
+const Unauthenticated: React.FC<UnauthenticatedProps> = () => {
   const history = useHistory();
 
   const onAuthenticationSuccess = useCallback(() => {

@@ -16,7 +16,7 @@ const { Text, Title } = Typography;
 const VerifiedEmailSettings: React.FC<{}> = () => {
   // We don't need to handle loading or error states because
   // the Me query is always loaded at this point
-  const { data, loading, error } = useMeQuery({
+  const { data } = useMeQuery({
     fetchPolicy: "cache-first",
   });
 

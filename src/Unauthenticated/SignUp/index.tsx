@@ -123,7 +123,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
         });
       }
     },
-    [debouncedDesiredEmailMaskAlias] // Only call effect if debounced search term changes
+    [debouncedDesiredEmailMaskAlias, isEmailMaskAvailable] // Only call effect if debounced search term changes
   );
 
   return (
@@ -241,7 +241,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       !mailMaskAliasInputValue
                         ? undefined
                         : isEmailMaskAvailableLoading ||
-                          mailMaskAliasInputValue !=
+                          mailMaskAliasInputValue !==
                             debouncedDesiredEmailMaskAlias
                         ? "Checking availability..."
                         : isEmailMaskAvailableData &&

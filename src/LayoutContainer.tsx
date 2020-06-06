@@ -1,4 +1,4 @@
-import { Layout, Menu, Tag, Typography } from "antd";
+import { Layout, Menu } from "antd";
 import { Link, useHistory } from "react-router-dom";
 
 import HeaderLogo from "./HeaderLogo";

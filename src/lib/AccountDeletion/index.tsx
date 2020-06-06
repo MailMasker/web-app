@@ -9,19 +9,11 @@ import {
   Typography,
 } from "antd";
 import {
-  CheckCircleOutlined,
-  DownloadOutlined,
-  LoadingOutlined,
-  LockOutlined,
-  SmileOutlined,
-  SolutionOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import {
   DeleteUserMutation,
   useDeleteUserMutation,
 } from "../generated/DeleteUser";
-import React, { useEffect, useState } from "react";
+import { DownloadOutlined, LockOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
 import Bugsnag from "@bugsnag/js";
@@ -33,14 +25,9 @@ import { useApolloClient } from "@apollo/react-hooks";
 const AccountDeletion: React.FC<{}> = () => {
   const [
     deleteUser,
-    {
-      data: deleteUserData,
-      loading: deleteUserLoading,
-      error: deleteUserError,
-    },
+    { loading: deleteUserLoading, error: deleteUserError },
   ] = useDeleteUserMutation();
 
-  const deleteAccountMatch = useRouteMatch("/delete-account");
   const accountDeletedMatch = useRouteMatch("/account-deleted");
   const history = useHistory<{
     accountDeletionResult?: DeleteUserMutation;
