@@ -1,7 +1,7 @@
 import "antd/dist/antd.css";
 
-import { BrowserRouter, Link, Redirect, Route, Switch } from "react-router-dom";
 import { Button, Result } from "antd";
+import { Link, Redirect, Route, Router, Switch } from "react-router-dom";
 
 import AccountDeletion from "./lib/AccountDeletion";
 import { ApolloProvider } from "@apollo/react-hooks";
@@ -16,12 +16,13 @@ import Settings from "./Settings";
 import Unauthenticated from "./Unauthenticated";
 import VerifyEmail from "./Unauthenticated/VerifyEmail";
 import { client } from "./apollo-client";
+import { history } from "./history";
 
 const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <BrowserRouter>
+        <Router history={history}>
           <Switch>
             <Route
               path="/verify-email/:email/code/:verificationCode"
@@ -88,7 +89,7 @@ const App: React.FC = () => {
               </Authenticated>
             </Route>
           </Switch>
-        </BrowserRouter>
+        </Router>
       </div>
     </ApolloProvider>
   );
