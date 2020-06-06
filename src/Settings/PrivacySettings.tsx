@@ -3,6 +3,7 @@ import { CheckCircleTwoTone, StopTwoTone } from "@ant-design/icons";
 import React, { useMemo } from "react";
 
 import { ColumnProps } from "antd/lib/table";
+import supportedEmailDomains from "../lib/supportedEmailDomains";
 
 const { Text, Title } = Typography;
 
@@ -52,9 +53,9 @@ const PrivacySettings: React.FC<{}> = () => {
               ** we don't currently offer a way to clear any emails that fail to
               be deleted due to some. If this a feature that's important to you,
               please let us know (
-              <Text copyable={{ text: "support@mailmasker.com" }}>
-                <a href="mailto:support@mailmasker.com">
-                  support@mailmasker.com
+              <Text copyable={{ text: `support${supportedEmailDomains[0]}` }}>
+                <a href={`mailto:support${supportedEmailDomains[0]}`}>
+                  support@{supportedEmailDomains[0]}
                 </a>
               </Text>
               ). While your email content should rarely, if ever, be deleted
@@ -87,9 +88,9 @@ const PrivacySettings: React.FC<{}> = () => {
               only reason that this is not deletable is because we didn't think
               it would need to be deleted. If this being deletable is important
               to you, please let us know (
-              <Text copyable={{ text: "support@mailmasker.com" }}>
-                <a href="mailto:support@mailmasker.com">
-                  support@mailmasker.com
+              <Text copyable={{ text: `support${supportedEmailDomains[0]}` }}>
+                <a href={`mailto:support${supportedEmailDomains[0]}`}>
+                  support@{supportedEmailDomains[0]}
                 </a>
               </Text>
               ).

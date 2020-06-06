@@ -6,6 +6,7 @@ import React from "react";
 import { StarTwoTone } from "@ant-design/icons";
 import { green } from "@ant-design/colors";
 import { loadStripe } from "@stripe/stripe-js";
+import supportedEmailDomains from "../lib/supportedEmailDomains";
 import { useCreateCheckoutSessionMutation } from "./generated/CreateCheckoutSessionMutation";
 import { useMeQuery } from "../Home/generated/MeQuery";
 
@@ -88,8 +89,10 @@ const BillingSettings: React.FC<{}> = () => {
           subTitle={
             <div>
               To cancel, email us at{" "}
-              <Text copyable={{ text: "cancel@mailmasker.com" }}>
-                <a href="mailto:cancel@mailmasker.com">cancel@mailmasker.com</a>
+              <Text copyable={{ text: `cancel@${supportedEmailDomains[0]}` }}>
+                <a href={`mailto:cancel@${supportedEmailDomains[0]}`}>
+                  cancel@{supportedEmailDomains[0]}
+                </a>
               </Text>
             </div>
           }
@@ -241,8 +244,10 @@ const BillingSettings: React.FC<{}> = () => {
           <p style={{ marginTop: "36px" }}>
             Have a question?
             <br />
-            <Text copyable={{ text: "plans@mailmasker.com" }}>
-              <a href="mailto:plans@mailmasker.com">plans@mailmasker.com</a>
+            <Text copyable={{ text: `plans@${supportedEmailDomains[0]}` }}>
+              <a href={`mailto:plans@${supportedEmailDomains[0]}`}>
+                plans@{supportedEmailDomains[0]}
+              </a>
             </Text>
           </p>
         </React.Fragment>

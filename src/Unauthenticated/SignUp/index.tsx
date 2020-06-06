@@ -23,6 +23,7 @@ import ErrorAlert from "../../lib/ErrorAlert";
 import { green } from "@ant-design/colors";
 // @ts-ignore
 import randomWords from "random-words";
+import supportedEmailDomains from "../../lib/supportedEmailDomains";
 import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import useDebounce from "../../lib/useDebounce";
 import { useHistory } from "react-router-dom";
@@ -94,8 +95,9 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
               password: values.password,
               uuid: uuidv4(),
               persistent: values.remember as boolean,
-              emailMask: `${history.location.state?.mailMaskAlias ??
-                ""}@mailmasker.com`,
+              emailMask: `${history.location.state?.mailMaskAlias ?? ""}@${
+                supportedEmailDomains[0]
+              }`,
               verifiedEmail: history.location.state?.emailAddress ?? "",
             },
           })
@@ -118,7 +120,8 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
       if (debouncedDesiredEmailMaskAlias) {
         isEmailMaskAvailable({
           variables: {
-            email: debouncedDesiredEmailMaskAlias + "@mailmasker.com",
+            email:
+              debouncedDesiredEmailMaskAlias + "@" + supportedEmailDomains[0],
           },
         });
       }
@@ -246,7 +249,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                         ? "Checking availability..."
                         : isEmailMaskAvailableData &&
                           isEmailMaskAvailableData.isEmailMaskAvailable
-                        ? `${debouncedDesiredEmailMaskAlias}@mailmasker.com is available`
+                        ? `${debouncedDesiredEmailMaskAlias}@${supportedEmailDomains[0]} is available`
                         : isEmailMaskAvailableError
                         ? isEmailMaskAvailableError.message
                         : isEmailMaskAvailableData &&
@@ -259,7 +262,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       placeholder="you"
                       style={{ textAlign: "end" }}
                       autoComplete="none"
-                      addonAfter="@mailmasker.com"
+                      addonAfter={`@${supportedEmailDomains[0]}`}
                       autoFocus
                     />
                   </Form.Item>
@@ -316,8 +319,8 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   <p>
                     Where should we forward email sent to{" "}
                     <strong>
-                      {history.location.state?.mailMaskAlias ?? "you"}
-                      @mailmasker.com
+                      {history.location.state?.mailMaskAlias ?? "you"}@
+                      {supportedEmailDomains[0]}
                     </strong>{" "}
                     ?
                   </p>

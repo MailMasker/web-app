@@ -23,6 +23,7 @@ import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
 import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import supportedEmailDomains from "../lib/supportedEmailDomains";
 
 dayjs.extend(relativeTime);
 
@@ -176,10 +177,10 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
                         personal information about you.
                       </li>
                       <li>
-                        Once you use a Mail Mask (ex: jane@mailmasker.com), it
-                        belongs to your account forever. Even if you decide to
-                        terminate your account, it cannot be used by anyone else
-                        in the future.
+                        Once you use a Mail Mask (ex: jane@
+                        {supportedEmailDomains[0]}), it belongs to your account
+                        forever. Even if you decide to terminate your account,
+                        it cannot be used by anyone else in the future.
                       </li>
                       <li>
                         Immediately after we receive an email at one of your
