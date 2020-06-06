@@ -8,6 +8,7 @@ import {
 import React, { useCallback } from "react";
 
 import AccountDeletion from "../lib/AccountDeletion";
+import Help from "./Help";
 import LayoutContainer from "../LayoutContainer";
 import LogInForgotPassword from "./LogInForgotPassword";
 import SignUp from "./SignUp";
@@ -57,6 +58,9 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = () => {
           />
           <Route path="/account-deleted">
             <AccountDeletion />
+          </Route>
+          <Route path="/help">
+            <Help />
           </Route>
           <Route path="/reset-password">
             <Redirect to="/forgot-password" />

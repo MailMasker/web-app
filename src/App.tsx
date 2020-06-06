@@ -48,6 +48,7 @@ const App: React.FC = () => {
                 "/forgot-password",
                 "/account-deleted",
                 "/reset-password/user/:userID/code/:code/username/:username",
+                "/help",
               ]}
             >
               <Unauthenticated />

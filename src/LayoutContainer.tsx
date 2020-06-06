@@ -1,9 +1,9 @@
 import { Layout, Menu } from "antd";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
 
 import HeaderLogo from "./HeaderLogo";
 import React from "react";
-import { useMeQuery } from "./Home/generated/MeQuery";
+import { SettingOutlined } from "@ant-design/icons";
 
 const { Header, Content, Footer } = Layout;
 const { SubMenu } = Menu;
@@ -17,7 +17,26 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
   children,
 }) => {
   const history = useHistory();
-  const { data: meQueryData } = useMeQuery({ fetchPolicy: "cache-only" });
+
+  const mailMasksMatch = useRouteMatch({ path: "/", exact: true });
+  const helpMatch = useRouteMatch("/help");
+  const logOutMatch = useRouteMatch("/log-out");
+  const settingsMatch = useRouteMatch("/settings");
+
+  const rightMenuSelectedKeys = [];
+  if (authenticated) {
+    if (mailMasksMatch) {
+      rightMenuSelectedKeys.push("/");
+    } else if (logOutMatch) {
+      rightMenuSelectedKeys.push("/log-out");
+    } else if (settingsMatch) {
+      rightMenuSelectedKeys.push("/settings");
+    }
+  } else {
+    if (helpMatch) {
+      rightMenuSelectedKeys.push("/help");
+    }
+  }
 
   return (
     <Layout style={{ minHeight: "100vh", backgroundColor: "#fff" }}>
@@ -39,30 +58,26 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
             {authenticated ? (
               <Menu
                 onClick={console.log}
-                selectedKeys={["setting:1"]}
+                selectedKeys={rightMenuSelectedKeys}
                 mode="horizontal"
                 theme="dark"
-                onSelect={(param) => history.push(`/${param.selectedKeys[0]}`)}
+                onSelect={(param) => history.push(`${param.selectedKeys[0]}`)}
               >
-                <SubMenu title={meQueryData?.me.user.username ?? "Account"}>
-                  <Menu.Item key="settings">Settings</Menu.Item>
-                  <Menu.Item
-                    key="log-out"
-                    onSelect={() => history.push("/log-out")}
-                  >
-                    Log Out
-                  </Menu.Item>
-                </SubMenu>
+                <Menu.Item key="/">Mail Masks</Menu.Item>
+                <Menu.Item key="/log-out">Log Out</Menu.Item>
+                <Menu.Item key="/settings">
+                  <SettingOutlined />
+                </Menu.Item>
               </Menu>
             ) : (
               <Menu
                 theme="dark"
                 mode="horizontal"
-                defaultSelectedKeys={["2"]}
+                selectedKeys={rightMenuSelectedKeys}
                 style={{ lineHeight: "64px" }}
-                onSelect={() => history.push("/sign-up")}
+                onSelect={() => history.push("/help")}
               >
-                <Menu.Item key="1">Help</Menu.Item>
+                <Menu.Item key="/help">Help</Menu.Item>
               </Menu>
             )}
           </div>

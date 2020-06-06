@@ -8,6 +8,7 @@ import PrivacySettings from "./PrivacySettings";
 import React from "react";
 import ReservedMailMasksSettings from "./ReservedMailMasksSettings";
 import StartAccountDeletion from "./StartAccountDeletion";
+import UsernameAndPassword from "./UsernameAndPassword";
 import VerifiedEmailsSettings from "./VerifiedEmailsSettings";
 import { useMeQuery } from "../Home/generated/MeQuery";
 
@@ -19,7 +20,7 @@ type TabType =
   | "delete-account"
   | "export-data";
 
-const SettingsContent: React.FC<{}> = () => {
+const Settings = () => {
   // We don't need to handle loading or error states because
   // the Me query is always loaded at this point
   const { data, loading, error } = useMeQuery({
@@ -51,12 +52,15 @@ const SettingsContent: React.FC<{}> = () => {
     return (
       <React.Fragment>
         <Tabs
-          activeKey={tabMatch?.params.tab ?? "verified-emails"}
+          activeKey={tabMatch?.params.tab ?? "username-password"}
           onChange={(activeKey: string) =>
             history.push(`/settings/${activeKey}`)
           }
           animated={{ tabPane: false, inkBar: true }}
         >
+          <Tabs.TabPane tab="Username & Password" key="username-password">
+            <UsernameAndPassword />
+          </Tabs.TabPane>
           <Tabs.TabPane tab="Verified Emails" key="verified-emails">
             <VerifiedEmailsSettings />
           </Tabs.TabPane>
@@ -81,20 +85,6 @@ const SettingsContent: React.FC<{}> = () => {
   } else {
     return null;
   }
-};
-
-const Settings: React.FC<{}> = () => {
-  return (
-    <React.Fragment>
-      <Space size="large" direction="vertical" style={{ width: "100%" }}>
-        <PageHeader title="Settings">
-          <Space size="large" direction="vertical" style={{ width: "100%" }}>
-            <SettingsContent />
-          </Space>
-        </PageHeader>
-      </Space>
-    </React.Fragment>
-  );
 };
 
 export default Settings;
