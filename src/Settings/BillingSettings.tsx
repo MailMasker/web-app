@@ -26,13 +26,11 @@ const BillingSettings: React.FC<{}> = () => {
   const freeFeatures = [
     {
       title: "Your Mail Masks are yours forever",
-      description:
-        "Once you create a Mail Mask (ex: you@mailmasker.com), it belongs to your account forever and no one else can use it.",
+      description: `Once you create a Mail Mask (ex: you@${supportedEmailDomains[0]}), it belongs to your account forever and no one else can use it.`,
     },
     {
       title: "3 primary Mail Masks",
-      description:
-        "You can create up to 3 Mail Masks (ex: you@mailmasker.com), and unlimited secondary masks (ex: you.whatever1@mailmasker.com, you.whatever2@mailmasker.com, etc)",
+      description: `You can create up to 3 Mail Masks (ex: you@${supportedEmailDomains[0]}), and unlimited secondary masks (ex: you.whatever1@${supportedEmailDomains[0]}, you.whatever2@${supportedEmailDomains[0]}, etc)`,
     },
     {
       title: "Unlimited secondary Mail Masks",
@@ -44,6 +42,10 @@ const BillingSettings: React.FC<{}> = () => {
       description:
         "Verified Email addresses are where we forward email received at your Mail Masks.",
     },
+    {
+      title: "-",
+      description: "",
+    },
   ];
 
   const premiumFeatures = [
@@ -53,8 +55,7 @@ const BillingSettings: React.FC<{}> = () => {
     },
     {
       title: "Unlimited primary Mail Masks",
-      description:
-        "Create as many as you'd like: you1@mailmasker.com, you2@mailmasker.com, etc",
+      description: `Create as many as you'd like: you1@${supportedEmailDomains[0]}, you2@${supportedEmailDomains[0]}, etc`,
     },
     {
       title: "Unlimited Verified Emails",
@@ -63,7 +64,11 @@ const BillingSettings: React.FC<{}> = () => {
     },
     {
       title: "Automatically-stopping Mail Masks",
-      description: `You can add ".14d" to any Mail Mask (ex: you.14d@mailmasker.com) and that Mail Mask will automatically stop forwarding email in 14 days.`,
+      description: `You can add ".14d" to any Mail Mask (ex: you.14d@${supportedEmailDomains[0]}) and that Mail Mask will automatically stop forwarding email in 14 days.`,
+    },
+    {
+      title: `Forward to stop@${supportedEmailDomains[0]}`,
+      description: `Forward any email that you receive via one of your Mail Masks to stop the Mail Mask immediately.`,
     },
   ];
 
