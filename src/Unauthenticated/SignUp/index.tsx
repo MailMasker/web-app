@@ -143,16 +143,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
               width: "100%",
             }}
           >
-            <Radio.Group
-              onChange={(e) => {
-                history.push(e.target.value);
-              }}
-              style={{ marginBottom: 8 }}
-              value={history.location.pathname}
-            >
-              <Radio.Button value="/sign-up">Sign Up</Radio.Button>
-              <Radio.Button value="/log-in">Log In</Radio.Button>
-            </Radio.Group>
             <Typography.Title level={2}>Sign Up</Typography.Title>
             <div
               style={{
@@ -263,7 +253,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       style={{ textAlign: "end" }}
                       autoComplete="none"
                       addonAfter={`@${supportedEmailDomains[0]}`}
-                      autoFocus
                     />
                   </Form.Item>
                   <Tooltip placement="right" title="Random">
@@ -336,7 +325,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   ]}
                 >
                   <Input
-                    autoFocus
                     prefix={<MailOutlined />}
                     placeholder="you@example.com"
                     style={{ textAlign: "center" }}
@@ -396,7 +384,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   ]}
                 >
                   <Input
-                    autoFocus
                     prefix={<UserOutlined />}
                     placeholder="Username"
                     autoComplete="username"

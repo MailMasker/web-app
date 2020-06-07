@@ -13,6 +13,8 @@
     "dayjs": "^1.8.25",
     "eslint-plugin-react-hooks": "^4.0.4",
     "file-saver": "eligrey/FileSaver.js#master",
+    "gatsby-cli": "^2.12.44",
+    "global": "^4.4.0",
     "graphql": "^14.5.8",
     "history": "^4.10.1",
     "random-words": "^1.1.1",

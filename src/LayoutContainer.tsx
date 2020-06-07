@@ -21,6 +21,8 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
   const helpMatch = useRouteMatch("/help");
   const logOutMatch = useRouteMatch("/log-out");
   const settingsMatch = useRouteMatch("/settings");
+  const logInMatch = useRouteMatch("/log-in");
+  const signUpMatch = useRouteMatch("/sign-up");
 
   const rightMenuSelectedKeys = [];
   if (authenticated) {
@@ -34,6 +36,10 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
   } else {
     if (helpMatch) {
       rightMenuSelectedKeys.push("/help");
+    } else if (logInMatch) {
+      rightMenuSelectedKeys.push("/log-in");
+    } else if (signUpMatch) {
+      rightMenuSelectedKeys.push("/sign-up");
     }
   }
 
@@ -73,8 +79,10 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
                 mode="horizontal"
                 selectedKeys={rightMenuSelectedKeys}
                 style={{ lineHeight: "64px" }}
-                onSelect={() => history.push("/help")}
+                onSelect={(param) => history.push(`${param.selectedKeys[0]}`)}
               >
+                <Menu.Item key="/sign-up">Sign Up</Menu.Item>
+                <Menu.Item key="/log-in">Log In</Menu.Item>
                 <Menu.Item key="/help">Help</Menu.Item>
               </Menu>
             )}
@@ -115,9 +123,11 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({
             <Link to="/help">
               <Button type="link">Help</Button>
             </Link>
-            <Link to="/log-out">
-              <Button type="link">Log Out</Button>
-            </Link>
+            {authenticated && (
+              <Link to="/log-out">
+                <Button type="link">Log Out</Button>
+              </Link>
+            )}
           </div>
         </div>
       </Footer>
