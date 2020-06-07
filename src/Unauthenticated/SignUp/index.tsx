@@ -18,6 +18,8 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import useQueryParams, { QueryParams } from "../../lib/useQueryParam";
 
 import ErrorAlert from "../../lib/ErrorAlert";
 import { green } from "@ant-design/colors";
@@ -26,7 +28,6 @@ import randomWords from "random-words";
 import supportedEmailDomains from "../../lib/supportedEmailDomains";
 import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import useDebounce from "../../lib/useDebounce";
-import { useHistory } from "react-router-dom";
 import { useIsEmailMaskAvailableLazyQuery } from "./generated/IsEmailMaskAvailableQuery";
 import useIsMobile from "../../lib/useIsMobile";
 import { uuidv4 } from "../../lib/uuid";
@@ -46,6 +47,8 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
     mailMaskAlias: string | undefined;
     emailAddress: string | undefined;
   }>();
+
+  const [queryParams] = useQueryParams(useState<QueryParams<"alias">>({}));
 
   const [
     createAccount,
@@ -129,6 +132,12 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
     [debouncedDesiredEmailMaskAlias, isEmailMaskAvailable] // Only call effect if debounced search term changes
   );
 
+  useEffect(() => {
+    if (queryParams.alias) {
+      setMailMaskAliasInputValue(queryParams.alias);
+    }
+  }, [queryParams.alias]);
+
   return (
     <React.Fragment>
       <React.Fragment>
@@ -180,7 +189,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                 key="choose_mail_mask"
                 initialValues={{
                   remember: true,
-                  mailMaskAlias: "",
+                  mailMaskAlias: queryParams.alias ?? "",
                 }}
                 onFinish={onSubmit}
                 style={{ width: "300px", marginTop: "24px" }}
@@ -230,23 +239,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                         ? "error"
                         : undefined
                     }
-                    help={
-                      !mailMaskAliasInputValue
-                        ? undefined
-                        : isEmailMaskAvailableLoading ||
-                          mailMaskAliasInputValue !==
-                            debouncedDesiredEmailMaskAlias
-                        ? "Checking availability..."
-                        : isEmailMaskAvailableData &&
-                          isEmailMaskAvailableData.isEmailMaskAvailable
-                        ? `${debouncedDesiredEmailMaskAlias}@${supportedEmailDomains[0]} is available`
-                        : isEmailMaskAvailableError
-                        ? isEmailMaskAvailableError.message
-                        : isEmailMaskAvailableData &&
-                          !isEmailMaskAvailableData.isEmailMaskAvailable
-                        ? "Already taken – please try something else"
-                        : undefined
-                    }
                   >
                     <Input
                       placeholder="you"
@@ -272,13 +264,39 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     </Button>
                   </Tooltip>
                 </div>
+                <div
+                  style={{
+                    marginTop: "24px",
+                    textAlign: "center",
+                    color: isEmailMaskAvailableData ? green[6] : undefined,
+                    fontSize: "1.2em",
+                  }}
+                >
+                  <strong>
+                    {!mailMaskAliasInputValue
+                      ? " "
+                      : isEmailMaskAvailableLoading ||
+                        mailMaskAliasInputValue !==
+                          debouncedDesiredEmailMaskAlias
+                      ? "Checking availability..."
+                      : isEmailMaskAvailableData &&
+                        isEmailMaskAvailableData.isEmailMaskAvailable
+                      ? `Available!`
+                      : isEmailMaskAvailableError
+                      ? isEmailMaskAvailableError.message
+                      : isEmailMaskAvailableData &&
+                        !isEmailMaskAvailableData.isEmailMaskAvailable
+                      ? "Already taken – please try something else"
+                      : " "}
+                  </strong>
+                </div>
                 <Form.Item>
                   <ErrorAlert error={signUpError} />
                   <Button
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
-                    style={{ width: "100%", marginTop: "36px" }}
+                    style={{ width: "100%", marginTop: "24px" }}
                     disabled={
                       isEmailMaskAvailableLoading ||
                       !mailMaskAliasInputValue ||
