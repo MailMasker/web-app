@@ -17,6 +17,10 @@ if (!process.env.REACT_APP_STRIPE_PUBLIC_KEY) {
   Bugsnag.notify("missing process.env.REACT_APP_STRIPE_PUBLIC_KEY");
 }
 
+if (!process.env.REACT_APP_STRIPE_PRICE_ID) {
+  Bugsnag.notify("missing process.env.REACT_APP_STRIPE_PRICE_ID");
+}
+
 const BillingSettings: React.FC<{}> = () => {
   const { data: meQueryData } = useMeQuery({ fetchPolicy: "cache-only" });
 
@@ -208,7 +212,6 @@ const PlansDescription = ({
                 <Typography.Title level={4} style={{ margin: "6px" }}>
                   $1 / month
                 </Typography.Title>
-                <div>or $9 / year</div>
               </div>
             </React.Fragment>
           }
@@ -237,7 +240,9 @@ const PlansDescription = ({
                     const {
                       data: createCheckoutSessionData,
                     } = await createCheckoutSession({
-                      variables: { priceID: "price_HKTm0UENhnuIIJ" },
+                      variables: {
+                        priceID: process.env.REACT_APP_STRIPE_PRICE_ID ?? "",
+                      },
                     });
                     const { error } = await stripe.redirectToCheckout({
                       sessionId:

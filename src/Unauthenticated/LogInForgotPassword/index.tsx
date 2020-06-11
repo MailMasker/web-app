@@ -4,13 +4,12 @@ import {
   Checkbox,
   Form,
   Input,
-  Radio,
   Space,
   Typography,
   message,
   notification,
 } from "antd";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 import ErrorAlert from "../../lib/ErrorAlert";
@@ -30,7 +29,6 @@ const LogInForgotPassword = ({
 }: LogInForgotPasswordProps) => {
   const [form] = Form.useForm();
 
-  const history = useHistory();
   const logInMatch = useRouteMatch("/log-in");
   const forgotPasswordMatch = useRouteMatch("/forgot-password");
   const resetPasswordMatch = useRouteMatch<{
@@ -59,7 +57,6 @@ const LogInForgotPassword = ({
   ] = useResetPasswordMutation();
 
   const onSubmitLogIn = (values: any) => {
-    console.info("Submitted form: ", values);
     logIn({
       variables: {
         username: values.username,
@@ -72,7 +69,6 @@ const LogInForgotPassword = ({
   };
 
   const onSubmitForgotPassword = (values: any) => {
-    console.info("Submitted form: ", values);
     sendResetPasswordEmail({
       variables: {
         usernameOrEmail: values.username,
@@ -83,7 +79,6 @@ const LogInForgotPassword = ({
   };
 
   const onSubmitResetPassword = (values: any) => {
-    console.info("Submitted form: ", values);
     resetPassword({
       variables: {
         newPassword: values.password,

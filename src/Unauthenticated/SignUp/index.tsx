@@ -3,7 +3,6 @@ import {
   Checkbox,
   Form,
   Input,
-  Radio,
   Space,
   Steps,
   Tooltip,
@@ -18,7 +17,6 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
 import useQueryParams, { QueryParams } from "../../lib/useQueryParam";
 
 import ErrorAlert from "../../lib/ErrorAlert";
@@ -28,6 +26,7 @@ import randomWords from "random-words";
 import supportedEmailDomains from "../../lib/supportedEmailDomains";
 import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import useDebounce from "../../lib/useDebounce";
+import { useHistory } from "react-router-dom";
 import { useIsEmailMaskAvailableLazyQuery } from "./generated/IsEmailMaskAvailableQuery";
 import useIsMobile from "../../lib/useIsMobile";
 import { uuidv4 } from "../../lib/uuid";
@@ -86,12 +85,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
           });
         }
       : (values: any) => {
-          console.info("Submitted form: ", values);
-          console.info("emailAddress: ", history.location.state?.emailAddress);
-          console.info(
-            "mailMaskAlias: ",
-            history.location.state?.mailMaskAlias
-          );
           createAccount({
             variables: {
               username: values.username,

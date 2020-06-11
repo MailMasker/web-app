@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useMeQuery } from "../Home/generated/MeQuery";
 import { useSendResetPasswordEmailMutation } from "../Unauthenticated/LogInForgotPassword/generated/SendResetPasswordEmailMutation";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 const UsernameAndPassword: React.FC<{}> = () => {
   // We don't need to handle loading or error states because
