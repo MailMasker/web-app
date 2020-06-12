@@ -350,7 +350,6 @@ const Home: React.FC<HomeProps> = () => {
         <PageHeader
           className="site-page-header-responsive"
           title="Mail Masks"
-          subTitle="Protect your real email address"
           extra={[
             <NewMailMaskModalAndButton key="new-mail-mask-modal-button" />,
           ]}
