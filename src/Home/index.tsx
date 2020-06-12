@@ -1,4 +1,5 @@
 import {
+  Alert,
   Badge,
   Empty,
   Modal,
@@ -21,9 +22,12 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import ModifyRouteExpiryDateButtonAndPopover from "./ModifyRouteExpiryDateButtonAndPopover";
 import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
 import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
+import { StarTwoTone } from "@ant-design/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
+import useIsPremium from "../lib/useIsPremium";
+import useLocalStorage from "../lib/useLocalStorage";
 
 dayjs.extend(relativeTime);
 
@@ -113,10 +117,10 @@ const mapEmailMasksFunctionFactory = ({ filter }: { filter: TabType }) => ({
     .flat();
 };
 
-const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
-  activeTab,
-  tableData,
-}) => {
+const MailMasksTable: React.FC<{
+  activeTab: TabType;
+  tableData: TableData[];
+}> = ({ activeTab, tableData }) => {
   const { data, loading, error } = useMeQuery({
     fetchPolicy: "cache-first",
   });
@@ -261,21 +265,19 @@ const HomeContent: React.FC<{ activeTab: TabType; tableData: TableData[] }> = ({
     return <ErrorAlert error={error} />;
   } else if (data) {
     return (
-      <React.Fragment>
-        <Table
-          bordered
-          columns={columns}
-          dataSource={tableData}
-          pagination={
-            tableData.length > 10 ? { position: ["bottomRight"] } : false
-          }
-          locale={{
-            emptyText: (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
-            ),
-          }}
-        />
-      </React.Fragment>
+      <Table
+        bordered
+        columns={columns}
+        dataSource={tableData}
+        pagination={
+          tableData.length > 10 ? { position: ["bottomRight"] } : false
+        }
+        locale={{
+          emptyText: (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
+          ),
+        }}
+      />
     );
   } else {
     return null;
@@ -292,6 +294,13 @@ const Home: React.FC<HomeProps> = () => {
   const { data } = useMeQuery({
     fetchPolicy: "cache-first",
   });
+
+  const isPremium = useIsPremium();
+
+  const [
+    hideStopMailMaskRequestTip,
+    setHideStopMailMaskRequestTip,
+  ] = useLocalStorage("hideStopMailMaskRequestTip", false);
 
   const activeData: TableData[] = useMemo(() => {
     if (!data) {
@@ -393,7 +402,33 @@ const Home: React.FC<HomeProps> = () => {
                 key="expired"
               />
             </Tabs>
-            <HomeContent activeTab={activeTab} tableData={tableData} />
+            <MailMasksTable activeTab={activeTab} tableData={tableData} />
+            {!isPremium && !hideStopMailMaskRequestTip && (
+              <Alert
+                message="Premium Feature"
+                description={
+                  <div>
+                    <div>
+                      Easily stop any of your Mail Masks by forwarding any email
+                      to{" "}
+                      <Text
+                        copyable={{ text: `stop@${supportedEmailDomains[0]}` }}
+                      >
+                        <a href={`mailto:stop@${supportedEmailDomains[0]}`}>
+                          stop@{supportedEmailDomains[0]}
+                        </a>
+                      </Text>
+                      .
+                    </div>
+                  </div>
+                }
+                type="info"
+                icon={<StarTwoTone />}
+                showIcon
+                closable
+                onClose={() => setHideStopMailMaskRequestTip(true)}
+              />
+            )}
           </Space>
         </PageHeader>
       </Space>
