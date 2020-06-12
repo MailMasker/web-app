@@ -277,7 +277,11 @@ const PrivacySettings: React.FC<{}> = () => {
           <div>
             <p>
               For more, see our{" "}
-              <a href="https://www.mailmasker.com/privacy" target="_blank">
+              <a
+                href="https://www.mailmasker.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Button type="link" style={{ margin: 0, padding: 0 }}>
                   Privacy Policy
                 </Button>

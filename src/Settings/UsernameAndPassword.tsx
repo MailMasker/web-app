@@ -1,4 +1,4 @@
-import { Button, Typography, message } from "antd";
+import { Button, Space, Typography, message } from "antd";
 import React, { memo } from "react";
 
 import ErrorAlert from "../lib/ErrorAlert";
@@ -25,56 +25,73 @@ const UsernameAndPassword: React.FC<{}> = () => {
   ] = useSendResetPasswordEmailMutation();
 
   return (
-    <React.Fragment>
-      <Title level={3}>Username</Title>
-      <div>
-        <p>
-          <Typography.Text copyable>
-            {meQueryData?.me.user.username}
-          </Typography.Text>
-        </p>
-        <Link to="/help">
-          <Button size="large">Contact us to change your username</Button>
-        </Link>
-      </div>
-      <Title level={3} style={{ marginTop: "24px" }}>
-        Password
-      </Title>
-      <div>
-        <p>
-          {meQueryData?.me.user.verifiedEmails.length === 0
-            ? "You must have a Verified Email on file to change your password."
-            : meQueryData?.me.user.verifiedEmails.length === 1
-            ? `If you wish to reset your password, press the "Reset Password" button. Then, check your ${meQueryData
-                ?.me.user.verifiedEmails[0].email ??
-                ""} inbox for an email from us with instructions.`
-            : `If you wish to reset your password, press the "Reset Password" button. We will send emails to ${meQueryData?.me.user.verifiedEmails
-                .map((ve) => ve.email ?? "")
-                .filter((e) => !!e)
-                .join(", ") ?? ""} with instructions.`}
-        </p>
-        <ErrorAlert error={sendResetPasswordEmailError} />
-        <Button
-          size="large"
-          loading={sendResetPasswordEmailLoading}
-          disabled={
-            sendResetPasswordEmailLoading ||
-            !!sendResetPasswordEmailData ||
-            meQueryData?.me.user.verifiedEmails.length === 0
-          }
-          onClick={async () => {
-            await sendResetPasswordEmail({
-              variables: {
-                usernameOrEmail: meQueryData?.me.user.username ?? "",
-              },
-            });
-            message.success(`Password reset email sent!`);
-          }}
-        >
-          Reset Password
-        </Button>
-      </div>
-    </React.Fragment>
+    <Space direction="vertical" size="large">
+      <section>
+        <Title level={3}>Username</Title>
+        <div>
+          <p>
+            Your username is:{" "}
+            <Typography.Text
+              copyable
+              style={{
+                backgroundColor: "rgba(0,0,0,0.05)",
+                padding: "6px",
+                borderRadius: "5px",
+              }}
+            >
+              {meQueryData?.me.user.username}
+            </Typography.Text>
+          </p>
+          <Link to="/help">
+            <Button size="large">Contact us to change your username</Button>
+          </Link>
+        </div>
+      </section>
+      <hr
+        style={{
+          borderTop: `1px solid rgba(0,0,0,0.05)`,
+          borderBottom: "none",
+        }}
+      />
+      <section>
+        <Title level={3}>Password</Title>
+        <div>
+          <p>
+            {meQueryData?.me.user.verifiedEmails.length === 0
+              ? "You must have a Verified Email on file to change your password."
+              : meQueryData?.me.user.verifiedEmails.length === 1
+              ? `If you wish to reset your password, press the button below. Then, check your ${meQueryData
+                  ?.me.user.verifiedEmails[0].email ??
+                  ""} inbox for an email from us with instructions.`
+              : `If you wish to reset your password, press the button below. We will email ${meQueryData?.me.user.verifiedEmails
+                  .map((ve) => ve.email ?? "")
+                  .filter((e) => !!e)
+                  .join(", ") ??
+                  ""} with instructions to choose a new password.`}
+          </p>
+          <ErrorAlert error={sendResetPasswordEmailError} />
+          <Button
+            size="large"
+            loading={sendResetPasswordEmailLoading}
+            disabled={
+              sendResetPasswordEmailLoading ||
+              !!sendResetPasswordEmailData ||
+              meQueryData?.me.user.verifiedEmails.length === 0
+            }
+            onClick={async () => {
+              await sendResetPasswordEmail({
+                variables: {
+                  usernameOrEmail: meQueryData?.me.user.username ?? "",
+                },
+              });
+              message.success(`Password reset email sent!`);
+            }}
+          >
+            Send me the instructions to reset my password
+          </Button>
+        </div>
+      </section>
+    </Space>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Spin, Tabs } from "antd";
+import { Space, Spin, Tabs } from "antd";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
 import BillingSettings from "./BillingSettings";
@@ -66,9 +66,23 @@ const Settings = () => {
             <UsernameAndPassword />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Privacy & Data Export" key="data-privacy">
-            <PrivacySettings />
-            <DataExport />
-            <StartAccountDeletion />
+            <Space direction="vertical" size="large">
+              <PrivacySettings />
+              <hr
+                style={{
+                  borderTop: `1px solid rgba(0,0,0,0.05)`,
+                  borderBottom: "none",
+                }}
+              />
+              <DataExport />
+              <hr
+                style={{
+                  borderTop: `1px solid rgba(0,0,0,0.05)`,
+                  borderBottom: "none",
+                }}
+              />
+              <StartAccountDeletion />
+            </Space>
           </Tabs.TabPane>
           <Tabs.TabPane tab="Plan & Billing" key="billing">
             <BillingSettings />
