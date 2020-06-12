@@ -9,7 +9,7 @@ import { green } from "@ant-design/colors";
 import { loadStripe } from "@stripe/stripe-js";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
 import { useCreateCheckoutSessionMutation } from "./generated/CreateCheckoutSessionMutation";
-import { useMeQuery } from "../Home/generated/MeQuery";
+import useIsPremium from "../lib/useIsPremium";
 
 const { Text } = Typography;
 
@@ -22,7 +22,7 @@ if (!process.env.REACT_APP_STRIPE_PRICE_ID) {
 }
 
 const BillingSettings: React.FC<{}> = () => {
-  const { data: meQueryData } = useMeQuery({ fetchPolicy: "cache-only" });
+  const isPremium = useIsPremium();
 
   const [showPlans, setShowPlans] = useState(false);
 
@@ -41,7 +41,7 @@ const BillingSettings: React.FC<{}> = () => {
       <div style={{ marginBottom: "12px" }}>
         Choose the plan that works for you and cancel at any time.
       </div>
-      {meQueryData?.me.user.plan?.type === "PREMIUM" ? (
+      {isPremium ? (
         <React.Fragment>
           <Result
             icon={<StarTwoTone />}
@@ -210,7 +210,7 @@ const PlansDescription = ({
                 }}
               >
                 <Typography.Title level={4} style={{ margin: "6px" }}>
-                  $1 / month
+                  $12 / year
                 </Typography.Title>
               </div>
             </React.Fragment>
