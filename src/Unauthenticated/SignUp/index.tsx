@@ -85,6 +85,14 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
           });
         }
       : (values: any) => {
+          console.log("values: ", values);
+
+          if (values.termsAndPrivacy !== true) {
+            message.error(
+              "You must agree to the Terms of Service and Privacy Policy."
+            );
+            return;
+          }
           createAccount({
             variables: {
               username: values.username,
@@ -376,6 +384,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                 initialValues={{
                   remember: true,
                   username: history.location.state?.username ?? "",
+                  termsAndPrivacy: true,
                 }}
                 onFinish={onSubmit}
                 style={{ width: "300px", marginTop: "24px" }}
@@ -418,6 +427,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       message: "Please choose a password",
                     },
                   ]}
+                  style={{ marginBottom: "12px" }}
                 >
                   <Input.Password
                     prefix={<LockOutlined />}
@@ -426,12 +436,11 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     autoComplete={"new-password"}
                   />
                 </Form.Item>
-                <Form.Item>
+                <Form.Item style={{ marginBottom: "6px" }}>
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
                     }}
                   >
                     <Form.Item name="remember" valuePropName="checked" noStyle>
@@ -446,6 +455,24 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       />
                     </Tooltip>
                   </div>
+                </Form.Item>
+                <Form.Item style={{ marginBottom: "6px" }}>
+                  <Form.Item
+                    name="termsAndPrivacy"
+                    valuePropName="checked"
+                    noStyle
+                  >
+                    <Checkbox>
+                      I agree to the{" "}
+                      <a href="https://www.mailmasker.com/terms">
+                        Terms of Service
+                      </a>{" "}
+                      and{" "}
+                      <a href="https://www.mailmasker.com/privacy">
+                        Privacy Policy
+                      </a>
+                    </Checkbox>
+                  </Form.Item>
                 </Form.Item>
                 <Form.Item>
                   <ErrorAlert error={signUpError} />
