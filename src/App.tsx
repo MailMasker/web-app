@@ -29,7 +29,7 @@ const App: React.FC = () => {
               render={({ match }) => (
                 <AuthenticatedOrUnauthenticated>
                   {({ authenticated }) => (
-                    <LayoutContainer authenticated={authenticated}>
+                    <LayoutContainer>
                       <VerifyEmail
                         authenticated={authenticated}
                         email={match.params.email}
@@ -55,7 +55,7 @@ const App: React.FC = () => {
             </Route>
             <Route path="*">
               <Authenticated>
-                <LayoutContainer authenticated>
+                <LayoutContainer>
                   <Switch>
                     <Route path="/log-out">
                       <LogOut />

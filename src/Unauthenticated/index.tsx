@@ -26,7 +26,7 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = () => {
 
   return (
     <BrowserRouter>
-      <LayoutContainer authenticated={false}>
+      <LayoutContainer>
         <Switch>
           <Route
             path={[
