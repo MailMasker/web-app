@@ -111,19 +111,31 @@ const HeaderContent: React.FC<HeaderContentProps> = ({ children }) => {
           )}
         </div>
       </Header>
-      {mobileMenuOpen && (
-        <Menu
-          theme="dark"
-          mode="vertical"
-          selectedKeys={rightMenuSelectedKeys}
-          style={{ lineHeight: "64px" }}
-          onSelect={(param) => history.push(`${param.selectedKeys[0]}`)}
-        >
-          <Menu.Item key="/sign-up">Sign Up</Menu.Item>
-          <Menu.Item key="/log-in">Log In</Menu.Item>
-          <Menu.Item key="/help">Help</Menu.Item>
-        </Menu>
-      )}
+      {mobileMenuOpen &&
+        (isAuthenticated ? (
+          <Menu
+            selectedKeys={rightMenuSelectedKeys}
+            mode="vertical"
+            theme="dark"
+            onSelect={(param) => history.push(`${param.selectedKeys[0]}`)}
+            forceSubMenuRender
+          >
+            <Menu.Item key="/">Mail Masks</Menu.Item>
+            <Menu.Item key="/settings">Settings</Menu.Item>
+          </Menu>
+        ) : (
+          <Menu
+            theme="dark"
+            mode="vertical"
+            selectedKeys={rightMenuSelectedKeys}
+            style={{ lineHeight: "64px" }}
+            onSelect={(param) => history.push(`${param.selectedKeys[0]}`)}
+          >
+            <Menu.Item key="/sign-up">Sign Up</Menu.Item>
+            <Menu.Item key="/log-in">Log In</Menu.Item>
+            <Menu.Item key="/help">Help</Menu.Item>
+          </Menu>
+        ))}
     </React.Fragment>
   );
 };
