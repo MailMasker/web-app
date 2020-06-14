@@ -67,13 +67,9 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
             forwardsTo.email
           ) : (
             <span>
-              <Text>
-                <span>
-                  <i style={{ color: grey[1] }}>Awaiting verification...</i>
-                </span>{" "}
-                {forwardsTo.email}
-              </Text>
+              <div>{forwardsTo.email}</div>
               <div>
+                <Typography.Text type="danger">Unverified</Typography.Text> –{" "}
                 <ResendVerificationEmailCTA email={forwardsTo.email ?? ""} />
               </div>
             </span>
