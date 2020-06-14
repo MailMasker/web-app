@@ -83,7 +83,7 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
           <Tag
             color="green"
             key={privacy}
-            icon={<InfoCircleOutlined />}
+            icon={isMobile ? undefined : <InfoCircleOutlined />}
             style={{ cursor: "pointer" }}
             onClick={() => {
               Modal.info({
@@ -95,9 +95,9 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
                       give you, while still making this service useful. In
                       short, that means:
                     </p>
-                    <ul>
+                    <ul style={{ paddingLeft: isMobile ? 0 : "16px" }}>
                       <li>
-                        You can delete your verified email addresses at any time
+                        You can delete your Verified Email addresses at any time
                         from our systems. After doing so, we no longer know any
                         personal information about you.
                       </li>
@@ -212,9 +212,21 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
                   <strong>{columns[1].title}</strong>
                   <div>{getValue(columns[1])}</div>
                 </div>
-                <div style={{ marginTop: "6px" }}>
-                  <strong>{columns[3].title}</strong>
-                  <div>{getValue(columns[3])}</div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginTop: "6px",
+                  }}
+                >
+                  <div style={{ width: "50%" }}>
+                    <strong>{columns[3].title}</strong>
+                    <div>{getValue(columns[3])}</div>
+                  </div>
+                  <div style={{ width: "50%" }}>
+                    <strong>{columns[2].title}</strong>
+                    <div>{getValue(columns[2])}</div>
+                  </div>
                 </div>
               </Card>
             );

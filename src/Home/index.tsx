@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import { orange } from "@ant-design/colors";
 import relativeTime from "dayjs/plugin/relativeTime";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
+import useIsMobile from "../lib/useIsMobile";
 import useIsPremium from "../lib/useIsPremium";
 import useLocalStorage from "../lib/useLocalStorage";
 
@@ -109,6 +110,7 @@ const Home: React.FC<HomeProps> = () => {
   });
 
   const isPremium = useIsPremium();
+  const isMobile = useIsMobile();
 
   const [
     hideStopMailMaskRequestTip,
@@ -163,14 +165,16 @@ const Home: React.FC<HomeProps> = () => {
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: isMobile ? "space-between" : "flex-start",
             alignItems: "center",
           }}
         >
           <Typography.Title level={2} style={{ margin: 0 }}>
-            Mail Masks
+            Your Mail Masks
           </Typography.Title>
-          <NewMailMaskModalAndButton key="new-mail-mask-modal-button" />
+          <div style={{ marginLeft: "12px" }}>
+            <NewMailMaskModalAndButton />
+          </div>
         </div>
         <Tabs
           defaultActiveKey={activeTab}

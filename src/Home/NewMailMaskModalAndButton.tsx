@@ -137,18 +137,13 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
 
   return (
     <React.Fragment>
-      <Button
-        type="primary"
-        icon={<PlusOutlined />}
-        onClick={showNewMaskModal}
-        size={isMobile ? "middle" : "large"}
-      >
-        New Mail Mask
+      <Button type="primary" icon={<PlusOutlined />} onClick={showNewMaskModal}>
+        {isMobile ? "New" : "New Mail Mask"}
       </Button>
       {/* unmount because I was having issues getting the validation to reset upon reopening the modal */}
       {newMaskModalVisible && (
         <Modal
-          title={isMobile ? "New" : "New Mail Mask"}
+          title={isMobile ? "New Mail Mask" : "New Mail Mask"}
           visible
           onOk={handleNewMaskOk}
           onCancel={handleNewMaskCancel}
