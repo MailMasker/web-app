@@ -9,11 +9,12 @@ import {
   message,
   notification,
 } from "antd";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, Redirect, useHistory, useRouteMatch } from "react-router-dom";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 import ErrorAlert from "../../lib/ErrorAlert";
 import React from "react";
+import useIsAuthenticated from "../../lib/useIsAuthenticated";
 import { useLogInMutation } from "./generated/LogInMutation";
 import { useResetPasswordMutation } from "./generated/ResetPasswordMutation";
 import { useSendResetPasswordEmailMutation } from "./generated/SendResetPasswordEmailMutation";
