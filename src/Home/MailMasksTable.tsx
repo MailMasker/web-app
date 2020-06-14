@@ -17,7 +17,6 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import ModifyRouteExpiryDateButtonAndPopover from "./ModifyRouteExpiryDateButtonAndPopover";
 import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
 import dayjs from "dayjs";
-import { grey } from "@ant-design/colors";
 import relativeTime from "dayjs/plugin/relativeTime";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
 import useIsMobile from "../lib/useIsMobile";
@@ -166,7 +165,7 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
         },
       },
     ],
-    [activeTab]
+    [activeTab, isMobile]
   );
 
   const emptyComponent = (

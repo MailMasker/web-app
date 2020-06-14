@@ -1,8 +1,3 @@
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
 import { Menu, Space, Spin, Tabs } from "antd";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
@@ -108,8 +103,16 @@ const Settings = () => {
             animated={{ tabPane: false, inkBar: true }}
           >
             <Tabs.TabPane tab="Account" key="account">
-              <VerifiedEmailsSettings />
-              <ReservedMailMasksSettings />
+              <Space direction="vertical" size="large">
+                <VerifiedEmailsSettings />
+                <hr
+                  style={{
+                    borderTop: `1px solid rgba(0,0,0,0.05)`,
+                    borderBottom: "none",
+                  }}
+                />
+                <ReservedMailMasksSettings />
+              </Space>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Username & Password" key="username-password">
               <UsernameAndPassword />

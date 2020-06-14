@@ -49,6 +49,11 @@ const ReservedMailMasksSettings: React.FC<{}> = () => {
             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
           ),
         }}
+        pagination={
+          emailMasksTableData.length > 10
+            ? { position: ["bottomRight"] }
+            : false
+        }
       />
     </React.Fragment>
   );

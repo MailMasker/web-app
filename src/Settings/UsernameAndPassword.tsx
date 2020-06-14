@@ -87,7 +87,7 @@ const UsernameAndPassword: React.FC<{}> = () => {
               message.success(`Password reset email sent!`);
             }}
           >
-            Send me the instructions to reset my password
+            Reset password
           </Button>
         </div>
       </section>

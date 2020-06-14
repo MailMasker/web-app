@@ -114,7 +114,9 @@ const HeaderContent: React.FC<HeaderContentProps> = ({ children }) => {
                   mode="horizontal"
                   selectedKeys={rightMenuSelectedKeys}
                   style={{ lineHeight: "64px" }}
-                  onSelect={(param) => history.push(`${param.selectedKeys[0]}`)}
+                  onSelect={(param: { selectedKeys: string[] }) =>
+                    history.push(`${param.selectedKeys[0]}`)
+                  }
                 >
                   <Menu.Item key="/sign-up">Sign Up</Menu.Item>
                   <Menu.Item key="/log-in">Log In</Menu.Item>

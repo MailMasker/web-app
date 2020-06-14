@@ -10,7 +10,6 @@ import {
 } from "antd";
 import React, { memo, useCallback, useState } from "react";
 
-import { EditOutlined } from "@ant-design/icons";
 import ErrorAlert from "../lib/ErrorAlert";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";

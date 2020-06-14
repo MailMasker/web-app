@@ -1,17 +1,21 @@
-import { Button, Empty, Space, Table, Typography } from "antd";
+import { Button, Card, Empty, Space, Table, Typography } from "antd";
 import { CheckCircleTwoTone, StopTwoTone } from "@ant-design/icons";
 import React, { useMemo } from "react";
 
 import { ColumnProps } from "antd/lib/table";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
+import useIsMobile from "../lib/useIsMobile";
 
 const { Text, Title } = Typography;
 
 const PrivacySettings: React.FC<{}> = () => {
+  const isMobile = useIsMobile();
   const privacyTableData = [
     {
       key: "content",
-      dataType: "Content of email (sender, subject, body, etc)",
+      dataType: isMobile
+        ? "Email content"
+        : "Content of email (sender, subject, body, etc)",
       storage: "A few seconds *",
       exportable: { exportable: null },
       deletable: { deletable: false },
@@ -68,8 +72,9 @@ const PrivacySettings: React.FC<{}> = () => {
     },
     {
       key: "counts",
-      dataType:
-        "Counts of number of emails received, forwarded, and intentionally ignored",
+      dataType: isMobile
+        ? "Email counts"
+        : "Counts of number of emails received, forwarded, and intentionally ignored",
       storage: "Indefinitely",
       exportable: { exportable: true },
       deletable: { deletable: false },
@@ -160,14 +165,16 @@ const PrivacySettings: React.FC<{}> = () => {
     },
   ];
 
-  const privacyColumns: ColumnProps<{
+  type PrivacyColumn = {
     key: string;
     dataType: string;
     storage: string;
     exportable: { exportable: boolean | null };
     deletable: { deletable: boolean };
     expandableDescription: React.ReactNode;
-  }>[] = useMemo(
+  };
+
+  const privacyColumns: ColumnProps<PrivacyColumn>[] = useMemo(
     () => [
       {
         title: "Data Type",
@@ -218,78 +225,121 @@ const PrivacySettings: React.FC<{}> = () => {
   );
 
   return (
-    <Space direction="vertical" size="large" style={{ width: "100%" }}>
+    <Space direction="vertical" size="small" style={{ width: "100%" }}>
+      <Title level={3}>Privacy</Title>
       <div>
-        <Title level={3}>Privacy</Title>
-        <Space direction="vertical" size="small" style={{ width: "100%" }}>
+        <p>
+          Here's a summary of your data in our system (expand each row for more
+          detail):
+        </p>
+        {isMobile ? (
           <div>
-            <p>
-              Here's a summary of your data in our system (expand each row for
-              more detail):
-            </p>
-            <Table
-              size="small"
-              bordered
-              columns={privacyColumns}
-              dataSource={privacyTableData}
-              pagination={
-                privacyTableData.length > 10
-                  ? { position: ["bottomRight"] }
-                  : false
-              }
-              locale={{
-                emptyText: (
-                  <Empty
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    description="None"
-                  />
-                ),
-              }}
-              expandRowByClick
-              expandable={{
-                expandedRowRender: (record) => record.expandableDescription,
-                rowExpandable: (record) => !!record.expandableDescription,
-              }}
-            />
+            {privacyTableData.map((row, index) => {
+              const getValue = (column?: ColumnProps<PrivacyColumn>) => {
+                if (!column) {
+                  return null;
+                }
+                const key = column.key;
+                if (!column || !column.render || !key) {
+                  return null;
+                }
+                const value = (row as any)[key];
+                if (!value) {
+                  return null;
+                }
+                return column.render(value, row, index) ?? null;
+              };
+              return (
+                <Card
+                  title={getValue(privacyColumns[0])}
+                  style={{ marginBottom: "12px" }}
+                >
+                  <div>
+                    <strong>{privacyColumns[1].title}</strong>
+                    <div>{getValue(privacyColumns[1])}</div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginTop: "6px",
+                    }}
+                  >
+                    <div style={{ width: "50%" }}>
+                      <strong>{privacyColumns[3].title}</strong>
+                      <div>{getValue(privacyColumns[3])}</div>
+                    </div>
+                    <div style={{ width: "50%" }}>
+                      <strong>{privacyColumns[2].title}</strong>
+                      <div>{getValue(privacyColumns[2])}</div>
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
-          <div>
-            <p style={{ marginTop: "16px" }}>
-              And for completeness, here's a list of common things that we don't
-              do:
-            </p>
-            <ul>
-              <li>
-                We don't use Google Analytics, Facebook SDKs, or anything else
-                that allows other companies to track you
-              </li>
-              <li>We don't store or collect your IP address</li>
-              <li>
-                We don't set any cookies except the one that keeps you logged in
-                here at MailMasker.com
-              </li>
-              <li>
-                We will never give or sell your information to another company.
-                If for some reason there's a benefit to you in the future that
-                we do so, we'll only do so if with your expressed consent.
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p>
-              For more, see our{" "}
-              <a
-                href="https://www.mailmasker.com/privacy"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button type="link" style={{ margin: 0, padding: 0 }}>
-                  Privacy Policy
-                </Button>
-              </a>
-              .
-            </p>
-          </div>
-        </Space>
+        ) : (
+          <Table
+            size="small"
+            bordered
+            columns={privacyColumns}
+            dataSource={privacyTableData}
+            pagination={
+              privacyTableData.length > 10
+                ? { position: ["bottomRight"] }
+                : false
+            }
+            locale={{
+              emptyText: (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description="None"
+                />
+              ),
+            }}
+            expandRowByClick
+            expandable={{
+              expandedRowRender: (record) => record.expandableDescription,
+              rowExpandable: (record) => !!record.expandableDescription,
+            }}
+          />
+        )}
+      </div>
+      <div>
+        <p style={{ marginTop: "16px" }}>
+          And for completeness, here's a list of common things that we don't do:
+        </p>
+        <ul>
+          <li>
+            We don't use Google Analytics, Facebook SDKs, or anything else that
+            allows other companies to track you
+          </li>
+          <li>We don't store or collect your IP address</li>
+          <li>
+            We don't set any cookies except the one that keeps you logged in
+            here at MailMasker.com
+          </li>
+          <li>
+            We will never give or sell your information to another company. If
+            for some reason there's a benefit to you in the future that we do
+            so, we'll only do so if with your expressed consent.
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p>
+          For more, see our{" "}
+          <a
+            href="https://www.mailmasker.com/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button type="link" style={{ margin: 0, padding: 0 }}>
+              Privacy Policy
+            </Button>
+          </a>
+          .
+        </p>
       </div>
     </Space>
   );
