@@ -193,7 +193,10 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   mailMaskAlias: queryParams.alias ?? "",
                 }}
                 onFinish={onSubmit}
-                style={{ width: "300px", marginTop: "24px" }}
+                style={{
+                  width: isMobile ? "100%" : "300px",
+                  marginTop: "24px",
+                }}
                 form={form}
                 onValuesChange={(values) => {
                   if (Object.keys(values).includes("mailMaskAlias")) {
@@ -317,7 +320,10 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   username: history.location.state?.username ?? "",
                 }}
                 onFinish={onSubmit}
-                style={{ width: "300px", marginTop: "24px" }}
+                style={{
+                  width: isMobile ? "100%" : "300px",
+                  marginTop: "24px",
+                }}
                 form={form}
               >
                 <div style={{ textAlign: "center", marginBottom: "24px" }}>
@@ -387,7 +393,10 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   termsAndPrivacy: true,
                 }}
                 onFinish={onSubmit}
-                style={{ width: "300px", marginTop: "24px" }}
+                style={{
+                  width: isMobile ? "100%" : "300px",
+                  marginTop: "24px",
+                }}
                 form={form}
               >
                 <div style={{ textAlign: "center", marginBottom: "24px" }}>

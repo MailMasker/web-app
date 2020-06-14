@@ -1,4 +1,4 @@
-import { Alert, Badge, Space, Tabs, Typography } from "antd";
+import { Alert, Badge, Button, Space, Tabs, Typography } from "antd";
 import MailMasksTable, {
   MailMasksTabType,
   MailMasksTableData,
@@ -6,6 +6,7 @@ import MailMasksTable, {
 import { MeQuery, useMeQuery } from "./generated/MeQuery";
 import React, { useMemo, useState } from "react";
 
+import { Link } from "react-router-dom";
 import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
 import { StarTwoTone } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -237,6 +238,9 @@ const Home: React.FC<HomeProps> = () => {
                   </Text>
                   .
                 </div>
+                <Link to="/settings/billing">
+                  <Button style={{ marginTop: "12px" }}>Upgrade now</Button>
+                </Link>
               </div>
             }
             type="info"
