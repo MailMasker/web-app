@@ -1,29 +1,15 @@
-import {
-  Alert,
-  Badge,
-  Empty,
-  Modal,
-  PageHeader,
-  Space,
-  Spin,
-  Table,
-  Tabs,
-  Tag,
-  Tooltip,
-  Typography,
-} from "antd";
+import { Alert, Badge, Space, Tabs, Typography } from "antd";
+import MailMasksTable, {
+  MailMasksTabType,
+  MailMasksTableData,
+} from "./MailMasksTable";
 import { MeQuery, useMeQuery } from "./generated/MeQuery";
 import React, { useMemo, useState } from "react";
-import { grey, orange } from "@ant-design/colors";
 
-import { ColumnProps } from "antd/lib/table";
-import ErrorAlert from "../lib/ErrorAlert";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import ModifyRouteExpiryDateButtonAndPopover from "./ModifyRouteExpiryDateButtonAndPopover";
 import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
-import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
 import { StarTwoTone } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { orange } from "@ant-design/colors";
 import relativeTime from "dayjs/plugin/relativeTime";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
 import useIsPremium from "../lib/useIsPremium";
@@ -34,17 +20,11 @@ dayjs.extend(relativeTime);
 const { Text } = Typography;
 const { TabPane } = Tabs;
 
-type TableData = {
-  key: string;
-  mailMaskEmail: string;
-  forwardsTo: MeQuery["me"]["user"]["verifiedEmails"][0];
-  route: MeQuery["me"]["user"]["routes"][0];
-  privacy: "MAX";
-};
-
-type TabType = "active" | "expiring-soon" | "expired";
-
-const mapEmailMasksFunctionFactory = ({ filter }: { filter: TabType }) => ({
+const mapEmailMasksFunctionFactory = ({
+  filter,
+}: {
+  filter: MailMasksTabType;
+}) => ({
   emailMasks,
   routes,
   verifiedEmails,
@@ -112,182 +92,15 @@ const mapEmailMasksFunctionFactory = ({ filter }: { filter: TabType }) => ({
           route,
           privacy: "MAX",
         },
-      ] as TableData[];
+      ] as MailMasksTableData[];
     })
     .flat();
-};
-
-const MailMasksTable: React.FC<{
-  activeTab: TabType;
-  tableData: TableData[];
-}> = ({ activeTab, tableData }) => {
-  const { data, loading, error } = useMeQuery({
-    fetchPolicy: "cache-first",
-  });
-
-  const columns: ColumnProps<TableData>[] = useMemo(
-    () => [
-      {
-        title: "Email received at",
-        dataIndex: "mailMaskEmail",
-        key: "mailMaskEmail",
-        render: (mailMaskEmail) => <Text copyable>{mailMaskEmail}</Text>,
-      },
-      {
-        title: "Forwards to",
-        dataIndex: "forwardsTo",
-        key: "forwardsTo",
-        render: (forwardsTo: MeQuery["me"]["user"]["verifiedEmails"][0]) =>
-          forwardsTo.verified ? (
-            forwardsTo.email
-          ) : (
-            <span>
-              <Text>
-                <span>
-                  <i style={{ color: grey[1] }}>Awaiting verification...</i>
-                </span>{" "}
-                {forwardsTo.email}
-              </Text>
-              <div>
-                <ResendVerificationEmailCTA email={forwardsTo.email ?? ""} />
-              </div>
-            </span>
-          ),
-      },
-      {
-        title: "Privacy",
-        key: "privacy",
-        dataIndex: "privacy",
-        render: (privacy) => (
-          <Tag
-            color="green"
-            key={privacy}
-            icon={<InfoCircleOutlined />}
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              Modal.info({
-                title: `About "MAX" Privacy`,
-                content: (
-                  <div>
-                    <p>
-                      This represents highest level of privacy that we could
-                      give you, while still making this service useful. In
-                      short, that means:
-                    </p>
-                    <ul>
-                      <li>
-                        You can delete your verified email addresses at any time
-                        from our systems. After doing so, we no longer know any
-                        personal information about you.
-                      </li>
-                      <li>
-                        Once you use a Mail Mask (ex: jane@
-                        {supportedEmailDomains[0]}), it belongs to your account
-                        forever. Even if you decide to terminate your account,
-                        it cannot be used by anyone else in the future.
-                      </li>
-                      <li>
-                        Immediately after we receive an email at one of your
-                        Mail Masks and forward it on to you, we permanently
-                        delete the email content from our servers. Furthermore,
-                        we have a backup mechanism which clears any emails which
-                        might fail to be deleted for some reason after 30 days.
-                      </li>
-                      <li>
-                        After forwarding an email to you, we don't store any
-                        information about your email (not even the subject or
-                        sender). The only thing we store is the date and a count
-                        of emails forwarded / rejected.
-                      </li>
-                    </ul>
-                  </div>
-                ),
-                onOk() {},
-              });
-            }}
-          >
-            {privacy}
-          </Tag>
-        ),
-      },
-      {
-        title: activeTab === "expired" ? "Stopped" : "Stops",
-        dataIndex: "route",
-        key: "route",
-        render: (route: MeQuery["me"]["user"]["routes"][0], parent) => {
-          const routeExpiryDayjs = route.expiresISO
-            ? dayjs(route.expiresISO)
-            : undefined;
-          return (
-            <Text>
-              <Tooltip
-                title={() => {
-                  if (!routeExpiryDayjs) {
-                    return "Emails will be forwarded indefinitely";
-                  }
-                  return routeExpiryDayjs.toDate().toLocaleString();
-                }}
-                placement="left"
-              >
-                <span>
-                  {routeExpiryDayjs ? dayjs().to(routeExpiryDayjs) : "never"}
-                </span>
-              </Tooltip>
-              <ModifyRouteExpiryDateButtonAndPopover
-                route={route}
-                mailMaskEmail={parent.mailMaskEmail}
-                onSuccess={({ modifiedRouteID }) => {
-                  // TODO: highlight the modified route's row
-                }}
-              />
-            </Text>
-          );
-        },
-      },
-    ],
-    [activeTab]
-  );
-
-  if (loading) {
-    return (
-      <Spin
-        size="large"
-        style={{
-          margin: "0",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, - 50%)",
-        }}
-      />
-    );
-  } else if (error) {
-    return <ErrorAlert error={error} />;
-  } else if (data) {
-    return (
-      <Table
-        bordered
-        columns={columns}
-        dataSource={tableData}
-        pagination={
-          tableData.length > 10 ? { position: ["bottomRight"] } : false
-        }
-        locale={{
-          emptyText: (
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
-          ),
-        }}
-      />
-    );
-  } else {
-    return null;
-  }
 };
 
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
-  const [activeTab, setActiveTab] = useState<TabType>("active");
+  const [activeTab, setActiveTab] = useState<MailMasksTabType>("active");
 
   // We don't need to handle loading or error states because
   // the Me query is always loaded at this point
@@ -302,7 +115,7 @@ const Home: React.FC<HomeProps> = () => {
     setHideStopMailMaskRequestTip,
   ] = useLocalStorage("hideStopMailMaskRequestTip", false);
 
-  const activeData: TableData[] = useMemo(() => {
+  const activeData: MailMasksTableData[] = useMemo(() => {
     if (!data) {
       return [];
     }
@@ -313,7 +126,7 @@ const Home: React.FC<HomeProps> = () => {
     });
   }, [data]);
 
-  const expiringSoonData: TableData[] = useMemo(() => {
+  const expiringSoonData: MailMasksTableData[] = useMemo(() => {
     if (!data) {
       return [];
     }
@@ -324,7 +137,7 @@ const Home: React.FC<HomeProps> = () => {
     });
   }, [data]);
 
-  const expiredData: TableData[] = useMemo(() => {
+  const expiredData: MailMasksTableData[] = useMemo(() => {
     if (!data) {
       return [];
     }
@@ -335,7 +148,7 @@ const Home: React.FC<HomeProps> = () => {
     });
   }, [data]);
 
-  let tableData: TableData[] = [];
+  let tableData: MailMasksTableData[] = [];
   if (activeTab === "active") {
     tableData = activeData;
   } else if (activeTab === "expiring-soon") {
@@ -347,89 +160,88 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <React.Fragment>
       <Space size="large" direction="vertical" style={{ width: "100%" }}>
-        <PageHeader
-          className="site-page-header-responsive"
-          title="Mail Masks"
-          extra={[
-            <NewMailMaskModalAndButton key="new-mail-mask-modal-button" />,
-          ]}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <Space size="large" direction="vertical" style={{ width: "100%" }}>
-            <Tabs
-              defaultActiveKey={activeTab}
-              onChange={setActiveTab as (activeKey: string) => void}
-            >
-              <TabPane tab={<span>Active</span>} key="active" />
-              <TabPane
-                tab={
-                  <span>
-                    Stops Soon
-                    {expiringSoonData.length > 0 && (
-                      <Badge
-                        count={expiringSoonData.length}
-                        style={{
-                          marginLeft: "8px",
-                          backgroundColor: "#fff",
-                          color: orange[5],
-                          boxShadow: `0 0 0 1px ${orange[5]} inset`,
-                          marginTop: "-2px",
-                        }}
-                      />
-                    )}
-                  </span>
-                }
-                key="expiring-soon"
-              />
-              <TabPane
-                tab={
-                  <span>
-                    Stopped
-                    {expiredData.length > 0 && (
-                      <Badge
-                        count={expiredData.length}
-                        style={{
-                          marginLeft: "8px",
-                          backgroundColor: "#fff",
-                          color: "#999",
-                          boxShadow: "0 0 0 1px #d9d9d9 inset",
-                          marginTop: "-2px",
-                        }}
-                      />
-                    )}
-                  </span>
-                }
-                key="expired"
-              />
-            </Tabs>
-            <MailMasksTable activeTab={activeTab} tableData={tableData} />
-            {!isPremium && !hideStopMailMaskRequestTip && (
-              <Alert
-                message="Premium Feature"
-                description={
-                  <div>
-                    <div>
-                      Easily stop any of your Mail Masks by forwarding any email
-                      to{" "}
-                      <Text
-                        copyable={{ text: `stop@${supportedEmailDomains[0]}` }}
-                      >
-                        <a href={`mailto:stop@${supportedEmailDomains[0]}`}>
-                          stop@{supportedEmailDomains[0]}
-                        </a>
-                      </Text>
-                      .
-                    </div>
-                  </div>
-                }
-                type="info"
-                icon={<StarTwoTone />}
-                showIcon
-                closable
-                onClose={() => setHideStopMailMaskRequestTip(true)}
-              />
-            )}
-          </Space>
-        </PageHeader>
+          <Typography.Title level={2} style={{ margin: 0 }}>
+            Mail Masks
+          </Typography.Title>
+          <NewMailMaskModalAndButton key="new-mail-mask-modal-button" />
+        </div>
+        <Tabs
+          defaultActiveKey={activeTab}
+          onChange={setActiveTab as (activeKey: string) => void}
+        >
+          <TabPane tab={<span>Active</span>} key="active" />
+          <TabPane
+            tab={
+              <span>
+                Stops Soon
+                {expiringSoonData.length > 0 && (
+                  <Badge
+                    count={expiringSoonData.length}
+                    style={{
+                      marginLeft: "8px",
+                      backgroundColor: "#fff",
+                      color: orange[5],
+                      boxShadow: `0 0 0 1px ${orange[5]} inset`,
+                      marginTop: "-2px",
+                    }}
+                  />
+                )}
+              </span>
+            }
+            key="expiring-soon"
+          />
+          <TabPane
+            tab={
+              <span>
+                Stopped
+                {expiredData.length > 0 && (
+                  <Badge
+                    count={expiredData.length}
+                    style={{
+                      marginLeft: "8px",
+                      backgroundColor: "#fff",
+                      color: "#999",
+                      boxShadow: "0 0 0 1px #d9d9d9 inset",
+                      marginTop: "-2px",
+                    }}
+                  />
+                )}
+              </span>
+            }
+            key="expired"
+          />
+        </Tabs>
+        <MailMasksTable activeTab={activeTab} tableData={tableData} />
+        {!isPremium && !hideStopMailMaskRequestTip && (
+          <Alert
+            message="Premium Feature"
+            description={
+              <div>
+                <div>
+                  Easily stop any of your Mail Masks by forwarding any email to{" "}
+                  <Text copyable={{ text: `stop@${supportedEmailDomains[0]}` }}>
+                    <a href={`mailto:stop@${supportedEmailDomains[0]}`}>
+                      stop@{supportedEmailDomains[0]}
+                    </a>
+                  </Text>
+                  .
+                </div>
+              </div>
+            }
+            type="info"
+            icon={<StarTwoTone />}
+            showIcon
+            closable
+            onClose={() => setHideStopMailMaskRequestTip(true)}
+          />
+        )}
       </Space>
     </React.Fragment>
   );

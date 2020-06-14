@@ -141,7 +141,7 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
         type="primary"
         icon={<PlusOutlined />}
         onClick={showNewMaskModal}
-        size="large"
+        size={isMobile ? "middle" : "large"}
       >
         New Mail Mask
       </Button>
@@ -324,4 +324,4 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
   );
 };
 
-export default NewMailMaskModalAndButton;
+export default React.memo(NewMailMaskModalAndButton);

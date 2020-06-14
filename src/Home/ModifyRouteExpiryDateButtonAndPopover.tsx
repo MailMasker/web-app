@@ -23,12 +23,14 @@ type ModifyRouteExpiryDateButtonAndPopoverProps = {
   route: { expiresISO?: string | null; id: string };
   mailMaskEmail: string;
   onSuccess: ({ modifiedRouteID }: { modifiedRouteID: string }) => void;
+  triggerText: string;
 };
 
 const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButtonAndPopoverProps> = ({
   route,
   mailMaskEmail,
   onSuccess,
+  triggerText,
 }) => {
   const [form] = useForm();
 
@@ -160,9 +162,11 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
       <Button
         type="link"
         size="small"
-        icon={<EditOutlined />}
         onClick={showEditRouteExpiryModal}
-      />
+        style={{ padding: 0 }}
+      >
+        {triggerText}
+      </Button>
       <Modal
         title="Stop-forwarding Date"
         visible={modalVisible}
