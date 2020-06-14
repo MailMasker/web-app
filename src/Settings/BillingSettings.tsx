@@ -9,6 +9,7 @@ import { green } from "@ant-design/colors";
 import { loadStripe } from "@stripe/stripe-js";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
 import { useCreateCheckoutSessionMutation } from "./generated/CreateCheckoutSessionMutation";
+import useIsMobile from "../lib/useIsMobile";
 import useIsPremium from "../lib/useIsPremium";
 
 const { Text } = Typography;
@@ -87,6 +88,8 @@ const PlansDescription = ({
     { error: createCheckoutSessionError, loading: createVerifiedEmailLoading },
   ] = useCreateCheckoutSessionMutation();
 
+  const isMobile = useIsMobile();
+
   const freeFeatures = [
     {
       title: "Your Mail Masks are yours forever",
@@ -142,6 +145,7 @@ const PlansDescription = ({
           display: "flex",
           justifyContent: "center",
           textAlign: "center",
+          flexDirection: isMobile ? "column" : "row",
         }}
       >
         <List
@@ -192,7 +196,8 @@ const PlansDescription = ({
         />
         <List
           style={{
-            marginLeft: "36px",
+            marginLeft: isMobile ? 0 : "36px",
+            marginTop: isMobile ? "24px" : 0,
             borderColor: green[4],
           }}
           itemLayout="horizontal"

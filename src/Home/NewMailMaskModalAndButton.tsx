@@ -143,7 +143,7 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
       {/* unmount because I was having issues getting the validation to reset upon reopening the modal */}
       {newMaskModalVisible && (
         <Modal
-          title={isMobile ? "New Mail Mask" : "New Mail Mask"}
+          title="New Mail Mask"
           visible
           onOk={handleNewMaskOk}
           onCancel={handleNewMaskCancel}

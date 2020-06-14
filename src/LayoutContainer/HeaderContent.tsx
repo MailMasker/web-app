@@ -67,18 +67,32 @@ const HeaderContent: React.FC<HeaderContentProps> = ({ children }) => {
             </Link>
           </div>
           {isMobile ? (
-            <Button
-              type="link"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              <MenuOutlined
-                style={{
-                  color: "white",
-                  fontSize: "22px",
-                  padding: "0px 12px",
-                }}
-              />
-            </Button>
+            isAuthenticated ? (
+              <Menu
+                selectedKeys={rightMenuSelectedKeys}
+                mode="horizontal"
+                theme="dark"
+                onSelect={(param) => history.push(`${param.selectedKeys[0]}`)}
+                forceSubMenuRender
+              >
+                <Menu.Item key="/settings">
+                  <SettingOutlined />
+                </Menu.Item>
+              </Menu>
+            ) : (
+              <Button
+                type="link"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <MenuOutlined
+                  style={{
+                    color: "white",
+                    fontSize: "22px",
+                    padding: "0px 12px",
+                  }}
+                />
+              </Button>
+            )
           ) : (
             <div style={{ marginRight: isMobile ? 0 : "24px" }}>
               {isAuthenticated ? (

@@ -169,6 +169,17 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
     [activeTab]
   );
 
+  const emptyComponent = (
+    <Empty
+      image={Empty.PRESENTED_IMAGE_SIMPLE}
+      description={
+        activeTab === "expired"
+          ? "None of your Mail Masks have been stopped."
+          : "None of your Mail Masks are due to stop forwarding soon."
+      }
+    />
+  );
+
   if (loading) {
     return (
       <Spin
@@ -188,6 +199,7 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
     if (isMobile) {
       return (
         <div>
+          {tableData.length === 0 && emptyComponent}
           {tableData.map((row, index) => {
             const getValue = (column?: ColumnProps<MailMasksTableData>) => {
               if (!column) {
@@ -243,9 +255,7 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
             tableData.length > 10 ? { position: ["bottomRight"] } : false
           }
           locale={{
-            emptyText: (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
-            ),
+            emptyText: emptyComponent,
           }}
         />
       );
