@@ -48,9 +48,14 @@ const BillingSettings: React.FC<{}> = () => {
         "A secondary Mail Mask has a dot after the alias of one of your primary Mail Masks. For example, if your primary Mail Mask was you@example.com, then you could create a secondary mask by sending an email to you.whatever@example.com.",
     },
     {
-      title: "1 Verified Email",
+      title: "Forward to 1 email",
       description:
-        "Verified Email addresses are where we forward email received at your Mail Masks.",
+        "Your Mail Masks will forward to a single external email address.",
+    },
+    {
+      title: "Data export",
+      description:
+        "We allow you to download a full record of your data in our system.",
     },
   ];
 
@@ -65,13 +70,18 @@ const BillingSettings: React.FC<{}> = () => {
         "Create as many as you'd like: you1@mailmasker.com, you2@mailmasker.com, etc",
     },
     {
-      title: "Unlimited Verified Emails",
+      title: "Forward to unlimited addresses",
       description:
         "Set up complex workflows by forwarding email received at each Mail Mask to a different email inbox.",
     },
     {
       title: "Automatically-stopping Mail Masks",
       description: `You can add ".14d" to any Mail Mask (ex: you.14d@mailmasker.com) and that Mail Mask will automatically stop forwarding email in 14 days.`,
+    },
+    {
+      title: "Forward to stop@mailmasker.com",
+      description:
+        "Stopping your Mail Mask is the quickest way to completely stop unwanted email, and you can stop your Mail Mask simply by re-forwarding any email to stop@mailmasker.com.",
     },
   ];
 
