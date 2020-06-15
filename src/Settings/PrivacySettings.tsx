@@ -3,7 +3,6 @@ import { CheckCircleTwoTone, StopTwoTone } from "@ant-design/icons";
 import React, { useMemo } from "react";
 
 import { ColumnProps } from "antd/lib/table";
-import supportedEmailDomains from "../lib/supportedEmailDomains";
 import useIsMobile from "../lib/useIsMobile";
 
 const { Text, Title } = Typography;
@@ -15,10 +14,9 @@ const PrivacySettings: React.FC<{}> = () => {
       key: "content",
       dataType: isMobile
         ? "Email content"
-        : "Content of email (sender, subject, body, etc)",
-      storage: "A few seconds *",
+        : "Email content (sender, subject, body, etc)",
+      storage: "A few seconds",
       exportable: { exportable: null },
-      deletable: { deletable: false },
       expandableDescription: (
         <Space direction="vertical" style={{ margin: "12px" }}>
           <div>
@@ -43,73 +41,20 @@ const PrivacySettings: React.FC<{}> = () => {
               if we receive an email at a Mail Mask which hasn't been reserved
               by anyone, we delete the email content immediately
             </li>
+            <li>
+              in the event that email content fails to be deleted immediately,
+              then our backup mechanism will delete any email content older than
+              5 days
+            </li>
           </ul>
-          <div>
-            <i>
-              * in the event that our server experiences an unexpected error
-              (such as a bug in our software), and we fail to delete the email
-              content immediately, then our secondary system will delete the
-              email content after 30 days
-            </i>
-          </div>
-          <div>
-            <i>
-              ** we don't currently offer a way to clear any emails that fail to
-              be deleted due to some. If this a feature that's important to you,
-              please let us know (
-              <Text copyable={{ text: `support${supportedEmailDomains[0]}` }}>
-                <a href={`mailto:support${supportedEmailDomains[0]}`}>
-                  support@{supportedEmailDomains[0]}
-                </a>
-              </Text>
-              ). While your email content should rarely, if ever, be deleted
-              immediately, we have a secondary mechanism that permanently
-              deletes all email content older than 30 days.
-            </i>
-          </div>
-        </Space>
-      ),
-    },
-    {
-      key: "counts",
-      dataType: isMobile
-        ? "Email counts"
-        : "Counts of number of emails received, forwarded, and intentionally ignored",
-      storage: "Indefinitely",
-      exportable: { exportable: true },
-      deletable: { deletable: false },
-      expandableDescription: (
-        <Space direction="vertical" style={{ margin: "12px" }}>
-          <div>
-            <Text strong>
-              We count the number of times that an email is received, as well as
-              when it's forwarded or ignored due to the Mail Mask being
-              intentionally stopped.
-            </Text>
-          </div>
-          <div>
-            <i>
-              Note: this primarily serves to give you insight into activity. The
-              only reason that this is not deletable is because we didn't think
-              it would need to be deleted. If this being deletable is important
-              to you, please let us know (
-              <Text copyable={{ text: `support${supportedEmailDomains[0]}` }}>
-                <a href={`mailto:support${supportedEmailDomains[0]}`}>
-                  support@{supportedEmailDomains[0]}
-                </a>
-              </Text>
-              ).
-            </i>
-          </div>
         </Space>
       ),
     },
     {
       key: "verified-emails",
       dataType: "Your Verified Email addresses",
-      storage: "Indefinitely",
+      storage: "Until you delete it",
       exportable: { exportable: true },
-      deletable: { deletable: true },
       expandableDescription: (
         <Space direction="vertical" style={{ margin: "12px" }}>
           <div>
@@ -137,15 +82,22 @@ const PrivacySettings: React.FC<{}> = () => {
     {
       key: "username-password",
       dataType: "Your username and hashed password",
-      storage: "Indefinitely",
+      storage: "Until you delete it",
       exportable: { exportable: true },
-      deletable: { deletable: true },
       expandableDescription: (
         <Space direction="vertical" style={{ margin: "12px" }}>
-          <div>
+          <p>
             <Text strong>
-              We store your username in plain-text. Your password, on the other
-              hand, is hashed using an industry-standard algorithm called{" "}
+              Your username can be deleted by deleting your account.
+            </Text>{" "}
+            However, in order to give you a way to recover your Mail Masks in
+            the future, we assign you a random username which you can use to log
+            in and reactivate your account and have access to your Mail Masks.
+          </p>
+          <p>
+            <Text strong>
+              Your password is never stored in plain text, but instead, is
+              hashed using an industry-standard algorithm called{" "}
               <a
                 href="https://en.wikipedia.org/wiki/Bcrypt"
                 target="_blank"
@@ -153,13 +105,31 @@ const PrivacySettings: React.FC<{}> = () => {
               >
                 bcrypt
               </a>
-              . We have no way to read or know your password, nor does any
-              malicious person who gains access to our database. When you log
-              in, we use the bcrypt algorithm again to compare the password you
-              enter to the hashed password on your account and determine whether
-              they are the same.
-            </Text>
-          </div>
+              .
+            </Text>{" "}
+            We have no way to read or know your password, nor does any malicious
+            person who were to gain access to our database.
+          </p>
+        </Space>
+      ),
+    },
+    {
+      key: "payment-information",
+      dataType: "Payment information",
+      storage: "Until you request that we delete it",
+      exportable: { exportable: true },
+      expandableDescription: (
+        <Space direction="vertical" style={{ margin: "12px" }}>
+          <p>
+            <Text strong>
+              The name and email address you provide to Stripe is stored in
+              Stripe's servers.
+            </Text>{" "}
+            Upon request, we will delete your customer account in our payment
+            provider, Stripe, which removes your name. However, your email
+            address remains in their activity logs, and is not something that we
+            can delete.
+          </p>
         </Space>
       ),
     },
@@ -170,7 +140,6 @@ const PrivacySettings: React.FC<{}> = () => {
     dataType: string;
     storage: string;
     exportable: { exportable: boolean | null };
-    deletable: { deletable: boolean };
     expandableDescription: React.ReactNode;
   };
 
@@ -200,22 +169,6 @@ const PrivacySettings: React.FC<{}> = () => {
               <CheckCircleTwoTone twoToneColor="#52c41a" />
             ) : (
               <StopTwoTone />
-            )}
-          </Text>
-        ),
-      },
-      {
-        title: "Deletable",
-        dataIndex: "deletable",
-        key: "deletable",
-        render: ({ deletable }) => (
-          <Text>
-            {deletable ? (
-              <CheckCircleTwoTone twoToneColor="#52c41a" />
-            ) : (
-              <React.Fragment>
-                <StopTwoTone /> **
-              </React.Fragment>
             )}
           </Text>
         ),
@@ -314,7 +267,6 @@ const PrivacySettings: React.FC<{}> = () => {
             We don't use Google Analytics, Facebook SDKs, or anything else that
             allows other companies to track you
           </li>
-          <li>We don't store or collect your IP address</li>
           <li>
             We don't set any cookies except the one that keeps you logged in
             here at MailMasker.com
@@ -322,13 +274,13 @@ const PrivacySettings: React.FC<{}> = () => {
           <li>
             We will never give or sell your information to another company. If
             for some reason there's a benefit to you in the future that we do
-            so, we'll only do so if with your expressed consent.
+            so, we'll only do so with your expressed consent.
           </li>
         </ul>
       </div>
       <div>
         <p>
-          For more, see our{" "}
+          We also encourage you to read our{" "}
           <a
             href="https://www.mailmasker.com/privacy/index.html"
             target="_blank"
