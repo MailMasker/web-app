@@ -3,10 +3,13 @@ import { Button, Space, Typography } from "antd";
 import { Link } from "react-router-dom";
 import React from "react";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
+import useIsPremium from "../lib/useIsPremium";
 
 const { Title } = Typography;
 
 const StartAccountDeletion: React.FC<{}> = () => {
+  const isPremium = useIsPremium();
+
   return (
     <Space direction="vertical" size="large" style={{ width: "100%" }}>
       <div>
@@ -19,7 +22,7 @@ const StartAccountDeletion: React.FC<{}> = () => {
           </li>
           <li>We delete all of your personally-identifiable from our system</li>
           <li>
-            we will give you the opportunity to do a full data export to see a
+            We will give you the opportunity to do a full data export to see a
             snapshot of before and after your account was deleted (this gives
             you a truer sense of what's been deleted, and what remains).
           </li>
@@ -67,6 +70,17 @@ const StartAccountDeletion: React.FC<{}> = () => {
           </li>
         </ul>
       </div>
+      {isPremium && (
+        <p>
+          <em>
+            To cancel your Premium membership, please{" "}
+            <Link to="/help">reach out to us</Link>, as it isn't yet
+            automatically canceled when you delete your account. Please also
+            feel free to request that we manually wipe as much of your data as
+            we can from our payment processor as well.
+          </em>
+        </p>
+      )}
       <Link to="/delete-account">
         <Button danger size="large">
           Begin Account Deletion & Data Export
