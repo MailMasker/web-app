@@ -52,7 +52,7 @@ const PrivacySettings: React.FC<{}> = () => {
     },
     {
       key: "verified-emails",
-      dataType: "Your Verified Email addresses",
+      dataType: "Your email addresses",
       storage: "Until you delete it",
       exportable: { exportable: true },
       expandableDescription: (
@@ -81,7 +81,7 @@ const PrivacySettings: React.FC<{}> = () => {
     },
     {
       key: "username-password",
-      dataType: "Your username and hashed password",
+      dataType: "Your username and password",
       storage: "Until you delete it",
       exportable: { exportable: true },
       expandableDescription: (
@@ -125,10 +125,8 @@ const PrivacySettings: React.FC<{}> = () => {
               The name and email address you provide to Stripe is stored in
               Stripe's servers.
             </Text>{" "}
-            Upon request, we will delete your customer account in our payment
-            provider, Stripe, which removes your name. However, your email
-            address remains in their activity logs, and is not something that we
-            can delete.
+            We don't have the ability to fully remove your name and email
+            address from Stripe's system.
           </p>
         </Space>
       ),
@@ -184,6 +182,19 @@ const PrivacySettings: React.FC<{}> = () => {
         <p>
           Here's a summary of your data in our system (expand each row for more
           detail):
+        </p>
+        <p>
+          <em>
+            This information is also available on our{" "}
+            <a
+              href="https://www.mailmasker.com/plans/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View source.
+            </a>
+            .
+          </em>
         </p>
         {isMobile ? (
           <div>

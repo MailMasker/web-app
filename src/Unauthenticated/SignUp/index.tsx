@@ -475,6 +475,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       <a
                         href="https://www.mailmasker.com/terms/index.html"
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
                         Terms of Service
                       </a>{" "}
@@ -482,6 +483,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       <a
                         href="https://www.mailmasker.com/privacy/index.html"
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
                         Privacy Policy
                       </a>
