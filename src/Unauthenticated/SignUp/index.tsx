@@ -246,7 +246,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   >
                     <Input
                       placeholder="you"
-                      style={{ textAlign: "end" }}
                       autoComplete="none"
                       addonAfter={`@${supportedEmailDomains[0]}`}
                     />
@@ -473,11 +472,17 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   >
                     <Checkbox>
                       I agree to the{" "}
-                      <a href="https://www.mailmasker.com/terms/index.html">
+                      <a
+                        href="https://www.mailmasker.com/terms/index.html"
+                        target="_blank"
+                      >
                         Terms of Service
                       </a>{" "}
                       and{" "}
-                      <a href="https://www.mailmasker.com/privacy/index.html">
+                      <a
+                        href="https://www.mailmasker.com/privacy/index.html"
+                        target="_blank"
+                      >
                         Privacy Policy
                       </a>
                     </Checkbox>
