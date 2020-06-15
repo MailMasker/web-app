@@ -473,11 +473,11 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   >
                     <Checkbox>
                       I agree to the{" "}
-                      <a href="https://www.mailmasker.com/terms">
+                      <a href="https://www.mailmasker.com/terms/index.html">
                         Terms of Service
                       </a>{" "}
                       and{" "}
-                      <a href="https://www.mailmasker.com/privacy">
+                      <a href="https://www.mailmasker.com/privacy/index.html">
                         Privacy Policy
                       </a>
                     </Checkbox>
