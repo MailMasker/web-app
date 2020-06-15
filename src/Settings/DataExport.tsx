@@ -33,7 +33,7 @@ const DataExport: React.FC<{}> = () => {
         </li>
         <li>
           For a summary of what is exportable, see{" "}
-          <Link to="/settings/privacy">Privacy</Link>.
+          <Link to="/settings/data-privacy">Privacy</Link>.
         </li>
       </ul>
       <div>
