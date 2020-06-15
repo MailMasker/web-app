@@ -34,7 +34,7 @@ const Unauthenticated: React.FC<UnauthenticatedProps> = () => {
     if ((logInMatch || signUpMatch) && isAuthenticated) {
       history.replace("/");
     }
-  }, [isAuthenticated, logInMatch]);
+  }, [isAuthenticated, logInMatch, history, signUpMatch]);
 
   return (
     <BrowserRouter>
