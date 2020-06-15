@@ -110,8 +110,8 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
                         Immediately after we receive an email at one of your
                         Mail Masks and forward it on to you, we permanently
                         delete the email content from our servers. Furthermore,
-                        we have a backup mechanism which clears any emails which
-                        might fail to be deleted for some reason after 30 days.
+                        we have a backup mechanism in place which permanently
+                        deletes any emails after they are 5 days old.
                       </li>
                       <li>
                         After forwarding an email to you, we don't store any
