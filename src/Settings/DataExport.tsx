@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 import { useExportDataLazyQuery } from "./generated/ExportData";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 const DataExport: React.FC<{}> = () => {
   const [
@@ -22,7 +22,7 @@ const DataExport: React.FC<{}> = () => {
   const [debouncedWait, setDebouncedWait] = useState(false);
 
   return (
-    <Space direction="vertical" size="large" style={{ width: "100%" }}>
+    <Space direction="vertical" size="small" style={{ width: "100%" }}>
       <Title level={3}>Export Data</Title>
       <ul>
         <li>You can export all your data at any time for any reason.</li>

@@ -1,4 +1,4 @@
-import { Button, Empty, Modal, Table, Tooltip, Typography } from "antd";
+import { Button, Card, Empty, Modal, Table, Tooltip, Typography } from "antd";
 import {
   CheckCircleTwoTone,
   DeleteTwoTone,
@@ -9,6 +9,7 @@ import React, { memo, useMemo } from "react";
 import { ColumnProps } from "antd/lib/table";
 import ResendVerificationEmailCTA from "../Home/ResendVerificationEmailCTA";
 import { grey } from "@ant-design/colors";
+import useIsMobile from "../lib/useIsMobile";
 import { useMeQuery } from "../Home/generated/MeQuery";
 
 const { Text, Title } = Typography;
@@ -16,9 +17,15 @@ const { Text, Title } = Typography;
 const VerifiedEmailSettings: React.FC<{}> = () => {
   // We don't need to handle loading or error states because
   // the Me query is always loaded at this point
-  const { data, loading, error } = useMeQuery({
+  const { data } = useMeQuery({
     fetchPolicy: "cache-first",
   });
+
+  const isMobile = useIsMobile();
+
+  const emptyComponent = (
+    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
+  );
 
   const verifiedEmailsTableData =
     data?.me.user.verifiedEmails.map((verifiedEmail) => ({
@@ -28,12 +35,14 @@ const VerifiedEmailSettings: React.FC<{}> = () => {
       delete: { id: verifiedEmail.id },
     })) ?? [];
 
-  const verifiedEmailsColumns: ColumnProps<{
+  type VerifiedEmailsColumn = {
     key: string;
     email: string;
     verified: { verified: boolean; id: string };
     delete: { id: string };
-  }>[] = useMemo(
+  };
+
+  const verifiedEmailsColumns: ColumnProps<VerifiedEmailsColumn>[] = useMemo(
     () => [
       {
         title: "Email",
@@ -95,15 +104,51 @@ const VerifiedEmailSettings: React.FC<{}> = () => {
   return (
     <React.Fragment>
       <Title level={3}>Verified Emails</Title>
-      <Table
-        columns={verifiedEmailsColumns}
-        dataSource={verifiedEmailsTableData}
-        locale={{
-          emptyText: (
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="None" />
-          ),
-        }}
-      />
+      {isMobile ? (
+        <React.Fragment>
+          {verifiedEmailsTableData.length === 0 && emptyComponent}
+          {verifiedEmailsTableData.map((row, index) => {
+            const getValue = (column?: ColumnProps<VerifiedEmailsColumn>) => {
+              if (!column) {
+                return null;
+              }
+              const key = column.key;
+              if (!column || !column.render || !key) {
+                return null;
+              }
+              const value = (row as any)[key];
+              if (!value) {
+                return null;
+              }
+              return column.render(value, row, index) ?? null;
+            };
+            return (
+              <Card
+                title={getValue(verifiedEmailsColumns[0])}
+                style={{ marginBottom: "12px" }}
+              >
+                <div>
+                  <strong>{verifiedEmailsColumns[1].title}</strong>
+                  <div>{getValue(verifiedEmailsColumns[1])}</div>
+                </div>
+              </Card>
+            );
+          })}
+        </React.Fragment>
+      ) : (
+        <Table
+          columns={verifiedEmailsColumns}
+          dataSource={verifiedEmailsTableData}
+          locale={{
+            emptyText: emptyComponent,
+          }}
+          pagination={
+            verifiedEmailsTableData.length > 10
+              ? { position: ["bottomRight"] }
+              : false
+          }
+        />
+      )}
     </React.Fragment>
   );
 };

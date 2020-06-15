@@ -3,7 +3,6 @@ import {
   Checkbox,
   Form,
   Input,
-  Radio,
   Space,
   Steps,
   Tooltip,
@@ -18,11 +17,13 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
+import useQueryParams, { QueryParams } from "../../lib/useQueryParam";
 
 import ErrorAlert from "../../lib/ErrorAlert";
 import { green } from "@ant-design/colors";
 // @ts-ignore
 import randomWords from "random-words";
+import supportedEmailDomains from "../../lib/supportedEmailDomains";
 import { useCreateUserMutation } from "./generated/CreateUserMutation";
 import useDebounce from "../../lib/useDebounce";
 import { useHistory } from "react-router-dom";
@@ -45,6 +46,8 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
     mailMaskAlias: string | undefined;
     emailAddress: string | undefined;
   }>();
+
+  const [queryParams] = useQueryParams(useState<QueryParams<"alias">>({}));
 
   const [
     createAccount,
@@ -82,20 +85,23 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
           });
         }
       : (values: any) => {
-          console.info("Submitted form: ", values);
-          console.info("emailAddress: ", history.location.state?.emailAddress);
-          console.info(
-            "mailMaskAlias: ",
-            history.location.state?.mailMaskAlias
-          );
+          console.log("values: ", values);
+
+          if (values.termsAndPrivacy !== true) {
+            message.error(
+              "You must agree to the Terms of Service and Privacy Policy."
+            );
+            return;
+          }
           createAccount({
             variables: {
               username: values.username,
               password: values.password,
               uuid: uuidv4(),
               persistent: values.remember as boolean,
-              emailMask: `${history.location.state?.mailMaskAlias ??
-                ""}@mailmasker.com`,
+              emailMask: `${history.location.state?.mailMaskAlias ?? ""}@${
+                supportedEmailDomains[0]
+              }`,
               verifiedEmail: history.location.state?.emailAddress ?? "",
             },
           })
@@ -118,13 +124,20 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
       if (debouncedDesiredEmailMaskAlias) {
         isEmailMaskAvailable({
           variables: {
-            email: debouncedDesiredEmailMaskAlias + "@mailmasker.com",
+            email:
+              debouncedDesiredEmailMaskAlias + "@" + supportedEmailDomains[0],
           },
         });
       }
     },
-    [debouncedDesiredEmailMaskAlias] // Only call effect if debounced search term changes
+    [debouncedDesiredEmailMaskAlias, isEmailMaskAvailable] // Only call effect if debounced search term changes
   );
+
+  useEffect(() => {
+    if (queryParams.alias) {
+      setMailMaskAliasInputValue(queryParams.alias);
+    }
+  }, [queryParams.alias]);
 
   return (
     <React.Fragment>
@@ -140,16 +153,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
               width: "100%",
             }}
           >
-            <Radio.Group
-              onChange={(e) => {
-                history.push(e.target.value);
-              }}
-              style={{ marginBottom: 8 }}
-              value={history.location.pathname}
-            >
-              <Radio.Button value="/sign-up">Sign Up</Radio.Button>
-              <Radio.Button value="/log-in">Log In</Radio.Button>
-            </Radio.Group>
             <Typography.Title level={2}>Sign Up</Typography.Title>
             <div
               style={{
@@ -187,10 +190,13 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                 key="choose_mail_mask"
                 initialValues={{
                   remember: true,
-                  mailMaskAlias: "",
+                  mailMaskAlias: queryParams.alias ?? "",
                 }}
                 onFinish={onSubmit}
-                style={{ width: "300px", marginTop: "24px" }}
+                style={{
+                  width: isMobile ? "100%" : "300px",
+                  marginTop: "24px",
+                }}
                 form={form}
                 onValuesChange={(values) => {
                   if (Object.keys(values).includes("mailMaskAlias")) {
@@ -237,30 +243,12 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                         ? "error"
                         : undefined
                     }
-                    help={
-                      !mailMaskAliasInputValue
-                        ? undefined
-                        : isEmailMaskAvailableLoading ||
-                          mailMaskAliasInputValue !=
-                            debouncedDesiredEmailMaskAlias
-                        ? "Checking availability..."
-                        : isEmailMaskAvailableData &&
-                          isEmailMaskAvailableData.isEmailMaskAvailable
-                        ? `${debouncedDesiredEmailMaskAlias}@mailmasker.com is available`
-                        : isEmailMaskAvailableError
-                        ? isEmailMaskAvailableError.message
-                        : isEmailMaskAvailableData &&
-                          !isEmailMaskAvailableData.isEmailMaskAvailable
-                        ? "Already taken – please try something else"
-                        : undefined
-                    }
                   >
                     <Input
                       placeholder="you"
                       style={{ textAlign: "end" }}
                       autoComplete="none"
-                      addonAfter="@mailmasker.com"
-                      autoFocus
+                      addonAfter={`@${supportedEmailDomains[0]}`}
                     />
                   </Form.Item>
                   <Tooltip placement="right" title="Random">
@@ -280,13 +268,39 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     </Button>
                   </Tooltip>
                 </div>
+                <div
+                  style={{
+                    marginTop: "24px",
+                    textAlign: "center",
+                    color: isEmailMaskAvailableData ? green[6] : undefined,
+                    fontSize: "1.2em",
+                  }}
+                >
+                  <strong>
+                    {!mailMaskAliasInputValue
+                      ? " "
+                      : isEmailMaskAvailableLoading ||
+                        mailMaskAliasInputValue !==
+                          debouncedDesiredEmailMaskAlias
+                      ? "Checking availability..."
+                      : isEmailMaskAvailableData &&
+                        isEmailMaskAvailableData.isEmailMaskAvailable
+                      ? `Available!`
+                      : isEmailMaskAvailableError
+                      ? isEmailMaskAvailableError.message
+                      : isEmailMaskAvailableData &&
+                        !isEmailMaskAvailableData.isEmailMaskAvailable
+                      ? "Already taken – please try something else"
+                      : " "}
+                  </strong>
+                </div>
                 <Form.Item>
                   <ErrorAlert error={signUpError} />
                   <Button
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
-                    style={{ width: "100%", marginTop: "36px" }}
+                    style={{ width: "100%", marginTop: "24px" }}
                     disabled={
                       isEmailMaskAvailableLoading ||
                       !mailMaskAliasInputValue ||
@@ -306,7 +320,10 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   username: history.location.state?.username ?? "",
                 }}
                 onFinish={onSubmit}
-                style={{ width: "300px", marginTop: "24px" }}
+                style={{
+                  width: isMobile ? "100%" : "300px",
+                  marginTop: "24px",
+                }}
                 form={form}
               >
                 <div style={{ textAlign: "center", marginBottom: "24px" }}>
@@ -316,8 +333,8 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   <p>
                     Where should we forward email sent to{" "}
                     <strong>
-                      {history.location.state?.mailMaskAlias ?? "you"}
-                      @mailmasker.com
+                      {history.location.state?.mailMaskAlias ?? "you"}@
+                      {supportedEmailDomains[0]}
                     </strong>{" "}
                     ?
                   </p>
@@ -333,7 +350,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   ]}
                 >
                   <Input
-                    autoFocus
                     prefix={<MailOutlined />}
                     placeholder="you@example.com"
                     style={{ textAlign: "center" }}
@@ -374,9 +390,13 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                 initialValues={{
                   remember: true,
                   username: history.location.state?.username ?? "",
+                  termsAndPrivacy: true,
                 }}
                 onFinish={onSubmit}
-                style={{ width: "300px", marginTop: "24px" }}
+                style={{
+                  width: isMobile ? "100%" : "300px",
+                  marginTop: "24px",
+                }}
                 form={form}
               >
                 <div style={{ textAlign: "center", marginBottom: "24px" }}>
@@ -393,7 +413,6 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   ]}
                 >
                   <Input
-                    autoFocus
                     prefix={<UserOutlined />}
                     placeholder="Username"
                     autoComplete="username"
@@ -417,6 +436,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       message: "Please choose a password",
                     },
                   ]}
+                  style={{ marginBottom: "12px" }}
                 >
                   <Input.Password
                     prefix={<LockOutlined />}
@@ -425,12 +445,11 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     autoComplete={"new-password"}
                   />
                 </Form.Item>
-                <Form.Item>
+                <Form.Item style={{ marginBottom: "6px" }}>
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
                     }}
                   >
                     <Form.Item name="remember" valuePropName="checked" noStyle>
@@ -445,6 +464,24 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                       />
                     </Tooltip>
                   </div>
+                </Form.Item>
+                <Form.Item style={{ marginBottom: "6px" }}>
+                  <Form.Item
+                    name="termsAndPrivacy"
+                    valuePropName="checked"
+                    noStyle
+                  >
+                    <Checkbox>
+                      I agree to the{" "}
+                      <a href="https://www.mailmasker.com/terms">
+                        Terms of Service
+                      </a>{" "}
+                      and{" "}
+                      <a href="https://www.mailmasker.com/privacy">
+                        Privacy Policy
+                      </a>
+                    </Checkbox>
+                  </Form.Item>
                 </Form.Item>
                 <Form.Item>
                   <ErrorAlert error={signUpError} />

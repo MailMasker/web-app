@@ -13,6 +13,8 @@
     "dayjs": "^1.8.25",
     "eslint-plugin-react-hooks": "^4.0.4",
     "file-saver": "eligrey/FileSaver.js#master",
+    "gatsby-cli": "^2.12.44",
+    "global": "^4.4.0",
     "graphql": "^14.5.8",
     "history": "^4.10.1",
     "random-words": "^1.1.1",
@@ -23,7 +25,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "SSL_CRT_FILE=localhost+1.pem SSL_KEY_FILE=localhost+1-key.pem HTTPS=true PORT=4200 REACT_APP_ENVIRONMENT=local REACT_APP_STRIPE_PUBLIC_KEY=pk_test_lQU4S6jwXLjmfY5dRXc6hVTr0037uKGXRi react-scripts start",
+    "start": "SSL_CRT_FILE=localhost+1.pem SSL_KEY_FILE=localhost+1-key.pem HTTPS=true PORT=4200 REACT_APP_ENVIRONMENT=local REACT_APP_STRIPE_PUBLIC_KEY=pk_test_lQU4S6jwXLjmfY5dRXc6hVTr0037uKGXRi REACT_APP_STRIPE_PRICE_ID=price_1GstRMAlCEbdgyQpXIfOIJRY react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

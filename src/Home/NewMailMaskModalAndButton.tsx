@@ -18,6 +18,7 @@ import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
 import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
 import { useCreateRouteMutation } from "./generated/CreateRouteMutation";
+import useIsMobile from "../lib/useIsMobile";
 import { useMeQuery } from "./generated/MeQuery";
 import { useRefreshRoutesAndEmailMasksLazyQuery } from "./generated/RefreshRoutesAndEmailMasksQuery";
 
@@ -132,10 +133,12 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
     setRecentlyCreatedVerifiedEmailIDs,
   ] = useState(new Set());
 
+  const isMobile = useIsMobile();
+
   return (
     <React.Fragment>
       <Button type="primary" icon={<PlusOutlined />} onClick={showNewMaskModal}>
-        New Mail Mask
+        {isMobile ? "New" : "New Mail Mask"}
       </Button>
       {/* unmount because I was having issues getting the validation to reset upon reopening the modal */}
       {newMaskModalVisible && (
@@ -316,4 +319,4 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
   );
 };
 
-export default NewMailMaskModalAndButton;
+export default React.memo(NewMailMaskModalAndButton);

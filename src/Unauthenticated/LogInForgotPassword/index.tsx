@@ -4,17 +4,17 @@ import {
   Checkbox,
   Form,
   Input,
-  Radio,
   Space,
   Typography,
   message,
   notification,
 } from "antd";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import { Link, Redirect, useHistory, useRouteMatch } from "react-router-dom";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 import ErrorAlert from "../../lib/ErrorAlert";
 import React from "react";
+import useIsAuthenticated from "../../lib/useIsAuthenticated";
 import { useLogInMutation } from "./generated/LogInMutation";
 import { useResetPasswordMutation } from "./generated/ResetPasswordMutation";
 import { useSendResetPasswordEmailMutation } from "./generated/SendResetPasswordEmailMutation";
@@ -30,7 +30,6 @@ const LogInForgotPassword = ({
 }: LogInForgotPasswordProps) => {
   const [form] = Form.useForm();
 
-  const history = useHistory();
   const logInMatch = useRouteMatch("/log-in");
   const forgotPasswordMatch = useRouteMatch("/forgot-password");
   const resetPasswordMatch = useRouteMatch<{
@@ -59,7 +58,6 @@ const LogInForgotPassword = ({
   ] = useResetPasswordMutation();
 
   const onSubmitLogIn = (values: any) => {
-    console.info("Submitted form: ", values);
     logIn({
       variables: {
         username: values.username,
@@ -72,7 +70,6 @@ const LogInForgotPassword = ({
   };
 
   const onSubmitForgotPassword = (values: any) => {
-    console.info("Submitted form: ", values);
     sendResetPasswordEmail({
       variables: {
         usernameOrEmail: values.username,
@@ -83,7 +80,6 @@ const LogInForgotPassword = ({
   };
 
   const onSubmitResetPassword = (values: any) => {
-    console.info("Submitted form: ", values);
     resetPassword({
       variables: {
         newPassword: values.password,
@@ -117,21 +113,11 @@ const LogInForgotPassword = ({
               width: "100%",
             }}
           >
-            <Radio.Group
-              onChange={(e) => {
-                history.push(e.target.value);
-              }}
-              style={{ marginBottom: 8 }}
-              value={history.location.pathname}
-            >
-              <Radio.Button value="/sign-up">Sign Up</Radio.Button>
-              <Radio.Button value="/log-in">Log In</Radio.Button>
-            </Radio.Group>
             <Title level={2}>
               {logInMatch
                 ? "Log In"
                 : forgotPasswordMatch
-                ? "Forgot Password"
+                ? "Forgot Username or Password"
                 : resetPasswordMatch
                 ? "Reset Password"
                 : () => console.error("unknown case")}
@@ -139,10 +125,6 @@ const LogInForgotPassword = ({
             {forgotPasswordMatch && (
               <React.Fragment>
                 <div style={{ textAlign: "center", width: "300px" }}>
-                  <Typography.Title level={3}>
-                    Forgot Username or Password?
-                  </Typography.Title>
-                  <br />
                   <Typography.Text>
                     We will send an email containing your username and a link to
                     reset your password to each of the verified addresses

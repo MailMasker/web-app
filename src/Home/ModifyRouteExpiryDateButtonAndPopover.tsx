@@ -10,7 +10,6 @@ import {
 } from "antd";
 import React, { memo, useCallback, useState } from "react";
 
-import { EditOutlined } from "@ant-design/icons";
 import ErrorAlert from "../lib/ErrorAlert";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -23,12 +22,14 @@ type ModifyRouteExpiryDateButtonAndPopoverProps = {
   route: { expiresISO?: string | null; id: string };
   mailMaskEmail: string;
   onSuccess: ({ modifiedRouteID }: { modifiedRouteID: string }) => void;
+  triggerText: string;
 };
 
 const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButtonAndPopoverProps> = ({
   route,
   mailMaskEmail,
   onSuccess,
+  triggerText,
 }) => {
   const [form] = useForm();
 
@@ -160,9 +161,11 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
       <Button
         type="link"
         size="small"
-        icon={<EditOutlined />}
         onClick={showEditRouteExpiryModal}
-      />
+        style={{ padding: 0 }}
+      >
+        {triggerText}
+      </Button>
       <Modal
         title="Stop-forwarding Date"
         visible={modalVisible}

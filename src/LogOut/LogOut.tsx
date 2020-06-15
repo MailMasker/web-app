@@ -24,7 +24,7 @@ const LogOut: React.FC<LogOutProps> = () => {
     } finally {
       apolloClient.clearStore();
     }
-  }, [unauthenticate]);
+  }, [unauthenticate, apolloClient]);
 
   if (loading) {
     return (

@@ -1,15 +1,7 @@
 import "antd/dist/antd.css";
 
-import {
-  BrowserRouter,
-  Link,
-  Redirect,
-  Route,
-  Switch,
-  useHistory,
-} from "react-router-dom";
 import { Button, Result } from "antd";
-import React, { useCallback } from "react";
+import { Link, Redirect, Route, Router, Switch } from "react-router-dom";
 
 import AccountDeletion from "./lib/AccountDeletion";
 import { ApolloProvider } from "@apollo/react-hooks";
@@ -19,23 +11,25 @@ import CheckoutSuccess from "./CheckoutCallback/CheckoutSuccess";
 import Home from "./Home";
 import LayoutContainer from "./LayoutContainer";
 import LogOut from "./LogOut/LogOut";
+import React from "react";
 import Settings from "./Settings";
 import Unauthenticated from "./Unauthenticated";
 import VerifyEmail from "./Unauthenticated/VerifyEmail";
 import { client } from "./apollo-client";
+import { history } from "./history";
 
 const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <BrowserRouter>
+        <Router history={history}>
           <Switch>
             <Route
               path="/verify-email/:email/code/:verificationCode"
               render={({ match }) => (
                 <AuthenticatedOrUnauthenticated>
                   {({ authenticated }) => (
-                    <LayoutContainer authenticated={authenticated}>
+                    <LayoutContainer>
                       <VerifyEmail
                         authenticated={authenticated}
                         email={match.params.email}
@@ -54,13 +48,14 @@ const App: React.FC = () => {
                 "/forgot-password",
                 "/account-deleted",
                 "/reset-password/user/:userID/code/:code/username/:username",
+                "/help",
               ]}
             >
               <Unauthenticated />
             </Route>
             <Route path="*">
               <Authenticated>
-                <LayoutContainer authenticated>
+                <LayoutContainer>
                   <Switch>
                     <Route path="/log-out">
                       <LogOut />
@@ -95,7 +90,7 @@ const App: React.FC = () => {
               </Authenticated>
             </Route>
           </Switch>
-        </BrowserRouter>
+        </Router>
       </div>
     </ApolloProvider>
   );

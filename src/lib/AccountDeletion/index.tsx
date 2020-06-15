@@ -9,19 +9,11 @@ import {
   Typography,
 } from "antd";
 import {
-  CheckCircleOutlined,
-  DownloadOutlined,
-  LoadingOutlined,
-  LockOutlined,
-  SmileOutlined,
-  SolutionOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import {
   DeleteUserMutation,
   useDeleteUserMutation,
 } from "../generated/DeleteUser";
-import React, { useEffect, useState } from "react";
+import { DownloadOutlined, LockOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
 import Bugsnag from "@bugsnag/js";
@@ -29,23 +21,21 @@ import ErrorAlert from "../ErrorAlert";
 import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 import { useApolloClient } from "@apollo/react-hooks";
+import useIsMobile from "../useIsMobile";
 
 const AccountDeletion: React.FC<{}> = () => {
   const [
     deleteUser,
-    {
-      data: deleteUserData,
-      loading: deleteUserLoading,
-      error: deleteUserError,
-    },
+    { loading: deleteUserLoading, error: deleteUserError },
   ] = useDeleteUserMutation();
 
-  const deleteAccountMatch = useRouteMatch("/delete-account");
   const accountDeletedMatch = useRouteMatch("/account-deleted");
   const history = useHistory<{
     accountDeletionResult?: DeleteUserMutation;
   }>();
   const [debouncedWait, setDebouncedWait] = useState(false);
+
+  const isMobile = useIsMobile();
 
   const accountDeletionResult: DeleteUserMutation | undefined =
     history.location.state?.accountDeletionResult;
@@ -76,8 +66,8 @@ const AccountDeletion: React.FC<{}> = () => {
   return (
     <Space
       direction="vertical"
-      size="large"
-      style={{ width: "100%", padding: "48px" }}
+      size={isMobile ? "small" : "large"}
+      style={{ width: "100%", padding: isMobile ? undefined : "48px" }}
     >
       <Steps current={current}>
         <Steps.Step title="Confirm" />
@@ -231,7 +221,7 @@ const AccountDeletion: React.FC<{}> = () => {
             </Form>
           )
         }
-        style={{ margin: "48px" }}
+        style={{ margin: isMobile ? undefined : "48px" }}
       />
     </Space>
   );
