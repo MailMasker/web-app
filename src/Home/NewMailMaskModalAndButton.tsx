@@ -19,8 +19,8 @@ import supportedEmailDomains from "../lib/supportedEmailDomains";
 import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
 import { useCreateRouteMutation } from "./generated/CreateRouteMutation";
 import useIsMobile from "../lib/useIsMobile";
+import useLocalStorage from "../lib/useLocalStorage";
 import { useMeQuery } from "./generated/MeQuery";
-import useRandomWords from "../lib/useRandomWords";
 import { useRefreshRoutesAndEmailMasksLazyQuery } from "./generated/RefreshRoutesAndEmailMasksQuery";
 
 type NewMailMaskModalAndButtonProps = {};
@@ -31,8 +31,6 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
   const { data: meQueryData } = useMeQuery({
     fetchPolicy: "cache-first",
   });
-
-  const { loading, allRandomWords } = useRandomWords(1);
 
   const firstMailMask =
     meQueryData && meQueryData.me.user.emailMasks.length > 0
@@ -143,6 +141,11 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
     recentlyCreatedVerifiedEmailIDs,
     setRecentlyCreatedVerifiedEmailIDs,
   ] = useState(new Set());
+
+  const [hideMailMaskCreationTip, setHideMailMaskCreationTip] = useLocalStorage(
+    "hideMailMaskCreationTip",
+    false
+  );
 
   const isMobile = useIsMobile();
 
@@ -309,14 +312,17 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
               />
             </Form.Item>
           </Form>
-          {firstMailMask && (
+          {firstMailMask && hideMailMaskCreationTip && (
             <Alert
               message={
                 <div>
                   <p>
-                    <strong>Make your life easier!</strong> Add ".anything" to
-                    your existing Mail Mask and a new one will be created
-                    automatically upon receiving its first email.
+                    <strong>The easiest way to create new Mail Masks</strong>
+                  </p>
+                  <p>
+                    Add ".anything" to your existing Mail Mask and a new one
+                    will be created automatically upon receiving its first
+                    email.
                   </p>
                   <p>
                     Try it now by just sending an email to:
@@ -337,6 +343,8 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
               }
               type="info"
               showIcon
+              closable
+              onClose={() => setHideMailMaskCreationTip(true)}
             />
           )}
           <ErrorAlert

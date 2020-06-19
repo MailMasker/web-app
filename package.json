@@ -1,6 +1,6 @@
 {
   "name": "email-forwarding-www",
-  "version": "0.2.8",
+  "version": "0.3.9",
   "private": true,
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
