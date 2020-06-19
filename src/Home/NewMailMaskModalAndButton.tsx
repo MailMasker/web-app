@@ -20,6 +20,7 @@ import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
 import { useCreateRouteMutation } from "./generated/CreateRouteMutation";
 import useIsMobile from "../lib/useIsMobile";
 import { useMeQuery } from "./generated/MeQuery";
+import useRandomWords from "../lib/useRandomWords";
 import { useRefreshRoutesAndEmailMasksLazyQuery } from "./generated/RefreshRoutesAndEmailMasksQuery";
 
 type NewMailMaskModalAndButtonProps = {};
@@ -30,6 +31,13 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
   const { data: meQueryData } = useMeQuery({
     fetchPolicy: "cache-first",
   });
+
+  const { loading, allRandomWords } = useRandomWords(1);
+
+  const firstMailMask =
+    meQueryData && meQueryData.me.user.emailMasks.length > 0
+      ? meQueryData?.me.user.emailMasks[0]
+      : undefined;
 
   const [
     createEmailMask,
@@ -163,14 +171,6 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
                 .length > 0,
           }}
         >
-          <ErrorAlert
-            error={[
-              createRouteError,
-              createEmailMaskError,
-              refreshRoutesAndEmailMasksError,
-            ]}
-            style={{ marginBottom: "24px" }}
-          />
           <Form
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
@@ -309,6 +309,36 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
               />
             </Form.Item>
           </Form>
+          {firstMailMask && (
+            <Alert
+              message={
+                <div>
+                  <p>
+                    <strong>Make your life easier!</strong> Add ".anything" to
+                    your existing Mail Mask and a new one will be created
+                    automatically upon receiving its first email.
+                  </p>
+                  <p>
+                    Try it now by just sending an email to:
+                    <br />
+                    <Typography.Text
+                      copyable={{
+                        text: `${firstMailMask.alias}.test@${firstMailMask.domain}`,
+                      }}
+                    >
+                      <a
+                        href={`mailto:${firstMailMask.alias}.test@${firstMailMask.domain}`}
+                      >
+                        {`${firstMailMask.alias}.test@${firstMailMask.domain}`}
+                      </a>
+                    </Typography.Text>
+                  </p>
+                </div>
+              }
+              type="info"
+              showIcon
+            />
+          )}
           <ErrorAlert
             error={[
               createRouteError,
