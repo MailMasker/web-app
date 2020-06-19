@@ -28,6 +28,7 @@ const { Text } = Typography;
 export type MailMasksTableData = {
   key: string;
   mailMaskEmail: string;
+  mailMask: MeQuery["me"]["user"]["emailMasks"][0];
   forwardsTo: MeQuery["me"]["user"]["verifiedEmails"][0];
   route: MeQuery["me"]["user"]["routes"][0];
   privacy: "MAX";
@@ -151,7 +152,7 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
               >
                 <ModifyRouteExpiryDateButtonAndPopover
                   route={route}
-                  mailMaskEmail={parent.mailMaskEmail}
+                  mailMask={parent.mailMask}
                   onSuccess={({ modifiedRouteID }) => {
                     // TODO: highlight the modified route's row
                   }}

@@ -93,6 +93,7 @@ const mapEmailMasksFunctionFactory = ({
           forwardsTo: verifiedEmail,
           route,
           privacy: "MAX",
+          mailMask: emailMask,
         },
       ] as MailMasksTableData[];
     })

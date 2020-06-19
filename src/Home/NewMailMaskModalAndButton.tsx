@@ -312,7 +312,7 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
               />
             </Form.Item>
           </Form>
-          {firstMailMask && hideMailMaskCreationTip && (
+          {firstMailMask && !hideMailMaskCreationTip && (
             <Alert
               message={
                 <div>

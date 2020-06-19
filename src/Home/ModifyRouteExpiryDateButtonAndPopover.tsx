@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   DatePicker,
   Form,
@@ -11,23 +12,27 @@ import {
 import React, { memo, useCallback, useState } from "react";
 
 import ErrorAlert from "../lib/ErrorAlert";
+import { MeQuery } from "./generated/MeQuery";
 import dayjs from "dayjs";
+import { deconstructMailMask } from "../lib/common/deconstructMailMask";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useForm } from "antd/lib/form/util";
+import useIsMobile from "../lib/useIsMobile";
+import useLocalStorage from "../lib/useLocalStorage";
 import { useUpdateRouteMutation } from "./generated/UpdateRouteMutation";
 
 dayjs.extend(relativeTime);
 
 type ModifyRouteExpiryDateButtonAndPopoverProps = {
   route: { expiresISO?: string | null; id: string };
-  mailMaskEmail: string;
+  mailMask: MeQuery["me"]["user"]["emailMasks"][0];
   onSuccess: ({ modifiedRouteID }: { modifiedRouteID: string }) => void;
   triggerText: string;
 };
 
 const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButtonAndPopoverProps> = ({
   route,
-  mailMaskEmail,
+  mailMask,
   onSuccess,
   triggerText,
 }) => {
@@ -42,6 +47,8 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
   const hideModal = useCallback(() => setModalVisible(false), [
     setModalVisible,
   ]);
+
+  const isMobile = useIsMobile();
 
   const options: {
     key: string;
@@ -112,6 +119,11 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
     setModalVisible,
   ]);
 
+  const [
+    hideAutoExpiringMailMasksTip,
+    setHideAutoExpiringMailMasksTip,
+  ] = useLocalStorage("hideAutoExpiringMailMasksTip", false);
+
   const handleOk = useCallback(async () => {
     let update = {};
     if (form.getFieldValue("duration") === "never") {
@@ -156,6 +168,10 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
     setModalVisible,
   ]);
 
+  const { expiryToken: currentMailMaskExpiryToken } = deconstructMailMask({
+    email: `${mailMask.alias}@${mailMask.domain}`,
+  });
+
   return (
     <React.Fragment>
       <Button
@@ -180,11 +196,13 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
         }}
       >
         <React.Fragment>
-          <ErrorAlert error={updateRouteError} />
           <div style={{ marginBottom: "12px" }}>
             <Typography.Text>
               When should we stop forwarding email to{" "}
-              <Typography.Text strong>{mailMaskEmail}</Typography.Text>?
+              <Typography.Text strong>
+                {mailMask.alias}@{mailMask.domain}
+              </Typography.Text>
+              ?
             </Typography.Text>
           </div>
           <Form
@@ -221,46 +239,89 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
                 }),
               ]}
             >
-              <Radio.Group>
+              <Radio.Group style={{ display: "flex", flexWrap: "wrap" }}>
                 {options.map(({ key, value, label }, index) => (
-                  <Radio
-                    value={value}
-                    key={key}
-                    style={radioStyle}
-                    autoFocus={index === 0}
-                  >
-                    {key === "custom" ? (
-                      <React.Fragment>
-                        <DatePicker
-                          onChange={(date) => {
-                            form.setFieldsValue({
-                              customDurationISO: date?.toISOString(),
-                              duration: value,
-                            });
+                  <div style={{ width: isMobile ? "100%" : "50%" }} key={key}>
+                    <Radio
+                      value={value}
+                      style={radioStyle}
+                      autoFocus={index === 0}
+                    >
+                      {key === "custom" ? (
+                        <React.Fragment>
+                          <DatePicker
+                            onChange={(date) => {
+                              form.setFieldsValue({
+                                customDurationISO: date?.toISOString(),
+                                duration: value,
+                              });
+                            }}
+                          />
+                        </React.Fragment>
+                      ) : (
+                        <Tooltip
+                          title={() => {
+                            if (key === "never") {
+                              return "Emails will be forwarded indefinitely";
+                            }
+                            if (key === "expire-now") {
+                              return "We will stop forwarding emails immediately";
+                            }
+                            return new Date(value).toLocaleDateString();
                           }}
-                        />
-                      </React.Fragment>
-                    ) : (
-                      <Tooltip
-                        title={() => {
-                          if (key === "never") {
-                            return "Emails will be forwarded indefinitely";
-                          }
-                          if (key === "expire-now") {
-                            return "We will stop forwarding emails immediately";
-                          }
-                          return new Date(value).toLocaleDateString();
-                        }}
-                        placement="right"
-                      >
-                        <span>{label}</span>
-                      </Tooltip>
-                    )}
-                  </Radio>
+                          placement="right"
+                        >
+                          <span>{label}</span>
+                        </Tooltip>
+                      )}
+                    </Radio>
+                  </div>
                 ))}
               </Radio.Group>
             </Form.Item>
           </Form>
+          <ErrorAlert error={updateRouteError} />
+          {!hideAutoExpiringMailMasksTip && !currentMailMaskExpiryToken && (
+            <Alert
+              message={
+                <div>
+                  <p>
+                    <strong>Create auto-stopping Mail Masks on-the-go</strong>
+                  </p>
+                  <p>
+                    Just add ".7d" to any existing Mail Mask and it will be
+                    created automatically whenever it receives its first email
+                    (no need to create this Mail Mask in advance!). Then, it
+                    will auto-stop forwarding after 7 days.
+                  </p>
+                  <p>
+                    <em>Try it now by just sending an email to:</em>
+                    <br />
+                    <Typography.Text
+                      copyable={{
+                        text: `${mailMask.alias}.7d@${mailMask.domain}`,
+                      }}
+                    >
+                      <a
+                        href={`mailto:${mailMask.alias}.7d@${mailMask.domain}`}
+                      >
+                        {`${mailMask.alias}.7d@${mailMask.domain}`}
+                      </a>
+                      .
+                    </Typography.Text>
+                  </p>
+                  <p>
+                    You can also specify auto-stop behavior in hours (".12h"),
+                    weeks (".2w"), months (".6m"), and years (".1y").
+                  </p>
+                </div>
+              }
+              type="info"
+              showIcon
+              closable
+              onClose={() => setHideAutoExpiringMailMasksTip(true)}
+            />
+          )}
         </React.Fragment>
       </Modal>
     </React.Fragment>
