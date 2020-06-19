@@ -180,21 +180,21 @@ const PrivacySettings: React.FC<{}> = () => {
       <Title level={3}>Privacy</Title>
       <div>
         <p>
-          Here's a summary of your data in our system (expand each row for more
-          detail):
-        </p>
-        <p>
           <em>
-            This information is also available on our{" "}
+            Note: this information, plus more, is available on our{" "}
             <a
-              href="https://www.mailmasker.com/plans/"
+              href="https://www.mailmasker.com/data/"
               target="_blank"
               rel="noopener noreferrer"
             >
-              View source.
+              main website
             </a>
             .
           </em>
+        </p>
+        <p>
+          Here's a summary of your data in our system (expand each row for more
+          detail):
         </p>
         {isMobile ? (
           <div>
@@ -293,7 +293,7 @@ const PrivacySettings: React.FC<{}> = () => {
         <p>
           We also encourage you to read our{" "}
           <a
-            href="https://www.mailmasker.com/privacy/index.html"
+            href="https://www.mailmasker.com/privacy/"
             target="_blank"
             rel="noopener noreferrer"
           >

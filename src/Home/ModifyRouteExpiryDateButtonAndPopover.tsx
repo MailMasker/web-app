@@ -192,7 +192,7 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
             name="horizontal_add_verified_email"
             onFinish={handleOk}
             initialValues={{
-              duration: route.expiresISO,
+              duration: route.expiresISO ?? "never",
               customDurationISO: "",
             }}
           >
