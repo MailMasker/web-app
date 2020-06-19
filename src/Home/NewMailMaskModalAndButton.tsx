@@ -110,7 +110,10 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
   const initialValues: FormStore = {
     alias: "",
     domain: supportedEmailDomains[0],
-    redirectToVerifiedEmailID: "",
+    redirectToVerifiedEmailID:
+      meQueryData && meQueryData.me.user.verifiedEmails.length > 0
+        ? meQueryData.me.user.verifiedEmails[0].id
+        : "",
   };
 
   const verifiedEmailOptions: {
