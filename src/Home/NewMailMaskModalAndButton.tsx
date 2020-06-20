@@ -15,6 +15,7 @@ import AddVerifiedEmailButtonAndPopover from "./AddVerifiedEmailButtonAndPopover
 import ErrorAlert from "../lib/ErrorAlert";
 import { PlusOutlined } from "@ant-design/icons";
 import ResendVerificationEmailCTA from "./ResendVerificationEmailCTA";
+import { deconstructMailMask } from "../lib/common/deconstructMailMask";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
 import { useCreateEmailMaskMutation } from "./generated/CreateEmailMask";
 import { useCreateRouteMutation } from "./generated/CreateRouteMutation";
@@ -147,6 +148,61 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
     false
   );
 
+  const [warning, setWarning] = useState<React.ReactNode | null>(null);
+
+  const handleValuesChange = useCallback(
+    (changedValues: any, values: any) => {
+      if (values.alias && values.alias.includes(".")) {
+        const { mailMaskParts, expiryToken } = deconstructMailMask({
+          email: `${values.alias}@${supportedEmailDomains[0]}`,
+        });
+        if (mailMaskParts.length > 1) {
+          console.log("mailMaskParts: ", mailMaskParts);
+          setWarning(
+            <Alert
+              type="warning"
+              message="Trying to create a secondary Mail Mask?"
+              description={
+                <span>
+                  The way to create it is by simply sending an email to{" "}
+                  {`${values.alias}@${supportedEmailDomains[0]}`}.
+                </span>
+              }
+              style={{ marginBottom: "12px" }}
+            />
+          );
+        } else if (expiryToken) {
+          setWarning(
+            <Alert
+              type="warning"
+              message="Trying to create an auto-stopping Mail Mask?"
+              description={
+                <span>
+                  If you're trying to create an auto-stopping Mail Mask, then
+                  create it by simply sending an email to{" "}
+                  {`${values.alias}@${supportedEmailDomains[0]}`}. It will stop{" "}
+                  {expiryToken} after it receives its first email.
+                </span>
+              }
+              style={{ marginBottom: "12px" }}
+            />
+          );
+        } else {
+          setWarning(
+            <Alert
+              type="warning"
+              message={<span>Mail Masks can't contain periods.</span>}
+              style={{ marginBottom: "12px" }}
+            />
+          );
+        }
+      } else {
+        setWarning(null);
+      }
+    },
+    [setWarning]
+  );
+
   const isMobile = useIsMobile();
 
   return (
@@ -181,6 +237,7 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
             name="newMailMaskForm"
             initialValues={initialValues}
             onFinish={handleFormFinish}
+            onValuesChange={handleValuesChange}
           >
             <Form.Item label="Receive email at" required>
               <Input.Group compact style={{ display: "flex" }}>
@@ -190,8 +247,7 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
                   rules={[
                     {
                       required: true,
-                      message:
-                        "Please choose an alias (aka 'you' part in you@example.com)",
+                      message: "",
                     },
                   ]}
                   style={{
@@ -247,6 +303,7 @@ const NewMailMaskModalAndButton: React.FC<NewMailMaskModalAndButtonProps> = () =
                 )}
               </Input.Group>
             </Form.Item>
+            {warning}
             <Form.Item
               label="Then forward to"
               name="redirectToVerifiedEmailID"
