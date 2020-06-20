@@ -1,9 +1,5 @@
-import { Button, Card, Empty, Modal, Table, Tooltip, Typography } from "antd";
-import {
-  CheckCircleTwoTone,
-  DeleteTwoTone,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
+import { Button, Card, Empty, Table, Tooltip, Typography } from "antd";
+import { CheckCircleTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import React, { memo, useMemo } from "react";
 
 import { ColumnProps } from "antd/lib/table";

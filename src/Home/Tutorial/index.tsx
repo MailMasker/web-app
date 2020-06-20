@@ -3,8 +3,6 @@ import React, { useCallback, useEffect } from "react";
 
 import Bugsnag from "@bugsnag/js";
 import { Link } from "react-router-dom";
-import { blue } from "@ant-design/colors";
-import { isNullableType } from "graphql";
 import supportedEmailDomains from "../../lib/supportedEmailDomains";
 import useHasVerifiedOneEmail from "../../lib/useHasVerifiedOneEmail";
 import useIsMobile from "../../lib/useIsMobile";
@@ -155,9 +153,6 @@ const TutorialStep = React.memo(({ step }: { step: number }) => {
     meQueryData && meQueryData.me.user.emailMasks.length > 0
       ? meQueryData.me.user.emailMasks[0]
       : undefined;
-  const firstMailMaskEmail = firstMailMask
-    ? `${firstMailMask.alias}@${firstMailMask.domain}`
-    : "";
 
   if (step === 0) {
     return (
