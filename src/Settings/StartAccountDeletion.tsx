@@ -26,7 +26,22 @@ const StartAccountDeletion: React.FC<{}> = () => {
             snapshot of before and after your account was deleted (this gives
             you a truer sense of what's been deleted, and what remains).
           </li>
-        </ul>{" "}
+        </ul>
+        <Title level={4}>What do I need to manually request be deleted?</Title>
+        <ul>
+          <li>
+            If you've got a paid account, reach out to us at{" "}
+            <Typography.Text
+              copyable={{ text: `cleanup@${supportedEmailDomains[0]}` }}
+            >
+              <a href={`mailto:cleanup@${supportedEmailDomains[0]}`}>
+                cleanup@{supportedEmailDomains[0]}
+              </a>
+            </Typography.Text>{" "}
+            if you would like us to wipe as much data as we can from Stripe's
+            system.
+          </li>
+        </ul>
         <Title level={4}>How can I recover my account?</Title>
         <ul>
           <li>
