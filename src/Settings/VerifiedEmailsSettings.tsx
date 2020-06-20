@@ -75,24 +75,25 @@ const VerifiedEmailSettings: React.FC<{}> = () => {
         key: "delete",
         dataIndex: "delete",
         render: ({ id }) => (
-          <Tooltip title="Remove Verified Email">
+          <Tooltip title="Coming soon: Remove Verified Email">
             <Button
               icon={<DeleteTwoTone />}
               type="link"
-              onClick={() =>
-                Modal.confirm({
-                  title: "Do you want to remove this Verified Email?",
-                  icon: <ExclamationCircleOutlined />,
-                  content:
-                    "When clicked the OK button, this dialog will be closed after 1 second",
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                    }).catch(() => console.log("Oops errors!"));
-                  },
-                  onCancel() {},
-                })
-              }
+              disabled
+              // onClick={() =>
+              //   Modal.confirm({
+              //     title: "Do you want to remove this Verified Email?",
+              //     icon: <ExclamationCircleOutlined />,
+              //     content:
+              //       "When clicked the OK button, this dialog will be closed after 1 second",
+              //     onOk() {
+              //       return new Promise((resolve, reject) => {
+              //         setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+              //       }).catch(() => console.log("Oops errors!"));
+              //     },
+              //     onCancel() {},
+              //   })
+              // }
             />
           </Tooltip>
         ),
