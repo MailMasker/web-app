@@ -286,7 +286,7 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
               message={
                 <div>
                   <p>
-                    <strong>Create auto-stopping Mail Masks on-the-go</strong>
+                    <strong>Create auto-stopping Mail Masks on-the-fly</strong>
                   </p>
                   <p>
                     Just add ".7d" to any existing Mail Mask and it will be
