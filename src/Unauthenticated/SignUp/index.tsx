@@ -271,7 +271,11 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                   style={{
                     marginTop: "24px",
                     textAlign: "center",
-                    color: isEmailMaskAvailableData ? green[6] : undefined,
+                    color:
+                      isEmailMaskAvailableData &&
+                      isEmailMaskAvailableData.isEmailMaskAvailable
+                        ? green[6]
+                        : undefined,
                     fontSize: "1.2em",
                   }}
                 >

@@ -114,10 +114,6 @@ const PlansDescription = ({
       description:
         "We allow you to download a full record of your data in our system.",
     },
-    {
-      title: "-",
-      description: "",
-    },
   ];
 
   const premiumFeatures = [
@@ -139,13 +135,8 @@ const PlansDescription = ({
       description: `You can add ".14d" to any Mail Mask (ex: you.14d@${supportedEmailDomains[0]}) and that Mail Mask will automatically stop forwarding email in 14 days.`,
     },
     {
-      title: `Forward to stop@${supportedEmailDomains[0]}`,
-      description: `Forward any email that you receive via one of your Mail Masks to stop the Mail Mask immediately.`,
-    },
-    {
-      title: "Forward to stop@mailmasker.com",
-      description:
-        "Stopping your Mail Mask is the quickest way to completely stop unwanted email, and you can stop your Mail Mask simply by re-forwarding any email to stop@mailmasker.com.",
+      title: `Send to stop@${supportedEmailDomains[0]}`,
+      description: `Stopping your Mail Mask is the quickest way to completely stop unwanted email, and you can stop your Mail Mask simply by re-forwarding any email to stop@${supportedEmailDomains[0]}.`,
     },
   ];
   return (
