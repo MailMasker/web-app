@@ -271,7 +271,7 @@ const ModifyRouteExpiryDateButtonAndPopover: React.FC<ModifyRouteExpiryDateButto
                           }}
                           placement="right"
                         >
-                          <span>{label}</span>
+                          <div>{label}</div>
                         </Tooltip>
                       )}
                     </Radio>

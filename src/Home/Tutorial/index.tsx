@@ -38,7 +38,7 @@ const Tutorial: React.FC<TutorialProps> = ({ onSkipTutorial }) => {
 
   // Automatically advance past the "Verify your email" step if you've already done so
   useEffect(() => {
-    if (currentTutorialStep === 1 && hasVerifiedOneEmail) {
+    if (currentTutorialStep === 0 && hasVerifiedOneEmail) {
       handleGoToNextStep();
     }
   }, [hasVerifiedOneEmail, currentTutorialStep, handleGoToNextStep]);
@@ -142,7 +142,12 @@ const TutorialStep = React.memo(({ step }: { step: number }) => {
     fetchPolicy: "cache-only",
   });
 
-  const firstUnverifiedEmail =
+  const firstVerifiedEmail =
+    meQueryData && meQueryData.me.user.verifiedEmails.length > 0
+      ? meQueryData.me.user.verifiedEmails[0]
+      : undefined;
+
+  const firstUnverifiedVerifiedEmail =
     meQueryData && meQueryData.me.user.verifiedEmails.length > 0
       ? meQueryData.me.user.verifiedEmails.find(
           (verifiedEmail) => !verifiedEmail.verified
@@ -163,8 +168,8 @@ const TutorialStep = React.memo(({ step }: { step: number }) => {
         <Alert
           message="Check your email"
           description={
-            firstUnverifiedEmail
-              ? `We've sent a verification email to ${firstUnverifiedEmail.email}. Open it and click the "Verify Email" button.`
+            firstUnverifiedVerifiedEmail
+              ? `We've sent a verification email to ${firstUnverifiedVerifiedEmail.email}. Open it and click the "Verify Email" button.`
               : `Look for an email from us that has a button labeled "Verify". Press that button and come back here.`
           }
           type="info"
@@ -199,7 +204,7 @@ const TutorialStep = React.memo(({ step }: { step: number }) => {
               </Typography.Text>
             </span>
           }
-          description={`You will receive it at ${firstUnverifiedEmail?.email ??
+          description={`You will receive it at ${firstVerifiedEmail?.email ??
             ""}`}
           type="info"
           style={{ marginTop: "24px" }}
@@ -229,8 +234,8 @@ const TutorialStep = React.memo(({ step }: { step: number }) => {
               </Typography.Text>
             </span>
           }
-          description={`You will receive it at ${firstUnverifiedEmail?.email ??
-            ""}`}
+          description={`You will receive it at ${firstVerifiedEmail?.email ??
+            ""} and a secondary Mail Mask will be automatically created.`}
           type="info"
         />
         <p style={{ marginTop: "24px" }}>
@@ -239,6 +244,11 @@ const TutorialStep = React.memo(({ step }: { step: number }) => {
         <p>
           You can add a dot (".") plus anything to an existing Mail Mask to
           create a new Mail Mask. No need to do anything in advance!
+        </p>
+        <p>
+          This is perfect for signing up for new services online, when you don't
+          necessarily want to share your real email address or want to be able
+          to prevent endless marketing emails.
         </p>
       </React.Fragment>
     );
@@ -289,8 +299,8 @@ const TutorialStep = React.memo(({ step }: { step: number }) => {
         <Alert
           message={
             <span>
-              Try it! Forward any an email sent to one of your Mail Masks to{" "}
-              {isMobile && <br />}
+              Try it! Manually forward any an email you've received at one of
+              your Mail Masks to {isMobile && <br />}
               <Typography.Text
                 copyable={{ text: `stop@${supportedEmailDomains[0]}` }}
               >
@@ -307,8 +317,7 @@ const TutorialStep = React.memo(({ step }: { step: number }) => {
           <strong>What else does Mail Masker Premium offer?</strong>
         </p>
         <p>
-          Check out our <Link to="/settings/billing">pricing page</Link> for a
-          full description.
+          <Link to="/settings/billing">See here</Link> for full details.
         </p>
       </React.Fragment>
     );

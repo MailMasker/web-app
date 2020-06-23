@@ -140,28 +140,26 @@ const MailMasksTable: React.FC<MailMasksTableProps> = ({
             ? dayjs(route.expiresISO)
             : undefined;
           return (
-            <Text>
-              <Tooltip
-                title={() => {
-                  if (!routeExpiryDayjs) {
-                    return "Emails will be forwarded indefinitely";
-                  }
-                  return routeExpiryDayjs.toDate().toLocaleString();
+            <Tooltip
+              title={() => {
+                if (!routeExpiryDayjs) {
+                  return "Emails will be forwarded indefinitely";
+                }
+                return routeExpiryDayjs.toDate().toLocaleString();
+              }}
+              placement="left"
+            >
+              <ModifyRouteExpiryDateButtonAndPopover
+                route={route}
+                mailMask={parent.mailMask}
+                onSuccess={({ modifiedRouteID }) => {
+                  // TODO: highlight the modified route's row
                 }}
-                placement="left"
-              >
-                <ModifyRouteExpiryDateButtonAndPopover
-                  route={route}
-                  mailMask={parent.mailMask}
-                  onSuccess={({ modifiedRouteID }) => {
-                    // TODO: highlight the modified route's row
-                  }}
-                  triggerText={
-                    routeExpiryDayjs ? dayjs().to(routeExpiryDayjs) : "never"
-                  }
-                />
-              </Tooltip>
-            </Text>
+                triggerText={
+                  routeExpiryDayjs ? dayjs().to(routeExpiryDayjs) : "never"
+                }
+              />
+            </Tooltip>
           );
         },
       },
