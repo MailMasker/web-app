@@ -1,20 +1,23 @@
-I followed the following instructions to make this:
-https://medium.com/@wolovim/deploying-create-react-app-to-s3-or-cloudfront-48dae4ce0af
+# MailMasker.com Web App
 
-## Deploying
+This is the code behind [app.mailmasker.com](https://app.mailmasker.com).
+
+## License
+
+[No permission](https://choosealicense.com/no-permission/) is given for this repo to be used by others. Practically speaking, this code doesn't seem to be useful to anyone else; however, we believe that there is tremendous value in transparency of making it publically accessible.
+
+## Usage
+
+### Deploying
 
 ```
 yarn deploy-dev
 ```
 
-## Running Terraform to manage infrastructure
+### Running locally
+
+You'll need to [trust the certificate](https://medium.com/@danielgwilson/https-and-create-react-app-3a30ed31c904).
 
 ```
-aws-vault exec email-forwarder-dev -- terraform apply
+yarn start
 ```
-
-## Running locally
-
-### Trusting the certificate
-
-https://medium.com/@danielgwilson/https-and-create-react-app-3a30ed31c904
