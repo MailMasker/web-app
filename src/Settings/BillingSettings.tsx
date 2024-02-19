@@ -1,16 +1,15 @@
 import { Button, List, Popover, Result, Space, Typography } from "antd";
 import React, { useState } from "react";
 
-import Bugsnag from "@bugsnag/js";
-import ErrorAlert from "../lib/ErrorAlert";
-import { Link } from "react-router-dom";
-import { StarTwoTone } from "@ant-design/icons";
 import { green } from "@ant-design/colors";
+import { StarTwoTone } from "@ant-design/icons";
+import Bugsnag from "@bugsnag/js";
 import { loadStripe } from "@stripe/stripe-js";
+import ErrorAlert from "../lib/ErrorAlert";
 import supportedEmailDomains from "../lib/supportedEmailDomains";
-import { useCreateCheckoutSessionMutation } from "./generated/CreateCheckoutSessionMutation";
 import useIsMobile from "../lib/useIsMobile";
 import useIsPremium from "../lib/useIsPremium";
+import { useCreateCheckoutSessionMutation } from "./generated/CreateCheckoutSessionMutation";
 
 const { Text } = Typography;
 
@@ -23,9 +22,8 @@ if (!process.env.REACT_APP_STRIPE_PRICE_ID) {
 }
 
 const BillingSettings: React.FC<{}> = () => {
-  const isPremium = useIsPremium();
-
   const [showPlans, setShowPlans] = useState(false);
+  const isPremium = useIsPremium();
 
   return (
     <Space
@@ -37,10 +35,11 @@ const BillingSettings: React.FC<{}> = () => {
         level={2}
         style={{ marginBottom: "0px", marginTop: "36px" }}
       >
-        Flexible plans with no surprises
+        One plan with no surprises
       </Typography.Title>
       <div style={{ marginBottom: "12px" }}>
-        Choose the plan that works for you and cancel at any time.
+        Mail Masker is a paid service. Instead of a free trial, we offer a 30
+        day money-back guarantee.
       </div>
       {isPremium ? (
         <React.Fragment>
@@ -90,39 +89,18 @@ const PlansDescription = ({
 
   const isMobile = useIsMobile();
 
-  const freeFeatures = [
+  const premiumFeatures = [
     {
       title: "Your Mail Masks are yours forever",
       description: `Once you create a Mail Mask (ex: you@${supportedEmailDomains[0]}), it belongs to your account forever and no one else can use it.`,
-    },
-    {
-      title: "3 primary Mail Masks",
-      description: `You can create up to 3 Mail Masks (ex: you@${supportedEmailDomains[0]}), and unlimited secondary masks (ex: you.whatever1@${supportedEmailDomains[0]}, you.whatever2@${supportedEmailDomains[0]}, etc)`,
-    },
-    {
-      title: "Unlimited secondary Mail Masks",
-      description:
-        "A secondary Mail Mask has a dot after the alias of one of your primary Mail Masks. For example, if your primary Mail Mask was you@example.com, then you could create a secondary mask by sending an email to you.whatever@example.com.",
-    },
-    {
-      title: "Forward to 1 email",
-      description:
-        "Your Mail Masks will forward to a single external email address.",
     },
     {
       title: "Data export",
       description:
         "We allow you to download a full record of your data in our system.",
     },
-  ];
-
-  const premiumFeatures = [
     {
-      title: "+ All Free features",
-      description: "Premium includes everything in the Free plan, plus more!",
-    },
-    {
-      title: "Unlimited primary Mail Masks",
+      title: "Unlimited Mail Masks",
       description: `Create as many as you'd like: you1@${supportedEmailDomains[0]}, you2@${supportedEmailDomains[0]}, etc`,
     },
     {
@@ -150,54 +128,7 @@ const PlansDescription = ({
         }}
       >
         <List
-          itemLayout="horizontal"
-          dataSource={freeFeatures}
-          header={
-            <React.Fragment>
-              <Typography.Title style={{ margin: "12px" }}>
-                Free
-              </Typography.Title>
-              <Typography.Title level={4} style={{ margin: "6px" }}>
-                $0
-              </Typography.Title>
-            </React.Fragment>
-          }
-          bordered
-          renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                title={
-                  <Popover
-                    title={item.title}
-                    content={
-                      <div style={{ maxWidth: "500px" }}>
-                        {item.description}
-                      </div>
-                    }
-                  >
-                    <Typography.Text style={{ cursor: "help" }}>
-                      {item.title}
-                    </Typography.Text>
-                  </Popover>
-                }
-              />
-            </List.Item>
-          )}
-          footer={
-            currentPlan === "FREE" ? (
-              <Button disabled size="large">
-                Current Plan
-              </Button>
-            ) : (
-              <Link to="/help">
-                <Button size="large">Contact Us to Downgrade</Button>
-              </Link>
-            )
-          }
-        />
-        <List
           style={{
-            marginLeft: isMobile ? 0 : "36px",
             marginTop: isMobile ? "24px" : 0,
             borderColor: green[4],
           }}
@@ -266,7 +197,7 @@ const PlansDescription = ({
                     }
                   }}
                 >
-                  Upgrade
+                  Check Out
                 </Button>
               </React.Fragment>
             ) : (

@@ -1,4 +1,11 @@
 import {
+  InfoCircleOutlined,
+  LockOutlined,
+  MailOutlined,
+  SyncOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import {
   Button,
   Checkbox,
   Form,
@@ -9,27 +16,20 @@ import {
   Typography,
   message,
 } from "antd";
-import {
-  InfoCircleOutlined,
-  LockOutlined,
-  MailOutlined,
-  SyncOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import useQueryParams, { QueryParams } from "../../lib/useQueryParam";
 
-import ErrorAlert from "../../lib/ErrorAlert";
 import { green } from "@ant-design/colors";
+import ErrorAlert from "../../lib/ErrorAlert";
 // @ts-ignore
 import randomWords from "random-words";
-import supportedEmailDomains from "../../lib/supportedEmailDomains";
-import { useCreateUserMutation } from "./generated/CreateUserMutation";
-import useDebounce from "../../lib/useDebounce";
 import { useHistory } from "react-router-dom";
-import { useIsEmailMaskAvailableLazyQuery } from "./generated/IsEmailMaskAvailableQuery";
+import supportedEmailDomains from "../../lib/supportedEmailDomains";
+import useDebounce from "../../lib/useDebounce";
 import useIsMobile from "../../lib/useIsMobile";
 import { uuidv4 } from "../../lib/uuid";
+import { useCreateUserMutation } from "./generated/CreateUserMutation";
+import { useIsEmailMaskAvailableLazyQuery } from "./generated/IsEmailMaskAvailableQuery";
 
 interface SignUpProps {
   onAuthenticationSuccess: () => void;
@@ -85,29 +85,37 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
           });
         }
       : (values: any) => {
-          console.log("values: ", values);
-
           if (values.termsAndPrivacy !== true) {
             message.error(
               "You must agree to the Terms of Service and Privacy Policy."
             );
             return;
           }
-          createAccount({
-            variables: {
-              username: values.username,
-              password: values.password,
-              uuid: uuidv4(),
-              persistent: values.remember as boolean,
-              emailMask: `${history.location.state?.mailMaskAlias ?? ""}@${
-                supportedEmailDomains[0]
-              }`,
-              verifiedEmail: history.location.state?.emailAddress ?? "",
-            },
-          })
-            .then(onAuthenticationSuccess)
-            .then(() => message.success(`Account created!`))
-            .catch((err) => console.error(err));
+
+          // @ts-ignore
+          grecaptcha.ready(function() {
+            // @ts-ignore
+            grecaptcha
+              .execute(window.REACT_APP_RECAPTCHA_SITE_KEY, {
+                action: "submit",
+              })
+              .then(function(token: string) {
+                createAccount({
+                  variables: {
+                    username: values.username,
+                    password: values.password,
+                    uuid: uuidv4(),
+                    persistent: values.remember as boolean,
+                    emailMask: `${history.location.state?.mailMaskAlias ??
+                      ""}@${supportedEmailDomains[0]}`,
+                    verifiedEmail: history.location.state?.emailAddress ?? "",
+                  },
+                })
+                  .then(onAuthenticationSuccess)
+                  .then(() => message.success(`Account created!`))
+                  .catch((err) => console.error(err));
+              });
+          });
         };
 
   const [mailMaskAliasInputValue, setMailMaskAliasInputValue] = useState<

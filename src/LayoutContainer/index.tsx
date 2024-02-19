@@ -1,9 +1,11 @@
+import { StarTwoTone } from "@ant-design/icons";
+import { Alert, Button, Layout } from "antd";
+import React from "react";
+import { Link, useRouteMatch } from "react-router-dom";
+import useIsAuthenticated from "../lib/useIsAuthenticated";
+import useIsPremium from "../lib/useIsPremium";
 import FooterContent from "./FooterContent";
 import HeaderContent from "./HeaderContent";
-import { Layout } from "antd";
-import React from "react";
-import useIsAuthenticated from "../lib/useIsAuthenticated";
-import { useRouteMatch } from "react-router-dom";
 
 const { Content } = Layout;
 
@@ -18,6 +20,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({ children }) => {
   const signUpMatch = useRouteMatch("/sign-up");
 
   const isAuthenticated = useIsAuthenticated();
+  const isPremium = useIsPremium();
 
   const rightMenuSelectedKeys = [];
   if (isAuthenticated) {
@@ -41,6 +44,34 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({ children }) => {
   return (
     <Layout style={{ minHeight: "100vh", backgroundColor: "#fff" }}>
       <HeaderContent />
+      {!isPremium && isAuthenticated && (
+        <div
+          style={{
+            maxWidth: "800px",
+            margin: "24px auto",
+            display: "flex",
+            alignItems: "stretch",
+          }}
+        >
+          <Alert
+            message="Check Out Now"
+            description={
+              <div>
+                <div>
+                  Mail Masker is a paid service. Instead of a free trial, we
+                  offer a 30 day money-back guarantee.
+                </div>
+                <Link to="/settings/billing">
+                  <Button style={{ marginTop: "12px" }}>Check Out Now</Button>
+                </Link>
+              </div>
+            }
+            type="info"
+            icon={<StarTwoTone />}
+            showIcon
+          />
+        </div>
+      )}
       <Content
         style={{
           maxWidth: "800px",

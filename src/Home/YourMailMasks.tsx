@@ -1,21 +1,17 @@
-import { Alert, Badge, Button, Space, Tabs, Typography } from "antd";
+import { Badge, Space, Tabs, Typography } from "antd";
+import React, { useMemo, useState } from "react";
 import MailMasksTable, {
   MailMasksTabType,
   MailMasksTableData,
 } from "./MailMasksTable";
 import { MeQuery, useMeQuery } from "./generated/MeQuery";
-import React, { useMemo, useState } from "react";
 
-import { Link } from "react-router-dom";
-import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
-import { StarTwoTone } from "@ant-design/icons";
-import dayjs from "dayjs";
 import { orange } from "@ant-design/colors";
+import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import supportedEmailDomains from "../lib/supportedEmailDomains";
 import useIsMobile from "../lib/useIsMobile";
 import useIsPremium from "../lib/useIsPremium";
-import useLocalStorage from "../lib/useLocalStorage";
+import NewMailMaskModalAndButton from "./NewMailMaskModalAndButton";
 
 dayjs.extend(relativeTime);
 
@@ -35,11 +31,6 @@ const YourMailMasks: React.FC<YourMailMasksProps> = () => {
 
   const isPremium = useIsPremium();
   const isMobile = useIsMobile();
-
-  const [
-    hideStopMailMaskRequestTip,
-    setHideStopMailMaskRequestTip,
-  ] = useLocalStorage("hideStopMailMaskRequestTip", false);
 
   const activeData: MailMasksTableData[] = useMemo(() => {
     if (!data) {
@@ -146,32 +137,6 @@ const YourMailMasks: React.FC<YourMailMasksProps> = () => {
         />
       </Tabs>
       <MailMasksTable activeTab={activeTab} tableData={tableData} />
-      {!isPremium && !hideStopMailMaskRequestTip && (
-        <Alert
-          message="Premium Feature"
-          description={
-            <div>
-              <div>
-                Easily stop any of your Mail Masks by forwarding any email to{" "}
-                <Text copyable={{ text: `stop@${supportedEmailDomains[0]}` }}>
-                  <a href={`mailto:stop@${supportedEmailDomains[0]}`}>
-                    stop@{supportedEmailDomains[0]}
-                  </a>
-                </Text>
-                .
-              </div>
-              <Link to="/settings/billing">
-                <Button style={{ marginTop: "12px" }}>Upgrade now</Button>
-              </Link>
-            </div>
-          }
-          type="info"
-          icon={<StarTwoTone />}
-          showIcon
-          closable
-          onClose={() => setHideStopMailMaskRequestTip(true)}
-        />
-      )}
     </Space>
   );
 };
