@@ -3,8 +3,11 @@ import * as Types from "../../generated/types";
 import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/react-common";
 import * as ApolloReactHooks from "@apollo/react-hooks";
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 
-export type RefreshRoutesAndEmailMasksQueryVariables = {};
+export type RefreshRoutesAndEmailMasksQueryVariables = Exact<{
+  [key: string]: never;
+}>;
 
 export type RefreshRoutesAndEmailMasksQuery = {
   readonly __typename?: "Query";

@@ -3,12 +3,13 @@ import * as Types from "../../../generated/types";
 import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/react-common";
 import * as ApolloReactHooks from "@apollo/react-hooks";
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 
-export type ResetPasswordMutationVariables = {
+export type ResetPasswordMutationVariables = Exact<{
   userID: Types.Scalars["String"];
   newPassword: Types.Scalars["String"];
   code: Types.Scalars["String"];
-};
+}>;
 
 export type ResetPasswordMutation = { readonly __typename?: "Mutation" } & Pick<
   Types.Mutation,

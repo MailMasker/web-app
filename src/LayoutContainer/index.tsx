@@ -54,7 +54,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({ children }) => {
           }}
         >
           <Alert
-            message="Check Out Now"
+            message="Check out now to start using Mail Masker"
             description={
               <div>
                 <div>
@@ -62,7 +62,7 @@ const LayoutContainer: React.FC<LayoutContainerProps> = ({ children }) => {
                   offer a 30 day money-back guarantee.
                 </div>
                 <Link to="/settings/billing">
-                  <Button style={{ marginTop: "12px" }}>Check Out Now</Button>
+                  <Button style={{ marginTop: "12px" }}>Go to Check Out</Button>
                 </Link>
               </div>
             }

@@ -16,12 +16,12 @@ export enum CacheControlScope {
 }
 
 export type CreateUserPayload = {
-   __typename?: 'CreateUserPayload';
+  __typename?: 'CreateUserPayload';
   userID: Scalars['ID'];
 };
 
 export type DeleteUserPayload = {
-   __typename?: 'DeleteUserPayload';
+  __typename?: 'DeleteUserPayload';
   scrambledUsername: Scalars['String'];
   dataBeforeDeletion: Scalars['String'];
   dataAfterDeletion: Scalars['String'];
@@ -32,7 +32,7 @@ export type DeleteUserPayload = {
  * An EmailMask cannot be deleted, but a Route.forwardTo can be deleted because it's important for users' data rights.
  */
 export type EmailMask = {
-   __typename?: 'EmailMask';
+  __typename?: 'EmailMask';
   id: Scalars['ID'];
   /** For x+y@1nt.email, "x" is the alias */
   alias: Scalars['String'];
@@ -43,12 +43,12 @@ export type EmailMask = {
 };
 
 export type Me = {
-   __typename?: 'Me';
+  __typename?: 'Me';
   user: User;
 };
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   authenticate?: Maybe<Scalars['Boolean']>;
   /** Token is optional because the server will first attempt to read the token from a cookie, if present */
   unauthenticate?: Maybe<Scalars['Boolean']>;
@@ -87,6 +87,7 @@ export type MutationCreateUserArgs = {
   persistent: Scalars['Boolean'];
   emailMask: Scalars['String'];
   verifiedEmail: Scalars['String'];
+  reCAPTCHAToken: Scalars['String'];
 };
 
 
@@ -148,7 +149,7 @@ export type MutationCreateCheckoutSessionArgs = {
 };
 
 export type Plan = {
-   __typename?: 'Plan';
+  __typename?: 'Plan';
   type: PlanType;
   displayName: Scalars['String'];
 };
@@ -159,7 +160,7 @@ export enum PlanType {
 }
 
 export type Query = {
-   __typename?: 'Query';
+  __typename?: 'Query';
   me: Me;
   ping: Scalars['String'];
   exportData: Scalars['String'];
@@ -173,7 +174,7 @@ export type QueryIsEmailMaskAvailableArgs = {
 
 /** A Route can not be hard deleted, but the email address in redirectToVerifiedEmail can be cleared at a user's request */
 export type Route = {
-   __typename?: 'Route';
+  __typename?: 'Route';
   id: Scalars['ID'];
   redirectToVerifiedEmail: VerifiedEmail;
   emailMask: EmailMask;
@@ -183,7 +184,7 @@ export type Route = {
 
 /** A User can't be deleted, but its username can be cleared at a user's request */
 export type User = {
-   __typename?: 'User';
+  __typename?: 'User';
   id: Scalars['ID'];
   username?: Maybe<Scalars['String']>;
   routes: Array<Route>;
@@ -194,7 +195,7 @@ export type User = {
 
 /** A VerifiedEmail is one for which ownership has been verified when `verified` is true */
 export type VerifiedEmail = {
-   __typename?: 'VerifiedEmail';
+  __typename?: 'VerifiedEmail';
   id: Scalars['ID'];
   /** If deleted, then `email` will be null */
   email?: Maybe<Scalars['String']>;

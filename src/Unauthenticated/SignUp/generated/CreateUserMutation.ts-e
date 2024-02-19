@@ -3,15 +3,17 @@ import * as Types from '../../../generated/types';
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 
-export type CreateUserMutationVariables = {
+export type CreateUserMutationVariables = Exact<{
   username: Types.Scalars['String'];
   password: Types.Scalars['String'];
   uuid: Types.Scalars['String'];
   persistent: Types.Scalars['Boolean'];
   verifiedEmail: Types.Scalars['String'];
   emailMask: Types.Scalars['String'];
-};
+  reCAPTCHAToken: Types.Scalars['String'];
+}>;
 
 
 export type CreateUserMutation = (
@@ -24,8 +26,8 @@ export type CreateUserMutation = (
 
 
 export const CreateUserDocument = gql`
-    mutation CreateUser($username: String!, $password: String!, $uuid: String!, $persistent: Boolean!, $verifiedEmail: String!, $emailMask: String!) {
-  createUser(username: $username, password: $password, uuid: $uuid, persistent: $persistent, verifiedEmail: $verifiedEmail, emailMask: $emailMask) {
+    mutation CreateUser($username: String!, $password: String!, $uuid: String!, $persistent: Boolean!, $verifiedEmail: String!, $emailMask: String!, $reCAPTCHAToken: String!) {
+  createUser(username: $username, password: $password, uuid: $uuid, persistent: $persistent, verifiedEmail: $verifiedEmail, emailMask: $emailMask, reCAPTCHAToken: $reCAPTCHAToken) {
     userID
   }
 }
@@ -51,6 +53,7 @@ export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<CreateUser
  *      persistent: // value for 'persistent'
  *      verifiedEmail: // value for 'verifiedEmail'
  *      emailMask: // value for 'emailMask'
+ *      reCAPTCHAToken: // value for 'reCAPTCHAToken'
  *   },
  * });
  */

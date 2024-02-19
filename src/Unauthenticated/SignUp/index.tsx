@@ -109,6 +109,7 @@ const SignUp = ({ onAuthenticationSuccess }: SignUpProps) => {
                     emailMask: `${history.location.state?.mailMaskAlias ??
                       ""}@${supportedEmailDomains[0]}`,
                     verifiedEmail: history.location.state?.emailAddress ?? "",
+                    reCAPTCHAToken: token,
                   },
                 })
                   .then(onAuthenticationSuccess)
